@@ -8,7 +8,7 @@
 #### begin function here ####
 
 #' getResPatches
-#' @author Pratik R Gupte
+#' @author Pratik R Gupte, \email{p.r.gupte@rug.nl}
 #' @param df A dataframe of values of any class that is or extends data.frame. The dataframe must contain at least two spatial coordinates, `x` and `y`, and a temporal coordinate, `time`. The names of columns specifying these can be passed as arguments below.
 #' @param x A column name (string) containing X (or longitude) coordinates.
 #' @param y A column name (string) containing Y (or latitude) coordinates.
@@ -18,6 +18,7 @@
 #' @return Depending on whether the constructed poylgons are requested, a list object containing as its first element a dataframe of patch summaries, and as its second element an `sf` `MULTIPOLYGON` or `POLYGON` (as approporiate) object. The list is returned when `returnSf = TRUE`, and only the dataframe of patch summaries when `returnSf` is `FALSE`.
 #' @export TRUE
 #'
+
 funcGetResPatches <- function(df, x = "x", y = "y", time = "time",
                               buffsize = 10.0,
                               returnSf = FALSE){

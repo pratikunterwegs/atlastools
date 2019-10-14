@@ -11,7 +11,7 @@ Authors@R:
            family = "Neves",
            role = c("ctb"),
            email = "p.m.santos.neves@rug.nl"))
-           
+
 Description: Some utilities to handle high-resolution tracking data from the Wadden Sea ATLAS system (WATLAS: https://www.nioz.nl/en/about/cos/coastal-movement-ecology/shorebird-tracking/watlas-tracking-regional-movements).
 
 License: GPL-3
@@ -23,6 +23,7 @@ Imports:
     tidyr,
     dplyr,
     purrr,
+    tibble,
     sf,
     glue,
     data.table

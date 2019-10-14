@@ -1,12 +1,3 @@
-#### function to get residence patches ####
-
-# Code author Pratik Gupte
-# PhD student
-# MARM group, GELIFES-RUG, NL
-# Contact p.r.gupte@rug.nl
-
-#### begin function here ####
-
 #' getResPatches
 #' @author Pratik R Gupte, \email{p.r.gupte@rug.nl}
 #' @param df A dataframe of values of any class that is or extends data.frame. The dataframe must contain at least two spatial coordinates, `x` and `y`, and a temporal coordinate, `time`. The names of columns specifying these can be passed as arguments below.
@@ -16,8 +7,7 @@
 #' @param buffsize A numeric value specifying the radius of the buffer to be drawn around each coordinate point. May be thought of as the distance that an individual can access, assess, or otherwise cover when at a discrete point in space.
 #' @param returnSf A logical value (`TRUE` or `FALSE`) of whether the constructed patches should be returned. When true, the `sf` object is returned bound to the patch summary dataframe in a list of length two.
 #' @return Depending on whether the constructed poylgons are requested, a list object containing as its first element a dataframe of patch summaries, and as its second element an `sf` `MULTIPOLYGON` or `POLYGON` (as approporiate) object. The list is returned when `returnSf = TRUE`, and only the dataframe of patch summaries when `returnSf` is `FALSE`.
-#' @export TRUE
-#'
+#' @export
 
 funcGetResPatches <- function(df, x = "x", y = "y", time = "time",
                               buffsize = 10.0,

@@ -1,22 +1,29 @@
 Package: watlasUtils
-Title: What the Package Does (One Line, Title Case)
+Title: Utilities for High Resolution Tracking Data from WATLAS
 Version: 0.0.0.9000
-Authors@R: 
-    person(given = "Pratik",
+Authors@R:
+    c(person(given = "Pratik",
            family = "Gupte",
            role = c("aut", "cre"),
            email = "p.r.gupte@rug.nl",
-           comment = c(ORCID = "https://orcid.org/0000-0001-5294-7819"))
-Description: What the package does (one paragraph).
+           comment = c(ORCID = "https://orcid.org/0000-0001-5294-7819")),
+    person(given = "Pedro",
+           family = "Neves",
+           role = c("ctb"),
+           email = "p.m.santos.neves@rug.nl"))
+           
+Description: Some utilities to handle high-resolution tracking data from the Wadden Sea ATLAS system (WATLAS: https://www.nioz.nl/en/about/cos/coastal-movement-ecology/shorebird-tracking/watlas-tracking-regional-movements).
+
 License: GPL-3
 Encoding: UTF-8
 LazyData: true
 URL: https://github.com/pratikunterwegs/watlasUtils
 BugReports: https://github.com/pratikunterwegs/watlasUtils/issues
-Imports: 
-    tidyr
-    dplyr
-    purrr
-    sf
-    glue
+Imports:
+    tidyr,
+    dplyr,
+    purrr,
+    sf,
+    glue,
     data.table
+RoxygenNote: 6.1.1

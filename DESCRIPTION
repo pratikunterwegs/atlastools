@@ -2,14 +2,21 @@ Package: watlasUtils
 Title: What the Package Does (One Line, Title Case)
 Version: 0.0.0.9000
 Authors@R: 
-    person(given = "First",
-           family = "Last",
+    person(given = "Pratik",
+           family = "Gupte",
            role = c("aut", "cre"),
-           email = "first.last@example.com",
-           comment = c(ORCID = "YOUR-ORCID-ID"))
+           email = "p.r.gupte@rug.nl",
+           comment = c(ORCID = "https://orcid.org/0000-0001-5294-7819"))
 Description: What the package does (one paragraph).
 License: GPL-3
 Encoding: UTF-8
 LazyData: true
 URL: https://github.com/pratikunterwegs/watlasUtils
 BugReports: https://github.com/pratikunterwegs/watlasUtils/issues
+Imports: 
+    tidyr
+    dplyr
+    purrr
+    sf
+    glue
+    data.table

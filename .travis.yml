@@ -1,3 +1,5 @@
 language: r
 r:
   - release
+apt_packages:
+  - libudunits2-dev

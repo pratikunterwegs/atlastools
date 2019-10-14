@@ -20,8 +20,6 @@ funcSegPath <- function(revdata, resTimeLimit = 2, travelSeg = 5,
 
   # read the file in
   {df <- fread(revdata)
-    # merge to recurse data
-    df <- merge(df, dataHt, all = FALSE)
     print(glue('individual {unique(df$id)} in tide {unique(df$tidalcycle)} has {nrow(df)} obs'))
   }
 
@@ -119,6 +117,9 @@ funcSegPath <- function(revdata, resTimeLimit = 2, travelSeg = 5,
 
   # add param assumptions
   df$resTimeLimit = resTimeLimit; df$travelSeg = travelSeg
+
+  # remove useless df columns
+  set(df, ,c("rollResTime", "resTimeBool"), NULL)
 
   return(df)
 

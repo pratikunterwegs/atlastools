@@ -25,6 +25,8 @@ Imports:
     sf,
     glue,
     data.table,
+    rlang,
+    stats,
     zoo,
     assertthat
 RoxygenNote: 6.1.1

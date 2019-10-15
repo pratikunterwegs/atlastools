@@ -8,6 +8,15 @@
 
 For more information on the system, contact WATLAS PI [Allert Bijleveld (COS-NIOZ)](https://www.nioz.nl/en/about/organisation/staff/allert-bijleveld).
 
+## Installation
+
+```r
+# This package can be installed using devtools
+install.packages("devtools")
+
+# library("devtools")
+devtools::install_github("pratikunterwegs/watlasUtils")
+```
 
 ## Current functions
 

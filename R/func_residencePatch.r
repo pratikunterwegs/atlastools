@@ -19,12 +19,12 @@ funcGetResPatches <- function(df, x = "x", y = "y", time = "time",
     # check that args are strings
     # check times are numerics
     assertthat::assert_that(is.data.frame(df),
-                            is.character(c(x,y,time,tidaltime)),
-                            is.numeric(c(df$time, df$tidaltime)),
+                            is.character(c(x,y,time)),
+                            is.numeric(c(df$time)),
                             msg = "argument classes don't match expected arg classes")
 
     # check that columns are present in data
-    assertthat::assert_that(length(base::intersect(c(x,y,time,tidaltime), names(df))) == 4,
+    assertthat::assert_that(length(base::intersect(c(x,y,time), names(df))) == 4,
                             msg = "wrong column names provided, or df has wrong cols")
   }
 
@@ -37,17 +37,17 @@ funcGetResPatches <- function(df, x = "x", y = "y", time = "time",
         dplyr::group_by(id, tidalcycle, resPatch, type) %>%
         tidyr::nest() %>%
         # make sd
-        dplyr::mutate(sfdata = purrr::map(data, function(dff){
+        dplyr::mutate(sfdata = purrr::map(.$data, function(dff){
           sf::st_as_sf(dff, coords = c("x", "y")) %>%
             # assign crs
             sf::`st_crs<-`(32631)}))#
 
       # make polygons
       pts = pts %>%
-        dplyr::mutate(polygons = purrr::map(sfdata, function(dff){
+        dplyr::mutate(polygons = purrr::map(.$sfdata, function(dff){
           # draw a 10 m buffer (arbitrary choice)
           sf::st_buffer(dff, buffsize) %>%
-            sf::summarise()})) %>%
+            dplyr::summarise()})) %>%
         # remove sf data
         dplyr::select(-sfdata)
 

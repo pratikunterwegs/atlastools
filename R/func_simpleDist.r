@@ -10,8 +10,8 @@
 funcDistance = function(df, x = "x", y = "y"){
   #check for basic assumptions
   assertthat::assert_that(is.data.frame(df),
-                          is.character(a),
-                          is.character(b),
+                          is.character(x),
+                          is.character(y),
                           msg = "some df assumptions are not met")
 
   dist <- dplyr::case_when(nrow(df) > 1 ~

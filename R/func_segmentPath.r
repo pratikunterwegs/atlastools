@@ -11,6 +11,7 @@
 #'
 
 funcSegPath <- function(revdata, resTimeLimit = 2, travelSeg = 5,
+                        infPatchTimeDiff = 1800, infPatchSpatDiff = 100,
                         inferPatches = TRUE){
 
   # handle global variable issues
@@ -29,20 +30,34 @@ funcSegPath <- function(revdata, resTimeLimit = 2, travelSeg = 5,
     print(glue::glue('individual {unique(df$id)} in tide {unique(df$tidalcycle)} has {nrow(df)} obs'))
   }
 
-  # get names
+  # get names and numeric variables
   dfnames <- names(df)
   namesReq <- c("id", "tidalcycle", "x", "y", "time", "resTime")
+  numvars <- c("x","y","time","resTime")
 
   # include asserts checking for required columns
   {
     for (i in 1:length(namesReq)) {
       assertthat::assert_that(namesReq[i] %in% dfnames,
-                              msg = glue::glue('{namesReq[i]} is missing from data!'))
+                              msg = glue::glue('{namesReq[i]} is required but missing from data!'))
+    }
+  }
+  # include assert checking for data type
+  {
+    for(i in 1:length(numvars)){
+      assertthat::assert_that("numeric" %in% class(df[,numvars[i]]),
+                              msg = glue::glue('{numvars[i]} must be numeric but is of type {class(df[,numvars[i]])}'))
     }
   }
 
   ## SET THE DF IN ORDER OF TIME ##
   data.table::setorder(df,time)
+
+  # check this has worked
+  {
+    assertthat::assert_that(min(diff(df$time)) >= 0,
+                            msg = "data for segmentation is not ordered by time")
+  }
 
   if(inferPatches == TRUE){
     # get the max and min time
@@ -56,9 +71,9 @@ funcSegPath <- function(revdata, resTimeLimit = 2, travelSeg = 5,
                 # get difference in time and space
                 ][,`:=`(timediff = c(diff(time), NA),
                         spatdiff = funcDistance(df = df, x = "x", y = "y"))
-                  # find missing patches if timediff is greater than 1 hour
-                  # AND spatdiff is less than 100m
-                  ][,infPatch := cumsum(timediff > 1800 & spatdiff < 100)
+                  # find missing patches if timediff is greater than specified (default 30 mins)
+                  # AND spatdiff is less than specified (100 m)
+                  ][,infPatch := cumsum(timediff > infPatchTimeDiff & spatdiff < infPatchSpatDiff)
                     # subset the data to collect only the first two points
                     # of an inferred patch
                     ][,posId := 1:(.N), by = "infPatch"
@@ -92,6 +107,13 @@ funcSegPath <- function(revdata, resTimeLimit = 2, travelSeg = 5,
 
   # sort by time
   data.table::setorder(df, time)
+
+  # check this has worked
+  {
+    assertthat::assert_that(min(diff(df$time)) >= 0,
+                            msg = "data for segmentation is not ordered by time")
+  }
+
   # prep to assign sequence to res patches
   # to each id.tide combination
   # remove NA vals in resTime

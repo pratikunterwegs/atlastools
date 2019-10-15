@@ -5,6 +5,7 @@
 \title{segPath}
 \usage{
 funcSegPath(revdata, resTimeLimit = 2, travelSeg = 5,
+  infPatchTimeDiff = 1800, infPatchSpatDiff = 100,
   inferPatches = TRUE)
 }
 \arguments{

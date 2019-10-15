@@ -55,7 +55,7 @@ funcSegPath <- function(revdata, resTimeLimit = 2, travelSeg = 5,
     tempdf = df[!is.na(time),
                 # get difference in time and space
                 ][,`:=`(timediff = c(diff(time), NA),
-                        spatdiff = funcDistance(df = df, a = "x", b = "y"))
+                        spatdiff = funcDistance(df = df, x = "x", y = "y"))
                   # find missing patches if timediff is greater than 1 hour
                   # AND spatdiff is less than 100m
                   ][,infPatch := cumsum(timediff > 1800 & spatdiff < 100)

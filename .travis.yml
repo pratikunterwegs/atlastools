@@ -1,5 +1,12 @@
 language: r
 r:
   - release
-apt_packages:
-  - libudunits2-dev
+addons:
+  apt:
+    sources:
+      - sourceline: ppa:ubuntugis/ubuntugis-unstable
+    packages:
+      - libudunits2-dev
+      - libgdal-dev
+      - libgeos-dev
+      - libproj-dev

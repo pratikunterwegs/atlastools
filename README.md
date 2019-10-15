@@ -11,7 +11,17 @@ For more information on the system, contact WATLAS PI [Allert Bijleveld (COS-NIO
 
 ## Current functions
 
-The package currently has the following functions:
+The package currently has the following main functions:
 
   - `funcSegPath` manual segmentation of movement data with an option to infer residence patches based on gaps in the data.
   - `funcGetResPatches` construction of `sf`-based residence patches and calculation of patch- and trajectory-specific metrics.
+
+## Planned functions
+
+It may be a good idea to split off some components of the two main functions to make them more modular, and to add some smaller diagnostic functions.
+
+### Modularity in main functions
+
+- `funcInferPatches` a function to detect temporal gaps in the data and convert these to 'inferred patches' if the data on either side of the gap satisfies some criteria. To be split off from `funcSegPath`, which already has this functionality.
+- `funcGetPatchSpatials` a function to construct `sf` `MULTIPOLYGON` objects from patch data, and export to local file.
+- `funcVisPatches` a function taking data with id and tidal-cycle information, and visualising (and optionally saving) the output as a map-like image.

@@ -1,3 +1,4 @@
+warnings_are_errors: false
 language: r
 r:
   - release
@@ -16,7 +17,3 @@ addons:
 branches:
   only:
   - master
-
-environment:
-  global:
-    WARNINGS_ARE_ERORRS: 0

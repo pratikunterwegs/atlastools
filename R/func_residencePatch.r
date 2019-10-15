@@ -229,7 +229,7 @@ funcGetResPatches <- function(df, x = "x", y = "y", time = "time",
 
         # add distance between and duration in SECONDS
         pts <- dplyr::mutate(pts, patch = 1:nrow(.),
-                      distBwPatch = funcPatchDistance(., x1 = "X_end", x2 = "X_start",
+                      distBwPatch = funcBwPatchDist(., x1 = "X_end", x2 = "X_start",
                                                       y1 = "Y_end", y2 = "Y_start"),
                       duration = time_end - time_start,
                       propFixes = nfixes/(duration/3))

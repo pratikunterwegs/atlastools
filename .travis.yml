@@ -3,6 +3,11 @@ CODECOV_TOKEN="b029e2a4-d34f-4717-9830-28d32f86ee43"
 language: r
 r:
   - release
+r_packages:
+  - covr
+
+after_success:
+  - Rscript -e 'library(covr); codecov()'
 
 addons:
   apt:

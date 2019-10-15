@@ -6,14 +6,16 @@
 #' @param inferPatches A logical indicating whether residence patches should be inferred from temporal gaps in the data.
 #'
 #' @return A data.frame extension object. This dataframe has the added column `resPatch` based on cumulative patch summing. Depending on whether `inferPatches` is set `TRUE`, the dataframe has additional inferred points. An additional column is created in each case, indicating whether the data are empirical fixes ('real') or 'inferred'.
+#' @import data.table
 #' @export
 #'
 
 funcSegPath <- function(revdata, resTimeLimit = 2, travelSeg = 5,
                         inferPatches = TRUE){
 
-  # add some 'syntactic sugar' global variables
-  utils::globalVariables(c(":=", ".N", "."))
+  # handle global variable issues
+  infPatch<-nfixes<-posId<-resPatch<-resTime<-resTimeBool<-rollResTime <- NULL
+  spatdiff <- time <- timediff <- type <- x <- y <- NULL
 
   # adding the inferPatches argument to prep for inferring
   # residence patches from missing data between travel segments
@@ -86,7 +88,7 @@ funcSegPath <- function(revdata, resTimeLimit = 2, travelSeg = 5,
   df[,type:="real"]
 
   # merge inferred data to empirical data
-  df <- data.table::merge(df, infPatchDf, by = intersect(names(df), names(infPatchDf)), all = T)
+  df <- base::merge(df, infPatchDf, by = intersect(names(df), names(infPatchDf)), all = T)
 
   # sort by time
   data.table::setorder(df, time)

@@ -10,3 +10,6 @@ addons:
       - libgdal-dev
       - libgeos-dev
       - libproj-dev
+environment:
+  global:
+    WARNINGS_ARE_ERORRS: 1

@@ -13,6 +13,14 @@ funcGetResPatches <- function(df, x = "x", y = "y", time = "time",
                               buffsize = 10.0,
                               returnSf = FALSE){
 
+  # handle global variable complaints
+  id <- tidalcycle <- resPatch <- type <- sfdata <- data <- polygons <- NULL
+  # more global vars
+  area <- start <- timediff <- spatdiff <- indePatch <- `.` <- NULL
+  # yet more of these variables
+  geometry <- X <- Y <- tidaltime <- time_mean <- distInPatch <- nfixes <- time_end <- time_start <- duration <- NULL
+
+
   #### check assumptions ####
   # assert df is a data frame
   {
@@ -142,7 +150,7 @@ funcGetResPatches <- function(df, x = "x", y = "y", time = "time",
                               type = ifelse(length(unique(type)) == 2,
                                             "mixed", dplyr::first(type)))
       # get the distinct observations
-      pts <- dplyr::mutate(pts, data = map(data, function(dff)
+      pts <- dplyr::mutate(pts, data = purrr::map(data, function(dff)
       {
         dff <- dplyr::bind_rows(dff)
         dff <- dplyr::distinct(dff)
@@ -154,7 +162,7 @@ funcGetResPatches <- function(df, x = "x", y = "y", time = "time",
       }))
 
       # clip underlying data by polygon boundaries
-      pts <- mutate(pts, data = purrr::map2(data, geometry, function(dff1, dff2)
+      pts <- dplyr::mutate(pts, data = purrr::map2(data, geometry, function(dff1, dff2)
       {
         # keep rows contained by polygon
         dff1 <- dff1[unlist(sf::st_contains(dff2, dff1)),]
@@ -164,7 +172,7 @@ funcGetResPatches <- function(df, x = "x", y = "y", time = "time",
 
       # get patch summary from underlying data
       # add x,y,time summary
-      pts <- dplyr::mutate(pts, patchSummary = map(data, function(dff)
+      pts <- dplyr::mutate(pts, patchSummary = purrr::map(data, function(dff)
       {
         # get temporary coordinates before dropping geometry
         tempcoords <- sf::st_coordinates(dff)

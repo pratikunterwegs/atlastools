@@ -1,4 +1,3 @@
-
 #' segPath
 #'
 #' @param revdata A string filepath to data in csv format. The data must be the output of recurse analysis, or must include, in addition to X, Y and time columns, a residence time column named resTime, id, and tidalcycle.
@@ -9,18 +8,23 @@
 #' @return A data.frame extension object. This dataframe has the added column `resPatch` based on cumulative patch summing. Depending on whether `inferPatches` is set `TRUE`, the dataframe has additional inferred points. An additional column is created in each case, indicating whether the data are empirical fixes ('real') or 'inferred'.
 #' @export
 #'
+
 funcSegPath <- function(revdata, resTimeLimit = 2, travelSeg = 5,
                         inferPatches = TRUE){
+
+  # add some 'syntactic sugar' global variables
+  utils::globalVariables(c(":=", ".N", "."))
 
   # adding the inferPatches argument to prep for inferring
   # residence patches from missing data between travel segments
 
   # print param assumpts
-  print(glue('param assumpts...\n residence time threshold = {resTimeLimit}\n travel segment smoothing = {travelSeg}'))
+  print(glue::glue('param assumpts...\n residence time threshold = {resTimeLimit}\n travel segment smoothing = {travelSeg}'))
 
   # read the file in
-  {df <- fread(revdata)
-    print(glue('individual {unique(df$id)} in tide {unique(df$tidalcycle)} has {nrow(df)} obs'))
+  {
+    df <- data.table::fread(revdata)
+    print(glue::glue('individual {unique(df$id)} in tide {unique(df$tidalcycle)} has {nrow(df)} obs'))
   }
 
   # get names
@@ -30,15 +34,13 @@ funcSegPath <- function(revdata, resTimeLimit = 2, travelSeg = 5,
   # include asserts checking for required columns
   {
     for (i in 1:length(namesReq)) {
-
       assertthat::assert_that(namesReq[i] %in% dfnames,
                               msg = glue::glue('{namesReq[i]} is missing from data!'))
-
     }
   }
 
   ## SET THE DF IN ORDER OF TIME ##
-  setorder(df,time)
+  data.table::setorder(df,time)
 
   if(inferPatches == TRUE){
     # get the max and min time
@@ -61,21 +63,21 @@ funcSegPath <- function(revdata, resTimeLimit = 2, travelSeg = 5,
                       ][posId <= 2 & !is.na(infPatch),]
     # handle cases where there are inferred patches
     # if(max(tempdf$infPatch > 0))
-      {
+    {
       # make list column of expected times with 3 second interval
       # assume coordinate is the mean between 'takeoff' and 'landing'
       infPatchDf = tempdf[,nfixes:=length(seq(time[1], time[2], by = 3)),
-                                          by = c("id", "tidalcycle", "infPatch")
-                                          ][,.(time = (seq(time[1], time[2], by = 3)),
-                             x = mean(x),
-                             y = mean(y),
-                             resTime = resTimeLimit),
-                          by = c("id", "tidalcycle", "infPatch","nfixes")
-                          ][infPatch > 0,
-                            ][,type:="inferred"]
-      }
+                          by = c("id", "tidalcycle", "infPatch")
+                          ][,.(time = (seq(time[1], time[2], by = 3)),
+                               x = mean(x),
+                               y = mean(y),
+                               resTime = resTimeLimit),
+                            by = c("id", "tidalcycle", "infPatch","nfixes")
+                            ][infPatch > 0,
+                              ][,type:="inferred"]
+    }
 
-    print(glue('\n {max(tempdf$infPatch)} inferred patches with {nrow(infPatchDf)} positions\n'))
+    print(glue::glue('\n {max(tempdf$infPatch)} inferred patches with {nrow(infPatchDf)} positions\n'))
 
   }
   rm(tempdf); gc()
@@ -84,10 +86,10 @@ funcSegPath <- function(revdata, resTimeLimit = 2, travelSeg = 5,
   df[,type:="real"]
 
   # merge inferred data to empirical data
-  df <- merge(df, infPatchDf, by = intersect(names(df), names(infPatchDf)), all = T)
+  df <- data.table::merge(df, infPatchDf, by = intersect(names(df), names(infPatchDf)), all = T)
 
   # sort by time
-  setorder(df, time)
+  data.table::setorder(df, time)
   # prep to assign sequence to res patches
   # to each id.tide combination
   # remove NA vals in resTime
@@ -119,7 +121,7 @@ funcSegPath <- function(revdata, resTimeLimit = 2, travelSeg = 5,
   df$resTimeLimit = resTimeLimit; df$travelSeg = travelSeg
 
   # remove useless df columns
-  set(df, ,c("rollResTime", "resTimeBool"), NULL)
+  data.table::set(df, ,c("rollResTime", "resTimeBool"), NULL)
 
   return(df)
 

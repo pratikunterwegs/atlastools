@@ -1,6 +1,7 @@
 language: r
 r:
   - release
+
 addons:
   apt:
     sources:
@@ -10,6 +11,12 @@ addons:
       - libgdal-dev
       - libgeos-dev
       - libproj-dev
+
+# safelist
+branches:
+  only:
+  - master
+
 environment:
   global:
-    WARNINGS_ARE_ERORRS: 1
+    WARNINGS_ARE_ERORRS: 0

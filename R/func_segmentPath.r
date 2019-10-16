@@ -90,7 +90,7 @@ funcSegPath <- function(revdata, resTimeLimit = 2, travelSeg = 5,
     # enter this step only if there are 2 or more rows of data between which to infer patches
     if(nrow(tempdf) >= 2)
     {
-      print(glue::glue('\n {unique(tempdf$id)} has {max(tempdf$infPatch)} inferred patches'))
+      print(glue::glue('\n... {unique(tempdf$id)} has {max(tempdf$infPatch)} inferred patches'))
       # make list column of expected times with 3 second interval
       # assume coordinate is the mean between 'takeoff' and 'landing'
       infPatchDf <- tempdf[,nfixes:=length(seq(time[1], time[2], by = 3)),

@@ -4,6 +4,8 @@
 #' @param resTimeLimit A numeric giving the time limit in minutes against which residence time is compared.
 #' @param travelSeg A numeric value of the number of fixes, or rows, over which a smoother function is applied.
 #' @param inferPatches A logical indicating whether residence patches should be inferred from temporal gaps in the data.
+#' @param infPatchTimeDiff A numeric duration in seconds, of the minimum time difference between two points, above which, it is assumed worthwhile to examine whether there is a missing residence patch to be inferred.
+#' @param infPatchSpatDiff A numeric distance in metres, of the maximum spatial distance between two points, below which it may be assumed few extreme movements took place between them.
 #'
 #' @return A data.frame extension object. This dataframe has the added column `resPatch` based on cumulative patch summing. Depending on whether `inferPatches` is set `TRUE`, the dataframe has additional inferred points. An additional column is created in each case, indicating whether the data are empirical fixes ('real') or 'inferred'.
 #' @import data.table
@@ -61,29 +63,29 @@ funcSegPath <- function(revdata, resTimeLimit = 2, travelSeg = 5,
 
   if(inferPatches == TRUE){
     # get the max and min time
-    maxtime = max(df$time); mintime= min(df$time)
+    maxtime <- max(df$time); mintime <- min(df$time)
 
     # make a df with id, tidalcycle and time seq, with missing x and y
     # identify where there are missing segments more than 2 mins long
     # there, create a sequence of points with id, tide, and time in 3s intervals
     # merge with true df
-    tempdf = df[!is.na(time),
-                # get difference in time and space
-                ][,`:=`(timediff = c(diff(time), NA),
-                        spatdiff = funcDistance(df = df, x = "x", y = "y"))
-                  # find missing patches if timediff is greater than specified (default 30 mins)
-                  # AND spatdiff is less than specified (100 m)
-                  ][,infPatch := cumsum(timediff > infPatchTimeDiff & spatdiff < infPatchSpatDiff)
-                    # subset the data to collect only the first two points
-                    # of an inferred patch
-                    ][,posId := 1:(.N), by = "infPatch"
-                      ][posId <= 2 & !is.na(infPatch),]
+    tempdf <- df[!is.na(time),]
+    # get difference in time and space
+    tempdf <- tempdf[,`:=`(timediff = c(diff(time), NA),
+                           spatdiff = funcDistance(df = tempdf, x = "x", y = "y"))
+                     # find missing patches if timediff is greater than specified (default 30 mins)
+                     # AND spatdiff is less than specified (100 m)
+                     ][,infPatch := cumsum(timediff > infPatchTimeDiff & spatdiff < infPatchSpatDiff)
+                       # subset the data to collect only the first two points
+                       # of an inferred patch
+                       ][,posId := 1:(.N), by = "infPatch"
+                         ][posId <= 2 & !is.na(infPatch),]
     # handle cases where there are inferred patches
     # if(max(tempdf$infPatch > 0))
     {
       # make list column of expected times with 3 second interval
       # assume coordinate is the mean between 'takeoff' and 'landing'
-      infPatchDf = tempdf[,nfixes:=length(seq(time[1], time[2], by = 3)),
+      infPatchDf <- tempdf[,nfixes:=length(seq(time[1], time[2], by = 3)),
                           by = c("id", "tidalcycle", "infPatch")
                           ][,.(time = (seq(time[1], time[2], by = 3)),
                                x = mean(x),

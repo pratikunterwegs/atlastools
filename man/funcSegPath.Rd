@@ -15,6 +15,10 @@ funcSegPath(revdata, resTimeLimit = 2, travelSeg = 5,
 
 \item{travelSeg}{A numeric value of the number of fixes, or rows, over which a smoother function is applied.}
 
+\item{infPatchTimeDiff}{A numeric duration in seconds, of the minimum time difference between two points, above which, it is assumed worthwhile to examine whether there is a missing residence patch to be inferred.}
+
+\item{infPatchSpatDiff}{A numeric distance in metres, of the maximum spatial distance between two points, below which it may be assumed few extreme movements took place between them.}
+
 \item{inferPatches}{A logical indicating whether residence patches should be inferred from temporal gaps in the data.}
 }
 \value{

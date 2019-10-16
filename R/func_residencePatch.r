@@ -53,7 +53,7 @@ funcGetResPatches <- function(df, x = "x", y = "y", time = "time",
       pts <- tidyr::nest(pts)
       # ungroup
       pts <- dplyr::ungroup(pts)
-      pts <- dplyr::mutate(pts, sfdata = purrr::map(.$data, function(dff)
+      pts <- dplyr::mutate(pts, sfdata = purrr::map(pts$data, function(dff)
       {
         dff <- sf::st_as_sf(dff, coords = c(x, y))
         # set crs to UTM 31N
@@ -62,7 +62,7 @@ funcGetResPatches <- function(df, x = "x", y = "y", time = "time",
       }))
 
       # make polygons
-      pts <- dplyr::mutate(pts, polygons = purrr::map(.$sfdata, function(dff)
+      pts <- dplyr::mutate(pts, polygons = purrr::map(pts$sfdata, function(dff)
       {
         # draw a 10 m buffer (arbitrary choice)
         dfpolygon <- sf::st_buffer(dff, buffsize)
@@ -84,7 +84,7 @@ funcGetResPatches <- function(df, x = "x", y = "y", time = "time",
         dff <- sf::st_cast(dff, "POLYGON")
 
         # get area for later filtering
-        dff <- dplyr::mutate(dff, area = as.numeric(sf::st_area(.)))
+        dff <- dplyr::mutate(dff, area = as.numeric(sf::st_area(dff)))
 
       }))
 
@@ -159,6 +159,9 @@ funcGetResPatches <- function(df, x = "x", y = "y", time = "time",
                               # tag patches as mixed if comprised of real and inferred
                               type = ifelse(length(unique(type)) == 2,
                                             "mixed", dplyr::first(type)))
+
+      # may need an ungroup here
+      pts <- dplyr::ungroup(pts)
       # get the distinct observations
       pts <- dplyr::mutate(pts, data = purrr::map(data, function(dff)
       {
@@ -219,7 +222,7 @@ funcGetResPatches <- function(df, x = "x", y = "y", time = "time",
                                  time_mean, type)
         # reorder and renumber patches by time
         patchSf <- dplyr::arrange(patchSf, time_mean)
-        patchSf <- dplyr::mutate(patchSf, patch = 1:nrow(.))
+        patchSf <- dplyr::mutate(patchSf, patch = 1:nrow(patchSf))
       }
 
 
@@ -227,7 +230,7 @@ funcGetResPatches <- function(df, x = "x", y = "y", time = "time",
       # add area and number of fixes and distance per patch
       # also proportion of expected positions received
 
-      pts <- dplyr::mutate(pts, area = as.numeric(sf::st_area(.)),
+      pts <- dplyr::mutate(pts, area = as.numeric(sf::st_area(pts)),
                            nfixes = purrr::map_int(data, nrow),
                            distPerPoint = distInPatch/nfixes)
         # drop geometry
@@ -238,7 +241,7 @@ funcGetResPatches <- function(df, x = "x", y = "y", time = "time",
         pts <- dplyr::arrange(pts, time_mean)
 
         # add distance between and duration in SECONDS
-        pts <- dplyr::mutate(pts, patch = 1:nrow(.),
+        pts <- dplyr::mutate(pts, patch = 1:nrow(pts),
                       distBwPatch = funcBwPatchDist(., x1 = "X_end", x2 = "X_start",
                                                       y1 = "Y_end", y2 = "Y_start"),
                       duration = time_end - time_start,

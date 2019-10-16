@@ -17,8 +17,12 @@ funcDistance = function(df, x = "x", y = "y"){
   dist <- dplyr::case_when(nrow(df) > 1 ~
                              # cases where sufficient data
                              {
-                               x1 <- df[1:nrow(df)-1,x]; x2 <- df[2:nrow(df),x]
-                               y1 <- df[1:nrow(df)-1,y]; y2 <- df[2:nrow(df),y]
+                               {x1 <- df[1:nrow(df)-1,x]
+                                 x2 <- df[2:nrow(df),x]
+                               }
+                               {y1 <- df[1:nrow(df)-1,y]
+                                 y2 <- df[2:nrow(df),y]
+                               }
 
                                # get dist
                                c(NA, sqrt((x1 - x2)^2 + (y1 - y2)^2))

@@ -1,3 +1,5 @@
-testthat::test_that("multiplication works", {
-  expect_equal(2 * 2, 4)
+testthat::test_that("simple segmentation works", {
+
+  testthat::expect_equal(2*2, 4)
+
 })

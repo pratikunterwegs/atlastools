@@ -51,6 +51,8 @@ funcGetResPatches <- function(df, x = "x", y = "y", time = "time",
       # convert to sf points object
       pts <- dplyr::group_by(df, id, tidalcycle, resPatch, type)
       pts <- tidyr::nest(pts)
+      # ungroup
+      pts <- dplyr::ungroup(pts)
       pts <- dplyr::mutate(pts, sfdata = purrr::map(.$data, function(dff)
       {
         dff <- sf::st_as_sf(dff, coords = c(x, y))

@@ -53,7 +53,7 @@ funcGetResPatches <- function(df, x = "x", y = "y", time = "time",
       pts <- tidyr::nest(pts)
       pts <- dplyr::mutate(pts, sfdata = purrr::map(.$data, function(dff)
       {
-        dff <- sf::st_as_sf(dff, coords = c("x", "y"))
+        dff <- sf::st_as_sf(dff, coords = c(x, y))
         # set crs to UTM 31N
         sf::st_crs(dff) <- 32631
         return(dff)

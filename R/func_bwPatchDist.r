@@ -21,16 +21,13 @@ funcBwPatchDist = function(df, x1 = "x_end", x2 = "x_start",
                              # get x and y
                              {
                                {
-                                 x1 <- df[,x1]
-                                 x2 <- df[,x2]
-                                 x1 <- x1[1:length(x1)-1];
-                                 x2 <- x2[2:length(x2)]
+                                 x1 <- df[[x1]][1:nrow(df)-1]
+                                 x2 <- df[[x2]][2:nrow(df)]
                                }
                                {
-                                 y1 <- df[,y1]
-                                 y2 <- df[,y2]
-                                 y1 <- y1[1:length(y1)-1];
-                                 y2 <- y2[2:length(y2)]}
+                                 y1 <- df[[y1]][1:nrow(df)-1]
+                                 y2 <- df[[y2]][2:nrow(df)]
+                               }
                                # get dist
                                c(NA, sqrt((x1 - x2)^2 + (y1 - y2)^2))},
                            nrow(df) == 1 ~ {0.0},

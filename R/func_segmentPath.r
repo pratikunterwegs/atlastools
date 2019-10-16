@@ -6,13 +6,14 @@
 #' @param inferPatches A logical indicating whether residence patches should be inferred from temporal gaps in the data.
 #' @param infPatchTimeDiff A numeric duration in seconds, of the minimum time difference between two points, above which, it is assumed worthwhile to examine whether there is a missing residence patch to be inferred.
 #' @param infPatchSpatDiff A numeric distance in metres, of the maximum spatial distance between two points, below which it may be assumed few extreme movements took place between them.
+#' @param htdata A string filepath to data in csv format. The data must be the output of tidal cycle finding analysis, or must include, in addition to X, Y and time columns, a tidaltime column named tidaltime; also id, and tidalcycle for merging.
 #'
 #' @return A data.frame extension object. This dataframe has the added column `resPatch` based on cumulative patch summing. Depending on whether `inferPatches` is set `TRUE`, the dataframe has additional inferred points. An additional column is created in each case, indicating whether the data are empirical fixes ('real') or 'inferred'.
 #' @import data.table
 #' @export
 #'
 
-funcSegPath <- function(revdata, resTimeLimit = 2, travelSeg = 5,
+funcSegPath <- function(revdata, htdata, resTimeLimit = 2, travelSeg = 5,
                         infPatchTimeDiff = 1800, infPatchSpatDiff = 100,
                         inferPatches = TRUE){
 
@@ -26,6 +27,9 @@ funcSegPath <- function(revdata, resTimeLimit = 2, travelSeg = 5,
   # read the file in
   {
     df <- data.table::fread(revdata)
+    htdf <- data.table::fread(htdata)
+    # merge with ht data
+    df <- base::merge(df, htdf, by = intersect(names(df), names(htdf)), all = T)
     print(glue::glue('individual {unique(df$id)} in tide {unique(df$tidalcycle)} has {nrow(df)} obs'))
   }
 

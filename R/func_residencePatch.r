@@ -89,7 +89,7 @@ funcGetResPatches <- function(df, x = "x", y = "y", time = "time",
       }))
 
       # remove point polygons if real, keeping inferred polygons, which have only a single coord
-      pts <- dplyr::mutate(polygons = purrr::map2(polygons, type, function(spatial, kind)
+      pts <- dplyr::mutate(pts, polygons = purrr::map2(polygons, type, function(spatial, kind)
       {
         if(kind == "real"){
           spatial <- dplyr::filter(spatial, area > 100*pi)
@@ -217,7 +217,7 @@ funcGetResPatches <- function(df, x = "x", y = "y", time = "time",
           return(thisdata$time_mean)
         }))
         # select some vars
-        patchSf <- dplyr::select(patchSf, id, tidalcycle, time_mean,
+        patchSf <- dplyr::select(patchSf, id, tidalcycle, tidaltime_mean,
                                  patch = indePatch, geometry,
                                  time_mean, type)
         # reorder and renumber patches by time

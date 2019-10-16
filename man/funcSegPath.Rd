@@ -4,12 +4,14 @@
 \alias{funcSegPath}
 \title{segPath}
 \usage{
-funcSegPath(revdata, resTimeLimit = 2, travelSeg = 5,
+funcSegPath(revdata, htdata, resTimeLimit = 2, travelSeg = 5,
   infPatchTimeDiff = 1800, infPatchSpatDiff = 100,
   inferPatches = TRUE)
 }
 \arguments{
 \item{revdata}{A string filepath to data in csv format. The data must be the output of recurse analysis, or must include, in addition to X, Y and time columns, a residence time column named resTime, id, and tidalcycle.}
+
+\item{htdata}{A string filepath to data in csv format. The data must be the output of tidal cycle finding analysis, or must include, in addition to X, Y and time columns, a tidaltime column named tidaltime; also id, and tidalcycle for merging.}
 
 \item{resTimeLimit}{A numeric giving the time limit in minutes against which residence time is compared.}
 

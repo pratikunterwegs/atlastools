@@ -87,10 +87,9 @@ funcSegPath <- function(revdata, htdata, resTimeLimit = 2, travelSeg = 5,
       print(glue::glue('\n... data has {max(tempdf$infPatch)} inferred patches\n\n'))
       # make list column of expected times with 3 second interval
       # assume coordinate is the mean between 'takeoff' and 'landing'
-      infPatchDf <- tempdf[,nfixes:=length(seq(time[1], time[2], by = 3)),
+      infPatchDf <- tempdf[,nfixes:=length(seq(from = time[1], to = time[2], by = 3)),
                            by = c("id", "tidalcycle", "infPatch")
-                           ][,.(time = (seq(min(time[1], na.rm = T), max(time[2], na.rm = T),
-                                            length.out = )),
+                           ][,.(time = seq(from = time[1], to = time[2], by = 3),
                                 x = mean(x),
                                 y = mean(y),
                                 resTime = resTimeLimit),

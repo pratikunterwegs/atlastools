@@ -16,7 +16,7 @@ funcGetResPatches <- function(df, x = "x", y = "y", time = "time",
   # handle global variable complaints
   id <- tidalcycle <- resPatch <- type <- sfdata <- data <- polygons <- NULL
   # more global vars
-  area <- start <- timediff <- spatdiff <- indePatch <- `.` <- NULL
+  area <- start <- timediff <- spatdiff <- indePatch <- tidaltime_mean <- NULL
   # yet more of these variables
   geometry <- X <- Y <- tidaltime <- time_mean <- distInPatch <- nfixes <- time_end <- time_start <- duration <- NULL
 

@@ -17,11 +17,11 @@ funcDistance = function(df, x = "x", y = "y"){
   dist <- dplyr::case_when(nrow(df) > 1 ~
                              # cases where sufficient data
                              {
-                               dm <- as.matrix(dist(df[,c(x,y)]))
-                               # add NA to the subdiagonal
-                               dm <- c(NA, dm[row(dm) == col(dm) + 1])
-                               # return dm
-                               dm
+                               x1 <- df[1:nrow(df)-1,x]; x2 <- df[2:nrow(df),x]
+                               y1 <- df[1:nrow(df)-1,y]; y2 <- df[2:nrow(df),y]
+
+                               # get dist
+                               c(NA, sqrt((x1 - x2)^2 + (y1 - y2)^2)))
                              },
                            nrow(df) == 1 ~ {0.0},
                            TRUE ~ {as.numeric(NA)})

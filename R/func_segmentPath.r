@@ -23,9 +23,6 @@ funcSegPath <- function(revdata, resTimeLimit = 2, travelSeg = 5,
   # adding the inferPatches argument to prep for inferring
   # residence patches from missing data between travel segments
 
-  # print param assumpts
-  print(glue::glue('param assumpts...\n residence time threshold = {resTimeLimit}\n travel segment smoothing = {travelSeg}'))
-
   # read the file in
   {
     df <- data.table::fread(revdata)
@@ -90,7 +87,7 @@ funcSegPath <- function(revdata, resTimeLimit = 2, travelSeg = 5,
     # enter this step only if there are 2 or more rows of data between which to infer patches
     if(nrow(tempdf) >= 2)
     {
-      print(glue::glue('\n... {unique(tempdf$id)} has {max(tempdf$infPatch)} inferred patches'))
+      print(glue::glue('\n... data has {max(tempdf$infPatch)} inferred patches\n\n'))
       # make list column of expected times with 3 second interval
       # assume coordinate is the mean between 'takeoff' and 'landing'
       infPatchDf <- tempdf[,nfixes:=length(seq(time[1], time[2], by = 3)),
@@ -107,7 +104,7 @@ funcSegPath <- function(revdata, resTimeLimit = 2, travelSeg = 5,
       rm(tempdf); gc()
       # merge inferred data to empirical data
       df <- base::merge(df, infPatchDf, by = intersect(names(df), names(infPatchDf)), all = T)
-    } else {print(glue::glue('\n... {unique(df$id)} has 0 inferred patches'))}
+    } else {print(glue::glue('\n... {unique(df$id)} has 0 inferred patches\n\n'))}
 
     # print(glue::glue('\n {max(tempdf$infPatch)} inferred patches with {nrow(infPatchDf)} positions\n'))
 

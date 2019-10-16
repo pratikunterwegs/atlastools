@@ -31,9 +31,17 @@ funcGetResPatches <- function(df, x = "x", y = "y", time = "time",
                             is.numeric(c(df$time)),
                             msg = "argument classes don't match expected arg classes")
 
-    # check that columns are present in data
-    assertthat::assert_that(length(base::intersect(c(x,y,time), names(df))) == 4,
-                            msg = "wrong column names provided, or df has wrong cols")
+    # get names and numeric variables
+    dfnames <- names(df)
+    namesReq <- c("id", "tidalcycle", "x", "y", "time", "resPatch", "type")
+
+    # include asserts checking for required columns
+    {
+      for (i in 1:length(namesReq)) {
+        assertthat::assert_that(namesReq[i] %in% dfnames,
+                                msg = glue::glue('{namesReq[i]} is required but missing from data!'))
+      }
+    }
   }
 
   #### pass methods to try catch ####

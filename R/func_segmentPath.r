@@ -46,12 +46,12 @@ funcSegPath <- function(revdata, resTimeLimit = 2, travelSeg = 5,
   }
 
   # include assert checking for data type
-#  {
-#    for(i in 1:length(numvars)){
-#      assertthat::assert_that("numeric" %in% class(df[,numvars[i]]),
-#                              msg = glue::glue('{numvars[i]} must be numeric but is of type {class(df[,numvars[i]])}'))
-#    }
-#  }
+  #  {
+  #    for(i in 1:length(numvars)){
+  #      assertthat::assert_that("numeric" %in% class(df[,numvars[i]]),
+  #                              msg = glue::glue('{numvars[i]} must be numeric but is of type {class(df[,numvars[i]])}'))
+  #    }
+  #  }
 
   ## SET THE DF IN ORDER OF TIME ##
   data.table::setorder(df,time)
@@ -62,7 +62,8 @@ funcSegPath <- function(revdata, resTimeLimit = 2, travelSeg = 5,
                             msg = "data for segmentation is not ordered by time")
   }
 
-  if(inferPatches == TRUE){
+  if(inferPatches == TRUE)
+  {
     # get the max and min time
     maxtime <- max(df$time); mintime <- min(df$time)
 
@@ -82,32 +83,34 @@ funcSegPath <- function(revdata, resTimeLimit = 2, travelSeg = 5,
                        ][,posId := 1:(.N), by = "infPatch"
                          ][posId <= 2 & !is.na(infPatch),]
     # handle cases where there are inferred patches
-    # if(max(tempdf$infPatch > 0))
+
+    # add type to real data
+    df[,type:="real"]
+
+    if(is.na(min(tempdf$infPatch)))
     {
+      print(glue::glue('\n {unique(tempdf$id)} has no inferred data'))
       # make list column of expected times with 3 second interval
       # assume coordinate is the mean between 'takeoff' and 'landing'
       infPatchDf <- tempdf[,nfixes:=length(seq(time[1], time[2], by = 3)),
-                          by = c("id", "tidalcycle", "infPatch")
-                          ][,.(time = (seq(time[1], time[2], by = 3)),
-                               x = mean(x),
-                               y = mean(y),
-                               resTime = resTimeLimit),
-                            by = c("id", "tidalcycle", "infPatch","nfixes")
-                            ][infPatch > 0,
-                              ][,type:="inferred"]
+                           by = c("id", "tidalcycle", "infPatch")
+                           ][,.(time = (seq(min(time[1], na.rm = T), max(time[2], na.rm = T),
+                                            length.out = )),
+                                x = mean(x),
+                                y = mean(y),
+                                resTime = resTimeLimit),
+                             by = c("id", "tidalcycle", "infPatch","nfixes")
+                             ][infPatch > 0,
+                               ][,type:="inferred"]
+
+      rm(tempdf); gc()
+      # merge inferred data to empirical data
+      df <- base::merge(df, infPatchDf, by = intersect(names(df), names(infPatchDf)), all = T)
     }
 
-    print(glue::glue('\n {max(tempdf$infPatch)} inferred patches with {nrow(infPatchDf)} positions\n'))
+    # print(glue::glue('\n {max(tempdf$infPatch)} inferred patches with {nrow(infPatchDf)} positions\n'))
 
   }
-  rm(tempdf); gc()
-
-  # add type to df
-  df[,type:="real"]
-
-  # merge inferred data to empirical data
-  df <- base::merge(df, infPatchDf, by = intersect(names(df), names(infPatchDf)), all = T)
-
   # sort by time
   data.table::setorder(df, time)
 

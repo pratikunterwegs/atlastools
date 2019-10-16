@@ -29,7 +29,7 @@ funcSegPath <- function(revdata, htdata, resTimeLimit = 2, travelSeg = 5,
     df <- data.table::fread(revdata)
     htdf <- data.table::fread(htdata)
     # merge with ht data
-    df <- base::merge(df, htdf, by = intersect(names(df), names(htdf)), all = T)
+    df <- base::merge(df, htdf, by = intersect(names(df), names(htdf)), all = FALSE)
     print(glue::glue('individual {unique(df$id)} in tide {unique(df$tidalcycle)} has {nrow(df)} obs'))
     rm(htdf); gc()
   }

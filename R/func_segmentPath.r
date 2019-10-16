@@ -75,7 +75,8 @@ funcSegPath <- function(revdata, htdata, resTimeLimit = 2, travelSeg = 5,
                        # subset the data to collect only the first two points
                        # of an inferred patch
                        ][,posId := 1:(.N), by = "infPatch"
-                         ][posId <= 2 & !is.na(infPatch) & !is.na(time),]
+                         ][posId <= 2 & !is.na(infPatch) & !is.na(time),
+                           ][infPatch > 0,]
     # handle cases where there are inferred patches
 
     # add type to real data

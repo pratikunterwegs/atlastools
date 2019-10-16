@@ -42,14 +42,6 @@ funcSegPath <- function(revdata, resTimeLimit = 2, travelSeg = 5,
     }
   }
 
-  # include assert checking for data type
-  #  {
-  #    for(i in 1:length(numvars)){
-  #      assertthat::assert_that("numeric" %in% class(df[,numvars[i]]),
-  #                              msg = glue::glue('{numvars[i]} must be numeric but is of type {class(df[,numvars[i]])}'))
-  #    }
-  #  }
-
   ## SET THE DF IN ORDER OF TIME ##
   data.table::setorder(df,time)
 
@@ -78,7 +70,7 @@ funcSegPath <- function(revdata, resTimeLimit = 2, travelSeg = 5,
                        # subset the data to collect only the first two points
                        # of an inferred patch
                        ][,posId := 1:(.N), by = "infPatch"
-                         ][posId <= 2 & !is.na(infPatch) & is.na(time),]
+                         ][posId <= 2 & !is.na(infPatch) & !is.na(time),]
     # handle cases where there are inferred patches
 
     # add type to real data

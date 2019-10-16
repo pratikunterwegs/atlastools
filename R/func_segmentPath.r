@@ -107,7 +107,7 @@ funcSegPath <- function(revdata, resTimeLimit = 2, travelSeg = 5,
       rm(tempdf); gc()
       # merge inferred data to empirical data
       df <- base::merge(df, infPatchDf, by = intersect(names(df), names(infPatchDf)), all = T)
-    }
+    } else {print(glue::glue('\n... {unique(df$id)} has 0 inferred patches'))}
 
     # print(glue::glue('\n {max(tempdf$infPatch)} inferred patches with {nrow(infPatchDf)} positions\n'))
 

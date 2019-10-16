@@ -21,7 +21,7 @@ funcDistance = function(df, x = "x", y = "y"){
                                y1 <- df[1:nrow(df)-1,y]; y2 <- df[2:nrow(df),y]
 
                                # get dist
-                               c(NA, sqrt((x1 - x2)^2 + (y1 - y2)^2)))
+                               c(NA, sqrt((x1 - x2)^2 + (y1 - y2)^2))
                              },
                            nrow(df) == 1 ~ {0.0},
                            TRUE ~ {as.numeric(NA)})
@@ -30,5 +30,3 @@ funcDistance = function(df, x = "x", y = "y"){
 }
 
 #### a function for patch end to patch start distances ####
-
-

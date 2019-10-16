@@ -44,13 +44,14 @@ funcSegPath <- function(revdata, resTimeLimit = 2, travelSeg = 5,
                               msg = glue::glue('{namesReq[i]} is required but missing from data!'))
     }
   }
+
   # include assert checking for data type
-  {
-    for(i in 1:length(numvars)){
-      assertthat::assert_that("numeric" %in% class(df[,numvars[i]]),
-                              msg = glue::glue('{numvars[i]} must be numeric but is of type {class(df[,numvars[i]])}'))
-    }
-  }
+#  {
+#    for(i in 1:length(numvars)){
+#      assertthat::assert_that("numeric" %in% class(df[,numvars[i]]),
+#                              msg = glue::glue('{numvars[i]} must be numeric but is of type {class(df[,numvars[i]])}'))
+#    }
+#  }
 
   ## SET THE DF IN ORDER OF TIME ##
   data.table::setorder(df,time)

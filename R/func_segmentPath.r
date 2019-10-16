@@ -87,7 +87,8 @@ funcSegPath <- function(revdata, resTimeLimit = 2, travelSeg = 5,
     # add type to real data
     df[,type:="real"]
 
-    if(nrow(tempdf < 2))
+    # enter this step only if there are 2 or more rows of data between which to infer patches
+    if(nrow(tempdf >= 2))
     {
       print(glue::glue('\n {unique(tempdf$id)} has no inferred data'))
       # make list column of expected times with 3 second interval

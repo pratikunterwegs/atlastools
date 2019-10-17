@@ -24,7 +24,7 @@ funcSegPath(revdata, htdata, resTimeLimit = 2, travelSeg = 5,
 \item{inferPatches}{A logical indicating whether residence patches should be inferred from temporal gaps in the data.}
 }
 \value{
-A data.frame extension object. This dataframe has the added column `resPatch` based on cumulative patch summing. Depending on whether `inferPatches` is set `TRUE`, the dataframe has additional inferred points. An additional column is created in each case, indicating whether the data are empirical fixes ('real') or 'inferred'.
+A data.frame extension object. This dataframe has the added column \code{resPatch} based on cumulative patch summing. Depending on whether \code{inferPatches = TRUE}, the dataframe has additional inferred points. An additional column is created in each case, indicating whether the data are empirical fixes ('real') or 'inferred'.
 }
 \description{
 segPath

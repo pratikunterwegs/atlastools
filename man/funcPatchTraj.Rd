@@ -19,7 +19,7 @@ funcPatchTraj(df, x1 = "X_end", x2 = "X_start", y1 = "Y_end",
 \item{y2}{Coordinate column for the end Y coordinate of the linestring; this should be the first Y coordinate of each patch if inter-patch linestrngs are to be constructed.}
 }
 \value{
-An `sf` `MULTILINESTRING` object representing the linear path between N patches, starting at the end point of the first patch, and ending at the first point of the Nth patch.
+An \code{sf MULTILINESTRING} object representing the linear path between N patches, starting at the end point of the first patch, and ending at the first point of the Nth patch.
 }
 \description{
 patchTraj

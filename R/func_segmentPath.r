@@ -19,7 +19,7 @@ funcSegPath <- function(revdata, htdata, resTimeLimit = 2, travelSeg = 5,
 
   # handle global variable issues
   infPatch<-nfixes<-posId<-resPatch<-resTime<-resTimeBool<-rollResTime <- NULL
-  spatdiff <- time <- timediff <- type <- x <- y <- NULL
+  spatdiff <- time <- timediff <- type <- x <- y <- npoints <- NULL
 
   # adding the inferPatches argument to prep for inferring
   # residence patches from missing data between travel segments

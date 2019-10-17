@@ -124,7 +124,7 @@ funcGetResPatches <- function(df, x = "x", y = "y", time = "time",
       patchSummary <- dplyr::ungroup(patchSummary)
 
       # join summary data with spatial data
-      pts <- dplyr::left_join(pts, patchSummary)
+      pts <- dplyr::left_join(pts, patchSummary, by = c("id", "tidalcycle", "type", "resPatch"))
 
       # unnest polygons column to get data
       # this has issues because of incompatible data types - check sf/dplyr/tidyr version

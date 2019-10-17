@@ -6,7 +6,7 @@
 #' @param y1 Coordinate column for the beginning Y coordinate of the linestring; this should be the last Y coordinate of each patch if inter-patch linestrngs are to be constructed. It is possible to use the X_start coordinate, but this will lead to issues and nonsensical output at this point.
 #' @param y2 Coordinate column for the end Y coordinate of the linestring; this should be the first Y coordinate of each patch if inter-patch linestrngs are to be constructed.
 #'
-#' @return An `sf` `MULTILINESTRING` object representing the linear path between N patches, starting at the end point of the first patch, and ending at the first point of the Nth patch.
+#' @return An \code{sf MULTILINESTRING} object representing the linear path between N patches, starting at the end point of the first patch, and ending at the first point of the Nth patch.
 #' @export
 #'
 funcPatchTraj <- function(df, x1 = "X_end", x2 = "X_start",

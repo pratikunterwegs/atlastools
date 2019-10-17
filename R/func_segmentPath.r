@@ -82,9 +82,8 @@ funcSegPath <- function(revdata, htdata, resTimeLimit = 2, travelSeg = 5,
     # merging is by incrementing infPatch by 1
     tempdf[,npoints:=max(posId), by="infPatch"]
     tempdf[,infPatch:=ifelse(npoints == 2, yes = infPatch, no = infPatch+1)]
-
+    tempdf <- tempdf[npoints >= 2,]
     # recount the number of positions, each inferred patch must have minimum 2 pos
-    tempdf[,npoints:=max(posId), by="infPatch"]
     {
       assertthat::assert_that(min(tempdf$npoints) > 1,
                               msg = "some inferred patches with only 1 position")

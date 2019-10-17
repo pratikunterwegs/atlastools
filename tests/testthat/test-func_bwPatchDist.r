@@ -1,10 +1,13 @@
-context("distance function overall")
+context("bwPatchDist function overall")
 testthat::test_that("simple distance works", {
 
   # make test positions
-  testdf <- tibble::tibble(a = 1, b = 1:100)
-  # run function with custom col names
-  testoutput <- watlasUtils::funcDistance(testdf, x = "a", y = "b")
+  testdf <- tibble::tibble(a_start = seq(10,100, 10),
+                           a_end = a_start+2,
+                           b_start = 1, b_end = 1)
+  # run function
+  testoutput <- watlasUtils::funcBwPatchDist(testdf, x1 = "a_end", x2 = "a_start",
+                                             y1 = "b_end", y2 = "b_start")
   # do tests
   # should return as many elements as nrows in df
   testthat::expect_equal(length(testoutput), nrow(testdf),
@@ -14,8 +17,9 @@ testthat::test_that("simple distance works", {
                              info = "first distance is not NA")
   # test that the vector class is numeric or double
   testthat::expect_type(testoutput, "double")
+
   # test that the distances except first are 1 in this case
-  testthat::expect_identical(testoutput, c(NA, rep(1.0, 99)),
+  testthat::expect_identical(testoutput, c(NA, rep(8.0, 9)),
                              info = "the distance calculation is wrong")
 
 })

@@ -19,7 +19,7 @@ funcSegPath <- function(revdata, htdata, resTimeLimit = 2, travelSeg = 5,
 
   # handle global variable issues
   infPatch<-nfixes<-posId<-resPatch<-resTime<-resTimeBool<-rollResTime <- NULL
-  spatdiff <- time <- timediff <- type <- x <- y <- NULL
+  spatdiff <- time <- timediff <- type <- x <- y <- npoints <- NULL
 
   # adding the inferPatches argument to prep for inferring
   # residence patches from missing data between travel segments
@@ -30,7 +30,7 @@ funcSegPath <- function(revdata, htdata, resTimeLimit = 2, travelSeg = 5,
     htdf <- data.table::fread(htdata)
     # merge with ht data
     df <- base::merge(df, htdf, by = intersect(names(df), names(htdf)), all = FALSE)
-    print(glue::glue('individual {unique(df$id)} in tide {unique(df$tidalcycle)} has {nrow(df)} obs'))
+    print(glue::glue('\n\nindividual {unique(df$id)} in tide {unique(df$tidalcycle)} has {nrow(df)} obs'))
     rm(htdf); gc()
   }
 
@@ -115,7 +115,7 @@ funcSegPath <- function(revdata, htdata, resTimeLimit = 2, travelSeg = 5,
       rm(tempdf); gc()
       # merge inferred data to empirical data
       df <- base::merge(df, infPatchDf, by = intersect(names(df), names(infPatchDf)), all = T)
-    } else {print(glue::glue('\n... {unique(df$id)} has 0 inferred patches\n\n'))}
+    } else {print(glue::glue('\n... {unique(df$id)} has 0 inferred patches'))}
 
   }
   # sort by time
@@ -159,6 +159,13 @@ funcSegPath <- function(revdata, htdata, resTimeLimit = 2, travelSeg = 5,
 
   # remove useless df columns
   data.table::set(df, ,c("rollResTime", "resTimeBool"), NULL)
+
+  # print message if dataframe has few rows
+  {
+    if(nrow(df) < 5){
+      print(glue::glue('\n\n...segmented dataframe has < 5 rows\n\n'))
+    }
+  }
 
   return(df)
 

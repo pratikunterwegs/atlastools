@@ -115,7 +115,7 @@ funcSegPath <- function(revdata, htdata, resTimeLimit = 2, travelSeg = 5,
       rm(tempdf); gc()
       # merge inferred data to empirical data
       df <- base::merge(df, infPatchDf, by = intersect(names(df), names(infPatchDf)), all = T)
-    } else {print(glue::glue('\n... {unique(df$id)} has 0 inferred patches\n\n'))}
+    } else {print(glue::glue('\n... {unique(df$id)} has 0 inferred patches'))}
 
   }
   # sort by time
@@ -163,7 +163,7 @@ funcSegPath <- function(revdata, htdata, resTimeLimit = 2, travelSeg = 5,
   # print message if dataframe has few rows
   {
     if(nrow(df) < 5){
-      print(glue::glue('\n...segmented dataframe has < 5 rows'))
+      print(glue::glue('...segmented dataframe has < 5 rows\n\n'))
     }
   }
 

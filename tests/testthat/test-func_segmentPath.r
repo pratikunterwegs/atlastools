@@ -1,4 +1,4 @@
-context("segPath function overall")
+context("segPath function")
 testthat::test_that("path segmentation works", {
 
   # read in data names

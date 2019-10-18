@@ -1,4 +1,4 @@
-context("distance function overall")
+context("distance function")
 testthat::test_that("simple distance works", {
 
   # make test positions

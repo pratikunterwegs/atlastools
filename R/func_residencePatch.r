@@ -265,6 +265,10 @@ funcGetResPatches <- function(df, x = "x", y = "y", time = "time",
       print(glue::glue('\nthere was an error in id_tide combination...
                                   {unique(df$id)} {unique(df$tidalcycle)}\n'))
       # dfErrors <- append(dfErrors, glue(z$id, "_", z$tidalCycle))
+    },
+    warning = function(w)
+    {
+      # do nothing...
     }
   )
 

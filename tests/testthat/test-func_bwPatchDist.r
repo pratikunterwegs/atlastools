@@ -1,4 +1,4 @@
-context("bwPatchDist function overall")
+context("bwPatchDist function")
 testthat::test_that("simple distance works", {
 
   # make test positions

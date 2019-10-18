@@ -30,7 +30,7 @@ funcSegPath <- function(revdata, htdata, resTimeLimit = 2, travelSeg = 5,
     htdf <- data.table::fread(htdata)
     # merge with ht data
     df <- base::merge(df, htdf, by = intersect(names(df), names(htdf)), all = FALSE)
-    print(glue::glue('individual {unique(df$id)} in tide {unique(df$tidalcycle)} has {nrow(df)} obs'))
+    print(glue::glue('\n\nindividual {unique(df$id)} in tide {unique(df$tidalcycle)} has {nrow(df)} obs'))
     rm(htdf); gc()
   }
 
@@ -163,7 +163,7 @@ funcSegPath <- function(revdata, htdata, resTimeLimit = 2, travelSeg = 5,
   # print message if dataframe has few rows
   {
     if(nrow(df) < 5){
-      print(glue::glue('...segmented dataframe has < 5 rows\n\n'))
+      print(glue::glue('\n\n...segmented dataframe has < 5 rows\n\n'))
     }
   }
 

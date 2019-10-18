@@ -160,6 +160,13 @@ funcSegPath <- function(revdata, htdata, resTimeLimit = 2, travelSeg = 5,
   # remove useless df columns
   data.table::set(df, ,c("rollResTime", "resTimeBool"), NULL)
 
+  # print message if dataframe has few rows
+  {
+    if(nrow(df) < 5){
+      print(glue::glue('\n...segmented dataframe has < 5 rows'))
+    }
+  }
+
   return(df)
 
 }

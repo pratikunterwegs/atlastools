@@ -26,8 +26,13 @@ funcSegPath <- function(revdata, htdata, resTimeLimit = 2, travelSeg = 5,
 
   # read the file in
   {
-    df <- data.table::fread(revdata)
-    htdf <- data.table::fread(htdata)
+    df <- revdata
+    htdf <- htdata
+
+    # convert both to DT if not
+    if(is.data.table(df) != TRUE) {setDT(df)}
+    if(is.data.table(htdf) != TRUE) {setDT(htdf)}
+
     # merge with ht data
     df <- base::merge(df, htdf, by = intersect(names(df), names(htdf)), all = FALSE)
     print(glue::glue('\n\nindividual {unique(df$id)} in tide {unique(df$tidalcycle)} has {nrow(df)} obs'))

@@ -2,8 +2,8 @@ context("residencePatch function")
 testthat::test_that("residence patch construction works", {
 
   # read in data names
-  revdata = "../testdata/recurse435_008.csv"
-  htdata = "../testdata/435_008.csv"
+  revdata = data.table::fread("../testdata/recurse435_008.csv")
+  htdata = data.table::fread("../testdata/435_008.csv")
   # run segmentation function
   segoutput <- funcSegPath(revdata = revdata,
                                         htdata = htdata,

@@ -27,20 +27,21 @@ The package currently has the following main functions:
   - `funcSegPath` manual segmentation of movement data with an option to infer residence patches based on gaps in the data.
   - `funcGetResPatches` construction of `sf`-based residence patches and calculation of patch- and trajectory-specific metrics.
 
-### `funcSegPath`
+### funcSegPath
 
 An exported function from the namespace, which takes as arguments two dataframes:
 
-	- `revdata`: A dataframe with recurse data.
-	- `htdata`: A dataframe with times since high tide.
+
+  - `revdata` A dataframe with recurse data.
+  - `htdata` A dataframe with times since high tide.
 
 Further arguments are:
 
-	- `resTimeLimit`: A cut-off value of residence time, which is used to classify positions as either stationary or travelling.
-	- `travelSeg`: The number of positions over which the smoother is applied.
-	- `inferPatches`: Whether to infer patches from missing data.
-	- `infPatchTimeDiff`: The time difference between two poistions after which the intervening time is considered as a missing residence patch.
-	- `infPatchSpatDiff`: The maximum distance between two positions to be considered the ends of an inferred patches.
+ - `resTimeLimit`: A cut-off value of residence time, which is used to classify positions as either stationary or travelling.
+ - `travelSeg`: The number of positions over which the smoother is applied.
+ - `inferPatches`: Whether to infer patches from missing data.
+ - `infPatchTimeDiff`: The time difference between two poistions after which the intervening time is considered as a missing residence patch.
+ - `infPatchSpatDiff`: The maximum distance between two positions to be considered the ends of an inferred patches.
 
 **Function procedure**
 
@@ -56,7 +57,7 @@ Further arguments are:
 
 6. The combined data are scanned for values of residence time below function arguments, and smoothed over the number of positions specified by function arguments. When the smoothed TRUE/FALSE value falls below 0.5, a new residence patch is begun.
 
-7. Redundant columns are removed, a message printed if the resulting dataframe has fewer than 5 rows, and the data are returned. 
+7. Redundant columns are removed, a message printed if the resulting dataframe has fewer than 5 rows, and the data are returned.
 
 
 ## Planned functions

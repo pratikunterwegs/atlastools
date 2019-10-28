@@ -27,25 +27,10 @@ testthat::test_that("path segmentation works on artificial data", {
   # create data where there are 5 patches roughly forming a square
   # there are no missing patches
   # the third cluster of points has a restime below the limit
-  testrevdata = tibble::tibble(id = 4e3,
-    tidalcycle = 1e3,
-    x = c(rep(0, 100), rep(0, 100), rep(10, 100),
-          rep(10, 100), rep(1, 100)),
-    y = c(rep(10, 100), rep(0, 100), rep(0, 100),
-          rep(10, 100), rep(11, 100)),
-    time = c(seq(1, 1e4, length.out = 500)),
-    resTime = c(rep(resTimeLimit, 200), rep(2, 100),
-                rep(resTimeLimit, 200)))
+  # read in data
+  testrevdata = data.table::fread("../testdata/test_revdata.csv")
+  testhtdata = data.table::fread("../testdata/test_htdata.csv")
 
-  # create ht data
-  testhtdata = tibble::tibble(id = 4e3,
-    tidalcycle = 1e3,
-    x = c(rep(0, 100), rep(0, 100), rep(10, 100),
-          rep(10, 100), rep(1, 100)),
-    y = c(rep(10, 100), rep(0, 100), rep(0, 100),
-          rep(10, 100), rep(11, 100)),
-    time = c(seq(1, 1e4, length.out = 500)),
-    tidaltime = seq(1, 12.41*60, length.out = 500))
 
   # run function
   testoutput <- watlasUtils::funcSegPath(revdata = testrevdata,

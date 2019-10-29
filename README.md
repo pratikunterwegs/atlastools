@@ -27,6 +27,39 @@ The package currently has the following main functions:
   - `funcSegPath` manual segmentation of movement data with an option to infer residence patches based on gaps in the data.
   - `funcGetResPatches` construction of `sf`-based residence patches and calculation of patch- and trajectory-specific metrics.
 
+### funcSegPath
+
+An exported function from the namespace, which takes as arguments two dataframes:
+
+
+  - `revdata` A dataframe with recurse data.
+  - `htdata` A dataframe with times since high tide.
+
+Further arguments are:
+
+ - `resTimeLimit`: A cut-off value of residence time, which is used to classify positions as either stationary or travelling.
+ - `travelSeg`: The number of positions over which the smoother is applied.
+ - `inferPatches`: Whether to infer patches from missing data.
+ - `infPatchTimeDiff`: The time difference between two poistions after which the intervening time is considered as a missing residence patch.
+ - `infPatchSpatDiff`: The maximum distance between two positions to be considered the ends of an inferred patches.
+
+**Function procedure**
+
+1. `revdata` and `htdata` are converted to `data.table`, and merged. The number of positions in the DT are printed to screen.
+
+2. When `inferPatches = TRUE`, the dataframe is assigned two new columns, `timediff`, which is the time difference between positions, and `spatdiff`, which is the spatial distance between positions. Time difference is calculated as diff<sub>1</sub> = t<sub>1</sub> - t<sub>2</sub>; this is to identify the point _preceding_ the patch.
+
+3. Inferred patches are identified where `timediff` AND `spatdiff` satisfy conditions. The first two points (t<sub>1</sub>, t<sub>2</sub>) of inferred patches are selected and the inferred positions between them are created. t<sub>1</sub> and t<sub>1</sub> are chronologically the first and last points of the inferred patch. The inferred positions have times with an interval of 3 seconds. The x and y coordinates assigned are the mean of t<sub>1</sub> and t<sub>2</sub>. Each coordinate is assigned a residence time equal to the `resTime` specified in the function arguments.
+
+4. A new column `type` is created in both the inferred and real data; this column has values "inferred" or "real".
+
+5. Inferred data are merged with real data, slotting into temporal gaps in the real data.
+
+6. The combined data are scanned for values of residence time below function arguments, and smoothed over the number of positions specified by function arguments. When the smoothed TRUE/FALSE value falls below 0.5, a new residence patch is begun.
+
+7. Redundant columns are removed, a message printed if the resulting dataframe has fewer than 5 rows, and the data are returned.
+
+
 ## Planned functions
 
 It may be a good idea to split off some components of the two main functions to make them more modular, and to add some smaller diagnostic functions.

@@ -63,9 +63,6 @@ funcSegPath <- function(revdata, htdata, resTimeLimit = 2, travelSeg = 5,
 
   if(inferPatches == TRUE)
   {
-    # get the max and min time
-    maxtime <- max(df$time); mintime <- min(df$time)
-
     # make a df with id, tidalcycle and time seq, with missing x and y
     # identify where there are missing segments more than 2 mins long
     # there, create a sequence of points with id, tide, and time in 3s intervals
@@ -158,9 +155,6 @@ funcSegPath <- function(revdata, htdata, resTimeLimit = 2, travelSeg = 5,
                      # assign res patch as change from F to T
                      ][,resPatch:= cumsum(resPatch)]
 
-
-  # add param assumptions
-  df$resTimeLimit = resTimeLimit; df$travelSeg = travelSeg
 
   # remove useless df columns
   data.table::set(df, ,c("rollResTime", "resTimeBool"), NULL)

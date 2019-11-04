@@ -5,7 +5,8 @@
 \title{getResPatches}
 \usage{
 funcGetResPatches(df, x = "x", y = "y", time = "time",
-  buffsize = 10, returnSf = FALSE)
+  buffsize = 10, returnSf = FALSE, resPatchTimeDiff = 3600,
+  resPatchSpatDiff = 50)
 }
 \arguments{
 \item{df}{A dataframe of values of any class that is or extends data.frame. The dataframe must contain at least two spatial coordinates, \code{x} and \code{y}, and a temporal coordinate, \code{time}. The names of columns specifying these can be passed as arguments below.}
@@ -19,6 +20,10 @@ funcGetResPatches(df, x = "x", y = "y", time = "time",
 \item{buffsize}{A numeric value specifying the radius of the buffer to be drawn around each coordinate point. May be thought of as the distance that an individual can access, assess, or otherwise cover when at a discrete point in space.}
 
 \item{returnSf}{A logical value of whether the constructed patches should be returned. When true, the \code{sf} object is returned bound to the patch summary dataframe in a list of length two.}
+
+\item{resPatchTimeDiff}{A numeric value of time in seconds of the time difference between two patches for them to be considered independent.}
+
+\item{resPatchSpatDiff}{A numeric value of distance in metres of the spatial distance between two patches for them to the considered independent.}
 }
 \value{
 Depending on whether the constructed poylgons are requested, a list object containing as its first element a dataframe of patch summaries, and as its second element an \code{sf MULTIPOLYGON} or \code{POLYGON} (as approporiate) object. The list is returned when \code{returnSf = TRUE}, and only the dataframe of patch summaries when \code{returnSf = FALSE}.

@@ -1,5 +1,7 @@
 # WATLAS Utilities
 
+---
+
 **Functions to handle data from the Wadden Sea ATLAS project**
 
 <!-- badges: start -->
@@ -9,6 +11,8 @@
 `watlasUtils` is an `R` package with functions that process high-resolution shorebird tracking data collected by the [Wadden Sea ATLAS project](https://www.nioz.nl/en/about/cos/coastal-movement-ecology/shorebird-tracking/watlas-tracking-regional-movements). WATLAS is part of the [Coastal Movement Ecology (C-MovE)](https://www.nioz.nl/en/about/cos/coastal-movement-ecology) group at the Royal Netherlands Institute for Sea Research's Department of Coastal Systems. This package is written and maintained by [Pratik Gupte](https://www.rug.nl/staff/p.r.gupte), at the [University of Groningen's Theoretical Biology Group](https://www.rug.nl/research/gelifes/tres/).
 
 For more information on the system, contact WATLAS PI [Allert Bijleveld (COS-NIOZ)](https://www.nioz.nl/en/about/organisation/staff/allert-bijleveld).
+
+---
 
 ## Installation
 
@@ -20,6 +24,8 @@ install.packages("devtools")
 devtools::install_github("pratikunterwegs/watlasUtils")
 ```
 
+---
+
 ## Current functions
 
 The package currently has the following main functions:
@@ -30,7 +36,6 @@ The package currently has the following main functions:
 ### funcSegPath
 
 An exported function from the namespace, which takes as arguments two dataframes:
-
 
   - `revdata` A dataframe with recurse data.
   - `htdata` A dataframe with times since high tide.
@@ -49,16 +54,34 @@ Further arguments are:
 
 2. When `inferPatches = TRUE`, the dataframe is assigned two new columns, `timediff`, which is the time difference between positions, and `spatdiff`, which is the spatial distance between positions. Time difference is calculated as diff<sub>1</sub> = t<sub>1</sub> - t<sub>2</sub>; this is to identify the point _preceding_ the patch.
 
-3. Inferred patches are identified where `timediff` AND `spatdiff` satisfy conditions. The first two points (t<sub>1</sub>, t<sub>2</sub>) of inferred patches are selected and the inferred positions between them are created. t<sub>1</sub> and t<sub>1</sub> are chronologically the first and last points of the inferred patch. The inferred positions have times with an interval of 3 seconds. The x and y coordinates assigned are the mean of t<sub>1</sub> and t<sub>2</sub>. Each coordinate is assigned a residence time equal to the `resTime` specified in the function arguments.
+3. Inferred patches are identified where `timediff` AND `spatdiff` satisfy conditions specified in `infPatchTimeDiff` and `infPatchSpatDiff`. 
+  a. The first two points (t<sub>1</sub>, t<sub>2</sub>) of inferred patches are selected and the inferred positions between them are created. 
+  b. t<sub>1</sub> and t<sub>1</sub> are chronologically the first and last points of the inferred patch. 
+  c. The inferred positions have times with an interval of 3 seconds. The x and y coordinates assigned are the mean of t<sub>1</sub> and t<sub>2</sub>. 
+  d. Each coordinate is assigned a residence time equal to the `resTime` specified in the function arguments.
 
 4. A new column `type` is created in both the inferred and real data; this column has values "inferred" or "real".
 
 5. Inferred data are merged with real data, slotting into temporal gaps in the real data.
 
-6. The combined data are scanned for values of residence time below function arguments, and smoothed over the number of positions specified by function arguments. When the smoothed TRUE/FALSE value falls below 0.5, a new residence patch is begun.
+6. The combined data are scanned for values of residence time below `resTimeLimit`, and smoothed over the number of positions in `travelSeg`. When the smoothed `TRUE` value falls below 0.5 (`R` represents `TRUE` as 1), a new residence patch is begun.
 
 7. Redundant columns are removed, a message printed if the resulting dataframe has fewer than 5 rows, and the data are returned.
 
+### funcGetResPatches
+
+An exported function from the namespace, which takes as arguments two dataframes:
+
+  - `df` A dataframe with positions classified into preliminary residence.
+
+Further arguments are:
+
+ - `buffsize`: A cut-off value of residence time, which is used to classify positions as either stationary or travelling.
+ - `resPatchTimeDiff`:
+ - `resPatchSpatDiff`: 
+ - `returnSf`: 
+
+---
 
 ## Planned functions
 

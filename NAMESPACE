@@ -3,8 +3,6 @@
 export(funcBwPatchDist)
 export(funcClassifyPath)
 export(funcDistance)
-export(funcGetResPatches)
 export(funcInferResidence)
 export(funcPatchTraj)
-export(funcSegPath)
 import(data.table)

@@ -10,7 +10,7 @@
 #' @export
 #'
 
-funcSimplePatch <- function(somedata,
+funcGetPatch <- function(somedata,
                              bufferSize = 10,
                              spatIndepLim = 50,
                              tempIndepLim = 3600,

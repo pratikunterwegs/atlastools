@@ -10,8 +10,6 @@
 #'
 #' @return A data.frame extension object. This dataframe has the added column \code{resPatch} based on cumulative patch summing. Depending on whether \code{inferPatches = TRUE}, the dataframe has additional inferred points. An additional column is created in each case, indicating whether the data are empirical fixes ('real') or 'inferred'.
 #' @import data.table
-#' @export
-#'
 
 funcSegPath <- function(revdata, htdata, resTimeLimit = 2, travelSeg = 5,
                         infPatchTimeDiff = 1800, infPatchSpatDiff = 100,

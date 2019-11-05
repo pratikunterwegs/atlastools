@@ -11,7 +11,7 @@
 #' @param returnSf A logical value of whether the constructed patches should be returned. When true, the \code{sf} object is returned bound to the patch summary dataframe in a list of length two.
 #'
 #' @return Depending on whether the constructed poylgons are requested, a list object containing as its first element a dataframe of patch summaries, and as its second element an \code{sf MULTIPOLYGON} or \code{POLYGON} (as approporiate) object. The list is returned when \code{returnSf = TRUE}, and only the dataframe of patch summaries when \code{returnSf = FALSE}.
-#' @export
+
 
 funcGetResPatches <- function(df, x = "x", y = "y", time = "time",
                               buffsize = 10.0,

@@ -10,11 +10,11 @@
 #' @export
 #'
 
-funcGetPatch <- function(somedata,
-                             bufferSize = 10,
-                             spatIndepLim = 50,
-                             tempIndepLim = 3600,
-                             makeSf = FALSE){
+funcGetResPatch <- function(somedata,
+                         bufferSize = 10,
+                         spatIndepLim = 50,
+                         tempIndepLim = 3600,
+                         makeSf = FALSE){
 
   # check somedata is a data.frame and has a resTime column
   {

@@ -114,6 +114,10 @@ funcInferResidence <- function(revdata,
                              ][,type:="inferred"]
 
     rm(tempdf); gc()
+
+    # remove infPatch and nfixes
+    set(infPatchDf, ,c("infPatch", "nfixes"), NULL)
+
     # merge inferred data to empirical data
     df <- base::merge(df, infPatchDf, by = intersect(names(df), names(infPatchDf)), all = T)
   } else {print(glue::glue('\n... {unique(df$id)} has 0 inferred patches'))}

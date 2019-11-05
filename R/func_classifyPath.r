@@ -4,7 +4,7 @@
 #' @param resTimeLimit A numeric giving the time limit in minutes against which residence time is compared.
 #' @param restimeCol The residence time column name.
 #' @param travelSeg A numeric value of the number of fixes, or rows, over which a smoother function is applied.
-#' @return A data.frame extension object. This dataframe has the added column \code{resPatch} based on cumulative patch summing. Depending on whether \code{inferPatches = TRUE}, the dataframe has additional inferred points. An additional column is created in each case, indicating whether the data are empirical fixes ('real') or 'inferred'.
+#' @return A data.frame extension object, which retains only points classified as residence points if residence time is below \code{resTimeLimit} over \code{travelSeg} points.
 #' @import data.table
 #' @export
 #'
@@ -20,8 +20,7 @@ funcClassifyPath <- function(somedata,
                             msg = "not a dataframe object!")
 
     assertthat::assert_that(restimeCol %in% names(somedata),
-                            "data has no residence time column")
-
+                            msg = "data has no residence time column")
   }
 
   # make datatable to use functions

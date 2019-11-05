@@ -17,9 +17,11 @@ testthat::test_that("residence inference works", {
   testthat::expect_s3_class(object = testoutput, class = c("data.table", "data.frame"))
   # test that there is a type column
   testthat::expect_true("type" %in% names(testoutput),
-                        info = "patches do not have type tag")
+                        info = "data does not have type tag")
 
   # check that there are two inferred patches
-  testthat::expect_equal(max(testoutput$resPatch), 2,
+  testthat::expect_equal(max(testoutput$infPatch, na.rm = TRUE), 2,
                          info = "does not calculate right number of patches")
 })
+
+# end here

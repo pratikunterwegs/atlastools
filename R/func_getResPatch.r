@@ -15,6 +15,8 @@ funcGetResPatch <- function(somedata,
                             spatIndepLim = 50,
                             tempIndepLim = 1800,
                             makeSf = FALSE){
+  # handle global variable issues
+  time <- timediff <- type <- x <- y <- npoints <- NULL
 
   # check somedata is a data.frame and has a resTime column
   {
@@ -36,11 +38,6 @@ funcGetResPatch <- function(somedata,
 
   # make datatable to use functions
   if(is.data.table(somedata) != TRUE) {setDT(somedata)}
-
-  # handle global variable issues
-  resTime <- resTimeBool <- rollResTime <- NULL
-  time <- timediff <- type <- x <- y <- npoints <- NULL
-
   # sort by time
   data.table::setorder(somedata, time)
 
@@ -187,9 +184,6 @@ funcGetResPatch <- function(somedata,
         somedata$polygons <- polygons
         somedata <- sf::st_as_sf(somedata, sf_column_name = "polygons")
       }
-
-      print(glue::glue('residence patches of {unique(somedata$id)} in tide {unique(somedata$tidalcycle)} constructed'))
-
       return(somedata)
     },
     # null error function, with option to collect data on errors

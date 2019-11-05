@@ -1,4 +1,4 @@
-#' simpleResPatch
+#' getResPatch
 #'
 #' @param somedata A dataframe of values of any class that is or extends data.frame. The dataframe must contain at least two spatial coordinates, \code{x} and \code{y}, and a temporal coordinate, \code{time}. The names of columns specifying these can be passed as arguments below.
 #' @param bufferSize A numeric value specifying the radius of the buffer to be considered around each coordinate point. May be thought of as the distance that an individual can access, assess, or otherwise cover when at a discrete point in space.
@@ -11,10 +11,10 @@
 #'
 
 funcGetResPatch <- function(somedata,
-                         bufferSize = 10,
-                         spatIndepLim = 50,
-                         tempIndepLim = 3600,
-                         makeSf = FALSE){
+                            bufferSize = 10,
+                            spatIndepLim = 50,
+                            tempIndepLim = 1800,
+                            makeSf = FALSE){
 
   # check somedata is a data.frame and has a resTime column
   {
@@ -55,7 +55,7 @@ funcGetResPatch <- function(somedata,
       # identify spatial overlap
       {
         # assign spat diff columns
-        somedata[,`:=`(spatdiff = watlasUtils::funcDistance(somedata = somedata,
+        somedata[,`:=`(spatdiff = watlasUtils::funcDistance(df = somedata,
                                                             x = "x", y = "y"))]
 
         # first spatial difference is infinity for calculation purposes
@@ -63,7 +63,7 @@ funcGetResPatch <- function(somedata,
 
         # merge points if not spatially independent
         # compare distance from previous point to buffersize
-        somedata <- somedata[,patch := cumsum(spatdiff > (2*resPatchSpatDiff))]
+        somedata <- somedata[,patch := cumsum(spatdiff > (2*bufferSize))]
       }
 
       # count fixes and patch and remove small patches
@@ -72,7 +72,7 @@ funcGetResPatch <- function(somedata,
         somedata <- somedata[,nfixes := .N, by = c("id", "tidalcycle", "patch")]
 
         # remove patches with 5 or fewer points
-        somedata[nfixes > 5, ]
+        somedata <- somedata[nfixes > 5, ]
       }
 
       # get time mean and extreme points for spatio-temporal independence calc
@@ -82,16 +82,8 @@ funcGetResPatch <- function(somedata,
         somedata <- dplyr::group_by(somedata, id, tidalcycle, patch, type)
         # nest data to keep for some operations
         somedata <- tidyr::nest(somedata)
-        somedata <- dplyr::summarise(somedata,
-                                     nfixes = purrr::map_int(data, nrow))
-
-        # get patch distances
-        somedata <- dplyr::summarise(somedata,
-                                     distInPatch = purrr::map(data, function(df){
-                                       sum(watlasUtils::funcDistance(df),
-                                           na.rm = TRUE)
-                                     }))
-
+        somedata <- dplyr::mutate(somedata,
+                                  nfixes = purrr::map_int(data, nrow))
         # summarise mean, first and last
         somedata <- dplyr::mutate(somedata,
                                   patchSummary = purrr::map(data, function(df){
@@ -126,9 +118,16 @@ funcGetResPatch <- function(somedata,
 
       # basic patch metrics for new patches
       {
-        somedata <- dplyr::group_by(patchSummary, id, tidalcycle, patch)
-        # summarise data as bind rows
-        somedata <- dplyr::summarise(data = dplyr::bind_rows(data)) # might have issues
+        somedata <- dplyr::group_by(somedata, id, tidalcycle, patch, type)
+        # select main data
+        somedata <- dplyr::select(somedata,
+                                  id, tidalcycle, patch, type, data) # might have issues
+        # unnest
+        somedata <- tidyr::unnest(somedata, cols = data)
+        # summarise data by new patch, ungrouping type
+        somedata <- dplyr::ungroup(somedata, type)
+        somedata <- dplyr::group_by(somedata, id, tidalcycle, patch)
+        somedata <- tidyr::nest(somedata)
         # basic metrics by new patch
         somedata <- dplyr::mutate(somedata,
                                   patchSummary = purrr::map(data, function(df){
@@ -138,27 +137,34 @@ funcGetResPatch <- function(somedata,
                                                                      end = dplyr::last,
                                                                      mean = mean))
                                   }))
-        # advanced metrics
+      }
+      # advanced metrics on ungrouped data
+      {
+        somedata <- dplyr::ungroup(somedata)
+        # distance in a patch
         somedata <- dplyr::mutate(somedata,
                                   distInPatch = purrr::map_dbl(data, function(df){
-                                    sum(funcDistance(df = df), na.rm = TRUE)
-                                  }),
-                                  distBwPatch = purrr::map_dbl(data, function(df){
-                                    sum(watlasUtils::funcBwPatchDist(df = df,
-                                                                     x1 = "x_end", x2 = "x_start",
-                                                                     y1 = "y_end", y2 = "y_start"),
-                                        na.rm = TRUE)
-                                  }),
-                                  type = dplyr::case_when(
-                                    sum(c("inferred","real") %in% type) == 2 ~ "mixed",
-                                    length(unique(type)) == 1 ~ unique(type),
-                                    TRUE ~ as.character(NA)
-                                  ))
-      }
+                                    sum(watlasUtils::funcDistance(df = df), na.rm = TRUE)
+                                  }))
+        # distance between patches
+        somedata <- tidyr::unnest(somedata, cols = patchSummary)
+        somedata <- dplyr::mutate(somedata,
+                                  distBwPatch = watlasUtils::funcBwPatchDist(df = somedata,
+                                                                             x1 = "x_end", x2 = "x_start",
+                                                                             y1 = "y_end", y2 = "y_start"))
+        # type of patch
+        somedata <- dplyr::mutate(somedata,
+                                  type = purrr::map_chr(data, function(df){
+                                    a <- ifelse(sum(c("real", "inferred") %in% df$type) == 2,
+                                                "mixed", first(df$type))
+                                    return(a)
+                                    }))
 
+      }
       # even more advanced metrics
       {
         somedata <- dplyr::mutate(somedata,
+                                  nfixes = purrr::map_int(data, nrow),
                                   duration = (time_end - time_start),
                                   propfixes = nfixes/(duration/3))
       }
@@ -173,11 +179,13 @@ funcGetResPatch <- function(somedata,
         }))
 
         somedata <- dplyr::mutate(somedata,
-                                  area = purrr::map_dbl(p2, sf::st_area))
+                                  area = purrr::map_dbl(polygons, sf::st_area))
       }
 
-      if(returnSf == TRUE){
-        somedata <- sf::st_as_sf(somedata, sf_column_name = polygons)
+      if(makeSf == TRUE){
+        polygons <- purrr::reduce(somedata$polygons, c)
+        somedata$polygons <- polygons
+        somedata <- sf::st_as_sf(somedata, sf_column_name = "polygons")
       }
 
       print(glue::glue('residence patches of {unique(somedata$id)} in tide {unique(somedata$tidalcycle)} constructed'))
@@ -188,7 +196,7 @@ funcGetResPatch <- function(somedata,
     error= function(e)
     {
       print(glue::glue('\nthere was an error in id_tide combination...
-                                  {unique(df$id)} {unique(df$tidalcycle)}\n'))
+                                  {unique(somedata$id)} {unique(somedata$tidalcycle)}\n'))
       # dfErrors <- append(dfErrors, glue(z$id, "_", z$tidalCycle))
     }
   )

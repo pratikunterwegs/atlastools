@@ -36,7 +36,6 @@ funcInferResidence <- function(revdata,
 
     # merge with ht data
     df <- base::merge(df, htdf, by = intersect(names(df), names(htdf)), all = FALSE)
-    print(glue::glue('\n\nindividual {unique(df$id)} in tide {unique(df$tidalcycle)} has {nrow(df)} obs'))
     rm(htdf); gc()
   }
 
@@ -100,7 +99,6 @@ funcInferResidence <- function(revdata,
   # enter this step only if there are 2 or more rows of data between which to infer patches
   if(nrow(tempdf) >= 2)
   {
-    print(glue::glue('\n... data has {max(tempdf$infPatch)} inferred patches\n\n'))
     # make list column of expected times with 3 second interval
     # assume coordinate is the mean between 'takeoff' and 'landing'
     infPatchDf <- tempdf[,nfixes:=length(seq(from = min(time), to = max(time), by = 3)),
@@ -120,7 +118,7 @@ funcInferResidence <- function(revdata,
 
     # merge inferred data to empirical data
     df <- base::merge(df, infPatchDf, by = intersect(names(df), names(infPatchDf)), all = T)
-  } else {print(glue::glue('\n... {unique(df$id)} has 0 inferred patches'))}
+  }
 
 
   # sort by time

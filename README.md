@@ -38,4 +38,8 @@ The package currently has the following main functions which are simplified vers
   - `funcDistance` Fast Euclidean-distance calculation between a series of points.
   - `funcPatchTraj` Construction of `sf`-based spatial data representing distance between patches. 
 
+## Example patch construction
+
+![An example of point classification and patch construction.](https://github.com/pratikunterwegs/watlasUtils/blob/simplified/tests/testdata/fig02_testFunc.png)
+
 ---

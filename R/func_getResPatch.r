@@ -165,12 +165,6 @@ funcGetResPatch <- function(somedata,
                                   duration = (time_end - time_start),
                                   propfixes = nfixes/(duration/3))
       }
-
-      # remove underlying data
-      {
-        somedata <- dplyr::select(somedata, -data)
-      }
-
       # true spatial metrics
       {
         somedata <- dplyr::mutate(somedata, polygons = purrr::map(data, function(df){
@@ -182,6 +176,10 @@ funcGetResPatch <- function(somedata,
 
         somedata <- dplyr::mutate(somedata,
                                   area = purrr::map_dbl(polygons, sf::st_area))
+      }
+      # remove underlying data
+      {
+        somedata <- dplyr::select(somedata, -data)
       }
 
       if(makeSf == TRUE){

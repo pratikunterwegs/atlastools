@@ -9,19 +9,24 @@
 #' @return An \code{sf MULTILINESTRING} object representing the linear path between N patches, starting at the end point of the first patch, and ending at the first point of the Nth patch.
 #' @export
 #'
-funcPatchTraj <- function(df, x1 = "X_end", x2 = "X_start",
-                          y1 = "Y_end", y2 = "Y_start"){
+funcPatchTraj <- function(df, x1 = "x_end", x2 = "x_start",
+                          y1 = "y_end", y2 = "y_start"){
   # must assert df has correct columns
+
+  # convert df to data_frame
+  df <- sf::st_drop_geometry(df)
+  data.table::setDT(df)
 
   # select cols from dfs
   {
-    x1 <- df[,x1]
-    x2 <- df[,x2]
+    x1 <- df[[x1]]
+    x2 <- df[[x2]]
     x1 <- x1[1:length(x1)-1];
-    x2 <- x2[2:length(x2)]}
+    x2 <- x2[2:length(x2)]
+  }
   {
-    y1 <- df[,y1]
-    y2 <- df[,y2]
+    y1 <- df[[y1]]
+    y2 <- df[[y2]]
     y1 <- y1[1:length(y1)-1];
     y2 <- y2[2:length(y2)]
   }
@@ -40,3 +45,5 @@ funcPatchTraj <- function(df, x1 = "X_end", x2 = "X_start",
   # return ml obj
   return(ml)
 }
+
+# ends here

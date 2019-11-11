@@ -22,4 +22,31 @@ classified_data <- purrr::map(this_data, watlasUtils::funcClassifyPath)
 patch_data <- purrr::map(classified_data, funcGetResPatch, makeSf = TRUE)
 
 #### combine sf objects and write to shp ####
-patch_sum <- purrr::reduce(patch_data, dplyr::bind_rows)
+patch_sum <- do.call(what = sf:::rbind.sf, args = patch_data)
+
+#### get trajectories ####
+patch_traj <- purrr::map(patch_data, watlasUtils::funcPatchTraj)
+data_traj <- sf::st_drop_geometry(patch_sum) %>%
+  dplyr::distinct(id, tidalcycle) %>%
+  dplyr::mutate(lines = patch_traj)
+patch_traj <- sf::st_as_sf(data_traj, sf_column_name = "lines")
+
+#### plot with tmap ####
+library(tmap)
+{
+  map2 = tm_shape(patch_sum)+
+    tm_polygons(col = "grey", style = "cat", alpha = 0.5)+
+    tm_text(text = "patch", size = 0.7, col = "black")+
+    tm_facets(by = "tidalcycle", free.coords = FALSE)+
+    tm_shape(patch_traj)+
+    tm_lines(col = "black", style = "cat",
+             palette = scico::scico(3, palette = "berlin"))+
+    tm_facets(by = "tidalcycle", free.coords = FALSE)
+}
+
+{
+  png(filename = "tests/testdata/fig_testFunc.png", width = 600, height = 600,
+      res = 100)
+  map2
+  dev.off()
+}

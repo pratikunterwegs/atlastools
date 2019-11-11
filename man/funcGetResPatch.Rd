@@ -5,7 +5,7 @@
 \title{getResPatch}
 \usage{
 funcGetResPatch(somedata, bufferSize = 10, spatIndepLim = 50,
-  tempIndepLim = 3600, makeSf = FALSE)
+  tempIndepLim = 1800, makeSf = FALSE)
 }
 \arguments{
 \item{somedata}{A dataframe of values of any class that is or extends data.frame. The dataframe must contain at least two spatial coordinates, \code{x} and \code{y}, and a temporal coordinate, \code{time}. The names of columns specifying these can be passed as arguments below.}

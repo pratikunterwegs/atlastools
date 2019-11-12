@@ -62,3 +62,5 @@ sf::st_write(patch_sum, dsn = "tests/testdata/patches", layer = "test_patches",
 sf::st_crs(patch_traj) <- 32631
 sf::st_write(patch_traj, dsn = "tests/testdata/patches_traj", layer = "test_patches_traj",
              driver = "ESRI Shapefile", delete_layer =TRUE)
+
+# ends here

@@ -4,7 +4,9 @@
 #' @param bufferSize A numeric value specifying the radius of the buffer to be considered around each coordinate point. May be thought of as the distance that an individual can access, assess, or otherwise cover when at a discrete point in space.
 #' @param spatIndepLim A numeric value of time in seconds of the time difference between two patches for them to be considered independent.
 #' @param makeSf Whether to return an sf object rather than simply a dataframe, the geometry being the patch outlines.
+#' @param minFixes Minimum number of fixes for a patch to be included in the data. A value of 100 corresponds to a patch of 5 minutes duration.
 #' @param tempIndepLim A numeric value of distance in metres of the spatial distance between two patches for them to the considered independent.
+#'
 #' @return A data.frame extension object. This dataframe has the added column \code{resPatch} based on cumulative patch summing. Depending on whether \code{inferPatches = TRUE}, the dataframe has additional inferred points. An additional column is created in each case, indicating whether the data are empirical fixes ('real') or 'inferred'.
 #' @import data.table
 #' @export
@@ -12,8 +14,8 @@
 
 funcGetResPatch <- function(somedata,
                             bufferSize = 10,
-                            spatIndepLim = 50,
-                            tempIndepLim = 1800,
+                            spatIndepLim = 100,
+                            tempIndepLim = 3600,
                             makeSf = FALSE){
   # handle global variable issues
   time <- timediff <- type <- x <- y <- npoints <- NULL
@@ -68,8 +70,8 @@ funcGetResPatch <- function(somedata,
         # count number of points per patch
         somedata <- somedata[,nfixes := .N, by = c("id", "tidalcycle", "patch")]
 
-        # remove patches with 5 or fewer points
-        somedata <- somedata[nfixes > 5, ]
+        # remove patches with 2 or fewer points
+        somedata <- somedata[nfixes > 2, ]
       }
 
       # get time mean and extreme points for spatio-temporal independence calc
@@ -95,9 +97,14 @@ funcGetResPatch <- function(somedata,
         # ungroup to prevent within group calcs
         somedata <- dplyr::ungroup(somedata)
 
+        # arrange by time
+        somedata <- dplyr::arrange(somedata, time_start)
+
+        # get time bewteen start of n+1 and end of n
         somedata <- dplyr::mutate(somedata,
                                   timediff = c(Inf,
-                                               as.numeric(diff(time_mean))))
+                                               as.numeric(time_start[2:length(time_start)] -
+                                                            time_end[1:length(time_end)-1])))
         # get spatial difference from last to first point
         spatdiff <- watlasUtils::funcBwPatchDist(df = somedata,
                                                  x1 = "x_end", x2 = "x_start",
@@ -177,9 +184,12 @@ funcGetResPatch <- function(somedata,
         somedata <- dplyr::mutate(somedata,
                                   area = purrr::map_dbl(polygons, sf::st_area))
       }
-      # remove underlying data
+      # remove old nfixes and type
       {
-        somedata <- dplyr::select(somedata, -data)
+        somedata$data <- purrr::map(somedata$data, function(df){
+          df <- dplyr::select(df, -nfixes, -type)
+          return(df)
+        })
       }
 
       if(makeSf == TRUE){

@@ -20,20 +20,27 @@ funcGetPatchData = function(resPatchData,
                             msg = "data column not present!")
 
   }
+  # return only spatial summary if requested
   if(whichData %in% c("spatial","Spatial"))
   {
-    assertthat::assert_that("sf" %in% class(somedata),
+    assertthat::assert_that("sf" %in% class(resPatchData),
                             msg = "not a spatial object, cannot return spatial data!")
 
 
     thisdata <- dplyr::select(resPatchData, -data)
     return(thisdata)
   }
+  # drop geometry and remove spatials if points requested
   else{
     this_data <- sf::st_drop_geometry(resPatchData)
-    this_data <- tidyr::unnest(resPatchData, cols = dataColumn)
-    return(thisdata)
+    rm(resPatchData)
+    # this_data <- dplyr::select(this_data, -polygons)
+    this_data <- tidyr::unnest(this_data, cols = dataColumn,
+                               names_repair = "universal")
+    return(this_data)
 
   }
 
 }
+
+# ends here

@@ -15,7 +15,7 @@
 funcGetResPatch <- function(somedata,
                             bufferSize = 10,
                             spatIndepLim = 100,
-                            tempIndepLim = 3600,
+                            tempIndepLim = 1800,
                             makeSf = FALSE){
   # handle global variable issues
   time <- timediff <- type <- x <- y <- npoints <- NULL
@@ -24,6 +24,9 @@ funcGetResPatch <- function(somedata,
   {
     assertthat::assert_that("data.frame" %in% class(somedata),
                             msg = "not a dataframe object!")
+
+    assertthat::assert_that(min(as.numeric(diff(somedata$time))) >= 0,
+                            msg = "not ordered in time!")
   }
 
   # get names and numeric variables

@@ -28,7 +28,7 @@ patch_data <- purrr::map(patch_data, watlasUtils::funcGetPatchData)
 # make single dataframe
 patch_data <- dplyr::bind_rows(patch_data)
 patch_data <- dplyr::mutate_at(patch_data, dplyr::vars(dplyr::starts_with("time")), function(x){as.POSIXct(x, origin = "1970-01-01")})
-summary_data <- dplyr::distinct(patch_data, id, tidalcycle, patch, time_mean, time_end, distBwPatch)
+summary_data <- dplyr::distinct(patch_data, id, tidalcycle, patch, time_mean, time_end, time_start, distBwPatch)
 
 #### plot restime by time ####
 ggplot(summary_data)+

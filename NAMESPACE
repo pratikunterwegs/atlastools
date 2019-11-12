@@ -3,6 +3,7 @@
 export(funcBwPatchDist)
 export(funcClassifyPath)
 export(funcDistance)
+export(funcGetPatchData)
 export(funcGetResPatch)
 export(funcInferResidence)
 export(funcPatchTraj)

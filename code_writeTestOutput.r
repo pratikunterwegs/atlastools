@@ -22,9 +22,6 @@ classified_data <- purrr::map(this_data, watlasUtils::funcClassifyPath)
 #### get residence patch sf objects ####
 patch_data <- purrr::map(classified_data, watlasUtils::funcGetResPatch, makeSf = TRUE)
 
-# get a benchmark
-bmark <- microbenchmark::microbenchmark(purrr::map(classified_data, watlasUtils::funcGetResPatch, makeSf = TRUE))
-
 #### combine sf objects and write to shp ####
 patch_sum <- do.call(what = sf:::rbind.sf, args = patch_data)
 

@@ -4,7 +4,7 @@
 #' @export
 #'
 #' @examples
-runApp <- function()
+runTweakApp <- function()
 {
   appDir <- system.file("shiny-examples", "tweak_patch_param", package = "watlasUtils")
   if (appDir == "") {

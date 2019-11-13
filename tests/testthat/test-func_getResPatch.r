@@ -8,8 +8,7 @@ testthat::test_that("patches are calculated correctly", {
   # run function for patch inference
   inference_output <- watlasUtils::funcInferResidence(revdata = revdata,
                                                       htdata = htdata,
-                                                      resTimeLimit = 2,
-                                                      travelSeg = 5,
+                                                      infResTime = 2,
                                                       infPatchTimeDiff = 1800,
                                                       infPatchSpatDiff = 100)
 
@@ -55,8 +54,7 @@ testthat::test_that("residence patch construction works on artificial data", {
   # run function for patch inference
   inference_output <- watlasUtils::funcInferResidence(revdata = testrevdata,
                                                       htdata = testhtdata,
-                                                      resTimeLimit = 2,
-                                                      travelSeg = 5,
+                                                      infResTime = 2,
                                                       infPatchTimeDiff = 1800,
                                                       infPatchSpatDiff = 100)
   # run function for classification

@@ -4,7 +4,7 @@
 \alias{funcGetResPatch}
 \title{getResPatch}
 \usage{
-funcGetResPatch(somedata, bufferSize = 10, spatIndepLim = 50,
+funcGetResPatch(somedata, bufferSize = 10, spatIndepLim = 100,
   tempIndepLim = 1800, makeSf = FALSE)
 }
 \arguments{

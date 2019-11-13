@@ -12,8 +12,7 @@
 
 funcInferResidence <- function(revdata,
                                htdata,
-                               resTimeLimit = 2,
-                               travelSeg = 5,
+                               infResTime = 2,
                                infPatchTimeDiff = 1800,
                                infPatchSpatDiff = 100){
 
@@ -105,7 +104,7 @@ funcInferResidence <- function(revdata,
                          ][,.(time = seq(from = min(time), to = max(time), by = 3),
                               x = mean(x),
                               y = mean(y),
-                              resTime = resTimeLimit),
+                              resTime = infResTime),
                            by = c("id", "tidalcycle", "infPatch","nfixes")
                            ][infPatch > 0,
                              ][,type:="inferred"]

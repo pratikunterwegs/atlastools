@@ -83,8 +83,8 @@ server <- function(input, output) {
           scale_fill_manual(values = pals::kovesi.rainbow(max(patch_outline_output$patch)))+
           ggthemes::theme_few()+
           theme(axis.text = element_blank(),
-                axis.title = element_text(size = rel(0.2)),
-                plot.background = element_rect(colour = "grey"))+
+                axis.title = element_text(size = rel(1)),
+                legend.title = element_text(size = rel(1)))+
           labs(x = "long", y = "lat", fill = "patch")
       )
 
@@ -115,8 +115,7 @@ server <- function(input, output) {
         # geom_vline(aes(xintercept = time_end), lty = 3, size = 0.2)+
         scale_color_manual(values = pals::kovesi.rainbow(max(patch_summary_data$patch)))+
         ggthemes::theme_few()+
-        theme(legend.position = 'none',
-              plot.background = element_rect(colour = "grey"))+
+        theme(legend.position = 'none')+
         labs(x = "time", y = "residence time (mins)", col = "patch",
              title = "residence time ~ time")
     )

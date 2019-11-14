@@ -5,20 +5,21 @@ library(shinythemes)
 ui <- fluidPage(
     titlePanel("WATLAS Utilities App"),
 
-    fillRow(
+    fluidRow(
         column(5,
                h4("Residence patches"),
-               plotOutput("patch_map")
+               plotOutput("patch_map", height = "600px")
         ),
         column(3,
                h4("Residence time ~ time"),
-               plotOutput("resTime_time"),
+               plotOutput("resTime_time",
+                          height = "300px", width = "600px"),
                h4("Patch summary"),
                tableOutput("patchSummary")
         )
     ),
     hr(),
-    fillRow(
+    fluidRow(
         column(2,
                h4("Patch construction parameters"),
                fileInput("revfile", p("recurse data")),
@@ -62,5 +63,5 @@ ui <- fluidPage(
                             p("spat indep limit (m)"),
                             value = 100.0)
         )
-    ), theme = shinytheme("spacelab")
+    ), theme = shinytheme("journal")
 )

@@ -7,31 +7,37 @@ ui <- fluidPage(
     sidebarLayout(
         sidebarPanel(
             h1("Function parameters"),
-            fileInput("file", p("recurse data")),
-            fileInput("file", p("tide data")),
-            p("inferResidence"),
-            numericInput("resTimeLimit",
-                p("residence time limit"),
+            fileInput("revfile", p("recurse data")),
+            fileInput("htfile", p("tide data")),
+            p("inferResidence: inferring residence points"),
+            numericInput("infResTime",
+                p("res time inferred pts (min)"),
                 value = 2.0),
-            p("classifyPath"),
+            p("classifyPath: classify as stationary"),
             numericInput("resTimeLimit",
-                p("residence time limit"),
+                p("residence time limit (min)"),
                 value = 2.0),
             textInput("resTimeCol",
                 p("residence time column"),
                 value = "resTime"),
             numericInput("travelSeg",
-                p("travel segment length"),
+                p("travel segment length (fixes)"),
                 value = 5.0),
-            p("getPatches"),
+            p("getPatches: construct residence patches"),
+            numericInput("bufferSize",
+                p("spatial buffer size (m)"),
+                value = 10.0),
+            numericInput("tempIndepLimit",
+                p("temp indep limit (s)"),
+                value = 1800),
+            numericInput("spatIndepLimit",
+                p("spat indep limit (m)"),
+                value = 100.0),
             submitButton("Nuke data")
             ),
 
         mainPanel(
-            h1("Function output"),
-            p("This is some function output"),
-            p("Residence time ~ time"),
-            p("Residence patches")
+            textOutput("selected_var")
             )
         )
 

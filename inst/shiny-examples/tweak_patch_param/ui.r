@@ -10,11 +10,18 @@ ui <- fluidPage(
             fileInput("revfile", p("recurse data")),
             fileInput("htfile", p("tide data")),
 
-            
+
             p("inferResidence: inferring residence points"),
             numericInput("infResTime",
                 p("res time inferred pts (min)"),
                 value = 2.0),
+            numericInput("infPatchTimeDiff",
+                p("min time gap missing data (min)"),
+                value = 2.0),
+            numericInput("infPatchSpatDiff",
+                p("max spatial gap missing data (min)"),
+                value = 2.0),
+
             p("classifyPath: classify as stationary"),
             numericInput("resTimeLimit",
                 p("residence time limit (min)"),
@@ -25,6 +32,7 @@ ui <- fluidPage(
             numericInput("travelSeg",
                 p("travel segment length (fixes)"),
                 value = 5.0),
+
             p("getPatches: construct residence patches"),
             numericInput("bufferSize",
                 p("spatial buffer size (m)"),
@@ -35,12 +43,12 @@ ui <- fluidPage(
             numericInput("spatIndepLimit",
                 p("spat indep limit (m)"),
                 value = 100.0),
-            actionButton(inputId = "go", 
+            actionButton(inputId = "go",
                 label = "Nuke data")
             ),
 
         mainPanel(
-            textOutput("selected_id")
+            plotOutput("everything")
             )
         )
 

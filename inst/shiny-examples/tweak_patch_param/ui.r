@@ -9,6 +9,8 @@ ui <- fluidPage(
             h1("Function parameters"),
             fileInput("revfile", p("recurse data")),
             fileInput("htfile", p("tide data")),
+
+            
             p("inferResidence: inferring residence points"),
             numericInput("infResTime",
                 p("res time inferred pts (min)"),
@@ -33,11 +35,12 @@ ui <- fluidPage(
             numericInput("spatIndepLimit",
                 p("spat indep limit (m)"),
                 value = 100.0),
-            submitButton("Nuke data")
+            actionButton(inputId = "go", 
+                label = "Nuke data")
             ),
 
         mainPanel(
-            textOutput("selected_var")
+            textOutput("selected_id")
             )
         )
 

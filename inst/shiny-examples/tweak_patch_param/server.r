@@ -2,95 +2,108 @@
 library(glue)
 library(ggplot2)
 library(data.table)
-library(RColorBrewer)
-options(scipen=1000)
+library(pals)
 
 server <- function(input, output) {
 
-  # get data
+  #### general data handling ####
+  dataOut <- eventReactive(input$go,{
+    # reads in data
+    revdata <- data.table::fread(input$revfile$datapath)
+    htdata <- data.table::fread(input$htfile$datapath)
 
-  # read in the data
-  recdata <- reactive({
-    print(input$revfile$datapath)
-    data <- data.table::fread(input$revfile$datapath)
-    return(data)
-    })
+    # run the inference func
+    inference_output <-
+      funcInferResidence(
+        revdata = revdata,
+        htdata = htdata,
+        infResTime = input$infResTime,
+        infPatchTimeDiff = input$infPatchTimeDiff,
+        infPatchSpatDiff = input$infPatchSpatDiff)
 
+    # run the classification func
+    classified_output <-
+      funcClassifyPath(
+        somedata = inference_output,
+        restimeCol = input$resTimeCol,
+        resTimeLimit = input$resTimeLimit,
+        travelSeg = input$travelSeg
+      )
 
-  htdata <-  reactive({
-    print(input$htfile$datapath)
-    data <- data.table::fread(input$htfile$datapath)
-    return(data)
-    })
+    # run patch construction
+    patch_output <-
+      funcGetResPatch(
+        somedata = classified_output,
+        bufferSize = input$bufferSize,
+        spatIndepLim = input$spatIndepLimit,
+        tempIndepLim = input$tempIndepLimit,
+        makeSf = "TRUE"
+      )
 
-  # print the selected bird for now to check that it works
-  output$everything <- renderPlot(
+    return(patch_output)
+  })
+
+  #### patch summary ####
+  output$patchSummary <- renderTable(
     {
-      # get data
-      recdata <- recdata()
-      htdata <- htdata()
+      patchSummary <- sf::st_drop_geometry(funcGetPatchData(resPatchData = dataOut(),
+                                            dataColumn = "data",
+                                            whichData = "spatial"))
+      return(patchSummary)
+    }
+  )
 
-      # run the inference func
-      inference_output <-
-        funcInferResidence(
-          revdata = recdata,
-          htdata = htdata,
-          infResTime = input$infResTime,
-          infPatchTimeDiff = input$infPatchTimeDiff,
-          infPatchSpatDiff = input$infPatchSpatDiff)
-
-      # run the classification func
-      classified_output <-
-        funcClassifyPath(
-          somedata = inference_output,
-          restimeCol = input$resTimeCol,
-          resTimeLimit = input$resTimeLimit,
-          travelSeg = input$travelSeg
-        )
-
-      # run patch construction
-      patch_output <-
-       funcGetResPatch(
-          somedata = classified_output,
-          bufferSize = input$bufferSize,
-          spatIndepLim = input$spatIndepLimit,
-          tempIndepLim = input$tempIndepLimit,
-          makeSf = "TRUE"
-        )
+  #### patches map plot ####
+  output$patch_map <- renderPlot(
+    {
 
       # get patch outlines
-      patch_outline_output <-
+      {patch_outline_output <-
         funcGetPatchData(
-          resPatchData = patch_output,
+          resPatchData = dataOut(),
           dataColumn = "data",
           whichData = "spatial"
-        )
-
-      # get classified points
-      patch_classified_output <-
-        funcGetPatchData(
-          resPatchData = patch_output,
-          dataColumn = "data",
-          whichData = "points"
-        )
+        )}
 
       return(
         ggplot()+
           geom_sf(data = patch_outline_output,
                   aes(fill = factor(patch)),
                   alpha = 0.7, col = 'transparent')+
-          # geom_sf(data = patch_traj, col = "red", size = 0.2)+
-          # geom_text(aes(x_mean, y_mean, label = patch))+
+          #geom_sf(data = patch_traj, col = "red", size = 0.2)+
           facet_wrap(~tidalcycle, ncol = 1, labeller = label_both)+
-          scale_fill_manual(values = pals::kovesi.rainbow(14))+
+          scale_fill_manual(values = pals::kovesi.rainbow(max(patch_outline_output$patch)))+
           ggthemes::theme_few()+
-          labs(x = "long", y = "lat", fill = "patch",
-               title = "patches in space")
+          theme(axis.text = element_blank())+
+          labs(x = "long", y = "lat", fill = "patch")
       )
 
-    }
-    # render table ends
-  )
+    }, res = 150, width = 400, height = 400)
+
+  #### restime time plot ####
+  output$resTime_time <- renderPlot({
+    # get patch outlines
+    {patch_outline_output <-
+      funcGetPatchData(
+        resPatchData = dataOut(),
+        dataColumn = "data",
+        whichData = "spatial"
+      )}
+
+    return(
+      ggplot()+
+        geom_sf(data = patch_outline_output,
+                aes(fill = factor(patch)),
+                alpha = 0.7, col = 'grey90')+
+        #geom_sf(data = patch_traj, col = "red", size = 0.2)+
+        facet_wrap(~tidalcycle, ncol = 1, labeller = label_both)+
+        scale_fill_manual(values = pals::kovesi.rainbow(max(patch_outline_output$patch)))+
+        ggthemes::theme_few()+
+        theme(axis.text = element_blank())+
+        labs(x = "long", y = "lat", fill = "patch")
+    )
+
+  }, res = 150, width = 400, height = 400)
 }
 
 # ends here

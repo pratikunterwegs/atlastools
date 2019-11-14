@@ -1,28 +1,32 @@
 # load packages
 library(shiny)
+library(shinythemes)
 
 ui <- fluidPage(
     titlePanel("WATLAS Utilities App"),
 
-    fluidRow(
-        column(3,
+    fillRow(
+        column(5,
+               h4("Residence patches"),
                plotOutput("patch_map")
         ),
         column(3,
-               plotOutput("resTime_time")
-        ),
-        column(3,
-               tableOutput("patchSummary"))
+               h4("Residence time ~ time"),
+               plotOutput("resTime_time"),
+               h4("Patch summary"),
+               tableOutput("patchSummary")
+        )
     ),
     hr(),
-
-    fluidRow(
+    fillRow(
         column(2,
                h4("Patch construction parameters"),
                fileInput("revfile", p("recurse data")),
                fileInput("htfile", p("tide data")),
+               actionButton(inputId = "go",
+                            label = "Run")
         ),
-        column(3,
+        column(2,
                h4("inferResidence: inferring residence points"),
                numericInput("infResTime",
                             p("res time inferred pts (min)"),
@@ -34,7 +38,7 @@ ui <- fluidPage(
                             p("max spatial gap missing data (min)"),
                             value = 2.0)
         ),
-        column(3,
+        column(2,
                h4("classifyPath: classify as stationary"),
                numericInput("resTimeLimit",
                             p("residence time limit (min)"),
@@ -46,7 +50,7 @@ ui <- fluidPage(
                             p("travel segment length (fixes)"),
                             value = 5.0),
         ),
-        column(3,
+        column(2,
                h4("getPatches: construct residence patches"),
                numericInput("bufferSize",
                             p("spatial buffer size (m)"),
@@ -56,9 +60,7 @@ ui <- fluidPage(
                             value = 1800),
                numericInput("spatIndepLimit",
                             p("spat indep limit (m)"),
-                            value = 100.0),
-               actionButton(inputId = "go",
-                            label = "Nuke data")
+                            value = 100.0)
         )
-    )
+    ), theme = shinytheme("spacelab")
 )

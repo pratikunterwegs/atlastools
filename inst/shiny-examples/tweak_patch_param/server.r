@@ -49,6 +49,14 @@ server <- function(input, output) {
       patchSummary <- sf::st_drop_geometry(funcGetPatchData(resPatchData = dataOut(),
                                             dataColumn = "data",
                                             whichData = "spatial"))
+      patchSummary <- dplyr::select(patchSummary,
+                                    id, tidalcycle, patch,
+                                    type,
+                                    tidaltime_mean,
+                                    distInPatch,
+                                    distBwPatch,
+                                    propfixes,
+                                    area)
       return(patchSummary)
     }
   )
@@ -74,36 +82,46 @@ server <- function(input, output) {
           facet_wrap(~tidalcycle, ncol = 1, labeller = label_both)+
           scale_fill_manual(values = pals::kovesi.rainbow(max(patch_outline_output$patch)))+
           ggthemes::theme_few()+
-          theme(axis.text = element_blank())+
+          theme(axis.text = element_blank(),
+                axis.title = element_text(size = rel(0.2)),
+                plot.background = element_rect(colour = "grey"))+
           labs(x = "long", y = "lat", fill = "patch")
       )
 
-    }, res = 150, width = 400, height = 400)
+    }, res = 150)
 
   #### restime time plot ####
   output$resTime_time <- renderPlot({
     # get patch outlines
-    {patch_outline_output <-
+    {patch_summary_data <-
       funcGetPatchData(
         resPatchData = dataOut(),
         dataColumn = "data",
-        whichData = "spatial"
+        whichData = "points"
       )}
 
     return(
       ggplot()+
-        geom_sf(data = patch_outline_output,
-                aes(fill = factor(patch)),
-                alpha = 0.7, col = 'grey90')+
-        #geom_sf(data = patch_traj, col = "red", size = 0.2)+
-        facet_wrap(~tidalcycle, ncol = 1, labeller = label_both)+
-        scale_fill_manual(values = pals::kovesi.rainbow(max(patch_outline_output$patch)))+
+        #geom_hline(yintercept = 2, col = 2)+
+        geom_line(data = patch_summary_data,
+                  aes(time, resTime, group = tidalcycle), col = "grey", size = 0.3)+
+        geom_point(data = patch_summary_data,
+                   aes(time, resTime, shape = type, col = factor(patch)),
+                   alpha = 0.2)+
+        # facet_wrap(~tidalcycle, ncol = 1, scales = "free_x",
+        #            labeller = "label_both")+
+        scale_x_time(labels = scales::time_format(format = "%Y-%m-%d\n %H:%M"))+
+        # geom_text(aes(time_mean, 100, label = patch))+
+        # geom_vline(aes(xintercept = time_end), lty = 3, size = 0.2)+
+        scale_color_manual(values = pals::kovesi.rainbow(max(patch_summary_data$patch)))+
         ggthemes::theme_few()+
-        theme(axis.text = element_blank())+
-        labs(x = "long", y = "lat", fill = "patch")
+        theme(legend.position = 'none',
+              plot.background = element_rect(colour = "grey"))+
+        labs(x = "time", y = "residence time (mins)", col = "patch",
+             title = "residence time ~ time")
     )
 
-  }, res = 150, width = 400, height = 400)
+  }, res = 100)
 }
 
 # ends here

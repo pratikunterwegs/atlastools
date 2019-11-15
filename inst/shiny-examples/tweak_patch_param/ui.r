@@ -9,17 +9,14 @@ ui <- fluidPage(
         column(5,
                h4("Residence patches"),
                textOutput("map_label"),
-               plotOutput("patch_map", height = "600px")
-        ),
+               plotOutput("patch_map", height = "600px")),
         column(3,
                h4("Residence time ~ time"),
                textOutput("map_label"),
                plotOutput("resTime_time",
                           height = "300px", width = "600px"),
                h4("Patch summary"),
-               tableOutput("patchSummary")
-        )
-    ),
+               tableOutput("patchSummary"))),
     hr(),
     fluidRow(
         column(2,
@@ -27,8 +24,7 @@ ui <- fluidPage(
                fileInput("revfile", p("recurse data")),
                fileInput("htfile", p("tide data")),
                actionButton(inputId = "go",
-                            label = "Run")
-        ),
+                            label = "Make patches")),
         column(2,
                h4("inferResidence: inferring residence points"),
                numericInput("infResTime",
@@ -39,8 +35,7 @@ ui <- fluidPage(
                             value = 1800.0),
                numericInput("infPatchSpatDiff",
                             p("max spatial gap missing data (m)"),
-                            value = 100.0)
-        ),
+                            value = 100.0)),
         column(2,
                h4("classifyPath: classify as stationary"),
                numericInput("resTimeLimit",
@@ -51,8 +46,7 @@ ui <- fluidPage(
                          value = "resTime"),
                numericInput("travelSeg",
                             p("travel segment length (fixes)"),
-                            value = 5.0),
-        ),
+                            value = 5.0)),
         column(2,
                h4("getPatches: construct residence patches"),
                numericInput("bufferSize",
@@ -63,7 +57,5 @@ ui <- fluidPage(
                             value = 1800),
                numericInput("spatIndepLimit",
                             p("spat indep limit (m)"),
-                            value = 100.0)
-        )
-    ), theme = shinytheme("darkly")
+                            value = 100.0)))
 )

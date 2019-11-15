@@ -7,7 +7,8 @@ library(pals)
 server <- function(input, output) {
 
   #### general data handling ####
-  dataOut <- eventReactive(input$go,{
+  dataOut <- eventReactive(input$go,
+                           {
     # reads in data
     revdata <- data.table::fread(input$revfile$datapath)
     htdata <- data.table::fread(input$htfile$datapath)
@@ -58,34 +59,40 @@ server <- function(input, output) {
                                     propfixes,
                                     area)
       return(patchSummary)
-    }
-  )
+    })
 
   #### patches map plot ####
   output$map_label <- renderText(
     paste("bird tag id = ", unique((dataOut())$id),
-          "tidal cycle = ", unique((dataOut())$tidalcycle))
-  )
+          "tidal cycle = ", unique((dataOut())$tidalcycle)))
+
   output$patch_map <- renderPlot(
     {
-
       # get patch outlines
-      {patch_outline_output <-
-        funcGetPatchData(
+      {
+        patch_outline_output <- funcGetPatchData(
           resPatchData = dataOut(),
           dataColumn = "data",
-          whichData = "spatial"
-        )}
+          whichData = "spatial")
+      }
       # get trajectories
       {
         patchtraj <- funcPatchTraj(df = patch_outline_output)
       }
+      # # get points
+      # {
+      #   patchdata <- funcGetPatchData(resPatchData = dataOut(),
+      #                                 dataColumn = "data",
+      #                                 whichData = "points")
+      # }
 
       return(
         ggplot()+
           geom_sf(data = patch_outline_output,
                   aes(fill = (patch)),
                   alpha = 0.7, col = 'transparent')+
+          # geom_point(data = patchdata,
+          #            aes(x, y), size = 0.1, alpha = 0.5)+
           geom_sf(data = patchtraj, col = "black", size = 0.2)+
           scale_fill_gradientn(colours = pals::kovesi.rainbow(max(patch_outline_output$patch)))+
           ggthemes::theme_few()+
@@ -101,14 +108,15 @@ server <- function(input, output) {
     }, res = 150)
 
   #### restime time plot ####
-  output$resTime_time <- renderPlot({
+  output$resTime_time <- renderPlot(
+    {
     # get patch outlines
-    {patch_summary_data <-
-      funcGetPatchData(
+    {
+      patch_summary_data <- funcGetPatchData(
         resPatchData = dataOut(),
         dataColumn = "data",
-        whichData = "points"
-      )}
+        whichData = "points")
+    }
 
     return(
       ggplot()+
@@ -133,4 +141,3 @@ server <- function(input, output) {
 }
 
 # ends here
-

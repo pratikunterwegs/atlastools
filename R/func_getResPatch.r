@@ -14,8 +14,7 @@
 funcGetResPatch <- function(somedata,
                             bufferSize = 10,
                             spatIndepLim = 100,
-                            tempIndepLim = 1800,
-                            makeSf = FALSE){
+                            tempIndepLim = 1800){
   # handle global variable issues
   time <- timediff <- type <- x <- y <- npoints <- NULL
   patch <- nfixes <- id <- tidalcycle <- data <- tidaltime <- NULL
@@ -196,12 +195,12 @@ funcGetResPatch <- function(somedata,
         })
       }
 
-      if(makeSf == TRUE){
+      # make spatial polygons
+      {
         polygons <- purrr::reduce(somedata$polygons, c)
         somedata$polygons <- polygons
         somedata <- sf::st_as_sf(somedata, sf_column_name = "polygons")
       }
-      return(somedata)
     },
     # null error function, with option to collect data on errors
     error= function(e)

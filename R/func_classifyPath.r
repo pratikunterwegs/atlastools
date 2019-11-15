@@ -22,8 +22,8 @@ funcClassifyPath <- function(somedata,
     assertthat::assert_that(restimeCol %in% names(somedata),
                             msg = "data has no residence time column")
     assertthat::assert_that(min(c(resTimeLimit, travelSeg)) > 1,
-                            msg = "function arguments are not positive")
-    assertthat::assert_that(is.integer(travelSeg),
+                            msg = "funcClassifyPath: function arguments are not positive")
+    assertthat::assert_that(is.numeric(travelSeg),
                             msg = "travel segment smoother needs an integer")
   }
 

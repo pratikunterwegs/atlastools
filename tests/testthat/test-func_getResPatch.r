@@ -1,4 +1,4 @@
-context("get residence patches")
+context("residence patches and classified points")
 testthat::test_that("patches are calculated correctly", {
 
   # read in data
@@ -37,6 +37,46 @@ testthat::test_that("patches are calculated correctly", {
 
   # check that data are ordered in time
   testthat::expect_gt(min(as.numeric(diff(testoutput$time_mean)), na.rm = TRUE), 0)
+})
+
+testthat::test_that("patch data access function works", {
+
+  # read in data
+  revdata = data.table::fread("../testdata/recdata/recurse435_008.csv")
+  htdata = data.table::fread("../testdata/htdata/435_008.csv")
+
+  # run function for patch inference
+  inference_output <- watlasUtils::funcInferResidence(revdata = revdata,
+                                                      htdata = htdata,
+                                                      infResTime = 2,
+                                                      infPatchTimeDiff = 1800,
+                                                      infPatchSpatDiff = 100)
+
+
+  # run function for classification
+  classified_output <- watlasUtils::funcClassifyPath(somedata = inference_output)
+
+  # run function for patch construction
+  testoutput <- watlasUtils::funcGetResPatch(somedata = classified_output,
+                                             bufferSize = 10,
+                                             spatIndepLim = 50,
+                                             tempIndepLim = 3600)
+
+  # access testoutput spatial
+  data_access_sf <- watlasUtils::funcGetPatchData(resPatchData = testoutput,
+                                                  dataColumn = "data",
+                                                  whichData = "spatial")
+
+  # access testoutput spatial
+  data_access_pt <- watlasUtils::funcGetPatchData(resPatchData = testoutput,
+                                                  dataColumn = "data",
+                                                  whichData = "points")
+
+  # test class pts
+  testthat::expect_s3_class(object = data_access_pt, class = c("data.frame", "tbl"))
+  # test class sf
+  testthat::expect_s3_class(object = data_access_sf, class = c("sf"))
+
 })
 
 testthat::test_that("residence patch construction works on artificial data", {

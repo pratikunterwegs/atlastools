@@ -21,6 +21,10 @@ funcClassifyPath <- function(somedata,
 
     assertthat::assert_that(restimeCol %in% names(somedata),
                             msg = "data has no residence time column")
+    assertthat::assert_that(min(c(resTimeLimit, travelSeg)) > 1,
+                            msg = "function arguments are not positive")
+    assertthat::assert_that(is.integer(travelSeg),
+                            msg = "travel segment smoother needs an integer")
   }
 
   # make datatable to use functions
@@ -43,26 +47,13 @@ funcClassifyPath <- function(somedata,
   # to each id.tide combination
   # remove NA vals in resTime
   # set residence time to 0 or 1 predicated on <= limit in func args
-  somedata <- somedata[!is.na(restimeCol)]
-  somedata[,resTimeBool:= ifelse(restimeCol < resTimeLimit, F, T)]
+  somedata <- somedata[!is.na(restimeCol),]
 
-  # get breakpoints if the mean over rows of length travelSeg
-  # is below 0.5
-  # how does this work?
-  # a sequence of comparisons, resTime <= resTimeLimit
-  # may be thus: c(T,T,T,F,F,T,T)
-  # indicating two non-residence points between 3 and 2 residence points
-  # the rolling mean over a window of length 3 will be
-  # c(1,.67,.33,.33,.33,.67) which can be used to
-  # smooth over false negatives of residence
-  somedata[,rollResTime:=(zoo::rollmean(resTimeBool, k = travelSeg, fill = NA) > 0.5)]
+  somedata[,rollResTime:=(zoo::rollmean(resTime, k = travelSeg, fill = NA))]
 
   # drop NAs in rolling residence time evaluation
   # essentially the first and last elements will be dropped
-  somedata <- somedata[!is.na(rollResTime) & resTimeBool == T, ]
-
-  # remove useless somedata columns
-  data.table::set(somedata, ,c("rollResTime", "resTimeBool"), NULL)
+  somedata <- somedata[rollResTime >= resTimeLimit, ]
 
   # print message if dataframe has few rows
   {

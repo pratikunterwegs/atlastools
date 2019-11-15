@@ -5,7 +5,7 @@
 \title{getResPatch}
 \usage{
 funcGetResPatch(somedata, bufferSize = 10, spatIndepLim = 100,
-  tempIndepLim = 1800, makeSf = FALSE)
+  tempIndepLim = 1800)
 }
 \arguments{
 \item{somedata}{A dataframe of values of any class that is or extends data.frame. The dataframe must contain at least two spatial coordinates, \code{x} and \code{y}, and a temporal coordinate, \code{time}. The names of columns specifying these can be passed as arguments below.}
@@ -15,8 +15,6 @@ funcGetResPatch(somedata, bufferSize = 10, spatIndepLim = 100,
 \item{spatIndepLim}{A numeric value of time in seconds of the time difference between two patches for them to be considered independent.}
 
 \item{tempIndepLim}{A numeric value of distance in metres of the spatial distance between two patches for them to the considered independent.}
-
-\item{makeSf}{Whether to return an sf object rather than simply a dataframe, the geometry being the patch outlines.}
 }
 \value{
 A data.frame extension object. This dataframe has the added column \code{resPatch} based on cumulative patch summing. Depending on whether \code{inferPatches = TRUE}, the dataframe has additional inferred points. An additional column is created in each case, indicating whether the data are empirical fixes ('real') or 'inferred'.

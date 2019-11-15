@@ -20,28 +20,20 @@ testthat::test_that("patches are calculated correctly", {
   testoutput <- watlasUtils::funcGetResPatch(somedata = classified_output,
                                              bufferSize = 10,
                                              spatIndepLim = 50,
-                                             tempIndepLim = 3600,
-                                             makeSf = "FALSE")
-
-  # make sf output
-  testoutput_sf <- watlasUtils::funcGetResPatch(somedata = classified_output,
-                                                makeSf = "TRUE")
+                                             tempIndepLim = 3600)
 
   # do tests
-  # test that the output class is data.table and data.frame
-  testthat::expect_s3_class(object = testoutput, class = c("data.table", "data.frame"))
+  # test that the sf output class is at least sf
+  testthat::expect_s3_class(object = testoutput, class = c("sf", "data.frame"))
 
   # test that names are present in output cols
   expnames <- c("id", "tidalcycle", "type", "patch", "time_mean",
                 "tidaltime_mean", "x_mean", "y_mean", "duration", "distInPatch",
-                "distBwPatch", "propfixes")
+                "distBwPatch", "propfixes", "polygons")
   for(i in 1:length(expnames)){
     testthat::expect_true(expnames[i] %in% colnames(testoutput),
                           info = glue::glue('{expnames[i]} expected in output but not produced'))
   }
-
-  # test that the sf output class is at least sf
-  testthat::expect_s3_class(object = testoutput_sf, class = c("sf"))
 
   # check that data are ordered in time
   testthat::expect_gt(min(as.numeric(diff(testoutput$time_mean)), na.rm = TRUE), 0)
@@ -64,16 +56,9 @@ testthat::test_that("residence patch construction works on artificial data", {
   testoutput <- watlasUtils::funcGetResPatch(somedata = classified_output,
                                              bufferSize = 10,
                                              spatIndepLim = 50,
-                                             tempIndepLim = 3600,
-                                             makeSf = "FALSE")
-
-  # make sf output
-  testoutput_sf <- watlasUtils::funcGetResPatch(somedata = classified_output,
-                                                makeSf = "TRUE")
+                                             tempIndepLim = 3600)
   # test that element one is a data.frame
-  testthat::expect_s3_class(object = testoutput, class = c("data.frame", "tbl"))
-  # test that element two is an sf *POLYGON
-  testthat::expect_s3_class(object = testoutput_sf, class = c("sf"))
+  testthat::expect_s3_class(object = testoutput, class = c("data.frame", "tbl", "sf"))
   # test that names are present in output cols
   expnames <- c("id", "tidalcycle", "type", "patch", "time_mean",
                 "tidaltime_mean", "x_mean", "y_mean", "duration", "distInPatch",

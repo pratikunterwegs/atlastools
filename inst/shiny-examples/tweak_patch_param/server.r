@@ -79,20 +79,20 @@ server <- function(input, output) {
       {
         patchtraj <- funcPatchTraj(df = patch_outline_output)
       }
-      # # get points
-      # {
-      #   patchdata <- funcGetPatchData(resPatchData = dataOut(),
-      #                                 dataColumn = "data",
-      #                                 whichData = "points")
-      # }
+      # get points
+      {
+        patchdata <- funcGetPatchData(resPatchData = dataOut(),
+                                      dataColumn = "data",
+                                      whichData = "points")
+      }
 
       return(
         ggplot()+
           geom_sf(data = patch_outline_output,
                   aes(fill = (patch)),
                   alpha = 0.7, col = 'transparent')+
-          # geom_point(data = patchdata,
-          #            aes(x, y), size = 0.1, alpha = 0.5)+
+          geom_point(data = patchdata,
+                     aes(x, y), size = 0.1, alpha = 0.5)+
           geom_sf(data = patchtraj, col = "black", size = 0.2)+
           scale_fill_gradientn(colours = pals::kovesi.rainbow(max(patch_outline_output$patch)))+
           ggthemes::theme_few()+

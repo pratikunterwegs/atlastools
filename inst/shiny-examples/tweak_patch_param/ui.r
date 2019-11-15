@@ -23,7 +23,7 @@ ui <- fluidPage(
     hr(),
     fluidRow(
         column(2,
-               h4("Patch construction parameters"),
+               h4("Patch construction data"),
                fileInput("revfile", p("recurse data")),
                fileInput("htfile", p("tide data")),
                actionButton(inputId = "go",
@@ -35,11 +35,11 @@ ui <- fluidPage(
                             p("res time inferred pts (min)"),
                             value = 2.0),
                numericInput("infPatchTimeDiff",
-                            p("min time gap missing data (min)"),
-                            value = 2.0),
+                            p("min time gap missing data (s)"),
+                            value = 1800.0),
                numericInput("infPatchSpatDiff",
-                            p("max spatial gap missing data (min)"),
-                            value = 2.0)
+                            p("max spatial gap missing data (m)"),
+                            value = 100.0)
         ),
         column(2,
                h4("classifyPath: classify as stationary"),
@@ -65,5 +65,5 @@ ui <- fluidPage(
                             p("spat indep limit (m)"),
                             value = 100.0)
         )
-    ), theme = shinytheme("lumen")
+    ), theme = shinytheme("darkly")
 )

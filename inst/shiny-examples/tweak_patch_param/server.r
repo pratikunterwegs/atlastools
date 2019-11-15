@@ -47,8 +47,8 @@ server <- function(input, output) {
   output$patchSummary <- renderTable(
     {
       patchSummary <- sf::st_drop_geometry(funcGetPatchData(resPatchData = dataOut(),
-                                            dataColumn = "data",
-                                            whichData = "spatial"))
+                                                            dataColumn = "data",
+                                                            whichData = "spatial"))
       patchSummary <- dplyr::select(patchSummary,
                                     id, tidalcycle, patch,
                                     type,
@@ -62,6 +62,10 @@ server <- function(input, output) {
   )
 
   #### patches map plot ####
+  output$map_label <- renderText(
+    paste("bird tag id = ", unique((dataOut())$id),
+          "tidal cycle = ", unique((dataOut())$tidalcycle))
+  )
   output$patch_map <- renderPlot(
     {
 
@@ -72,19 +76,25 @@ server <- function(input, output) {
           dataColumn = "data",
           whichData = "spatial"
         )}
+      # get trajectories
+      {
+        patchtraj <- funcPatchTraj(df = patch_outline_output)
+      }
 
       return(
         ggplot()+
           geom_sf(data = patch_outline_output,
-                  aes(fill = factor(patch)),
+                  aes(fill = (patch)),
                   alpha = 0.7, col = 'transparent')+
-          #geom_sf(data = patch_traj, col = "red", size = 0.2)+
-          facet_wrap(~tidalcycle, ncol = 1, labeller = label_both)+
-          scale_fill_manual(values = pals::kovesi.rainbow(max(patch_outline_output$patch)))+
+          geom_sf(data = patchtraj, col = "black", size = 0.2)+
+          scale_fill_gradientn(colours = pals::kovesi.rainbow(max(patch_outline_output$patch)))+
           ggthemes::theme_few()+
           theme(axis.text = element_blank(),
-                axis.title = element_text(size = rel(1)),
-                legend.title = element_text(size = rel(1)))+
+                axis.title = element_text(size = rel(0.5)),
+                legend.title = element_text(size = rel(0.5)),
+                legend.text = element_text(size = rel(0.5)),
+                legend.position = "bottom",
+                legend.key.width = unit(0.05, "cm"))+
           labs(x = "long", y = "lat", fill = "patch")
       )
 
@@ -116,8 +126,7 @@ server <- function(input, output) {
         scale_color_manual(values = pals::kovesi.rainbow(max(patch_summary_data$patch)))+
         ggthemes::theme_few()+
         theme(legend.position = 'none')+
-        labs(x = "time", y = "residence time (mins)", col = "patch",
-             title = "residence time ~ time")
+        labs(x = "time", y = "residence time (mins)", col = "patch")
     )
 
   }, res = 100)

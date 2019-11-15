@@ -8,10 +8,12 @@ ui <- fluidPage(
     fluidRow(
         column(5,
                h4("Residence patches"),
+               textOutput("map_label"),
                plotOutput("patch_map", height = "600px")
         ),
         column(3,
                h4("Residence time ~ time"),
+               textOutput("map_label"),
                plotOutput("resTime_time",
                           height = "300px", width = "600px"),
                h4("Patch summary"),
@@ -63,5 +65,5 @@ ui <- fluidPage(
                             p("spat indep limit (m)"),
                             value = 100.0)
         )
-    ), theme = shinytheme("journal")
+    ), theme = shinytheme("lumen")
 )

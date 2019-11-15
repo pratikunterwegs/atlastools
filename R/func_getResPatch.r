@@ -4,7 +4,6 @@
 #' @param bufferSize A numeric value specifying the radius of the buffer to be considered around each coordinate point. May be thought of as the distance that an individual can access, assess, or otherwise cover when at a discrete point in space.
 #' @param spatIndepLim A numeric value of time in seconds of the time difference between two patches for them to be considered independent.
 #' @param tempIndepLim A numeric value of distance in metres of the spatial distance between two patches for them to the considered independent.
-#'
 #' @return A data.frame extension object. This dataframe has the added column \code{resPatch} based on cumulative patch summing. Depending on whether \code{inferPatches = TRUE}, the dataframe has additional inferred points. An additional column is created in each case, indicating whether the data are empirical fixes ('real') or 'inferred'.
 #' @import data.table
 #' @export

@@ -19,7 +19,8 @@ funcInferResidence <- function(revdata,
   # handle global variable issues
   infPatch<-nfixes<-posId<-resPatch<-resTime<-resTimeBool<-rollResTime <- NULL
   spatdiff <- time <- timediff <- type <- x <- y <- npoints <- NULL
-
+  data <- duration <- id <- nfixes <- patch <- patchSummary <- NULL
+  tidalcycle <- tidaltime <- time_end <- time_start <- NULL
   # adding the inferPatches argument to prep for inferring
   # residence patches from missing data between travel segments
 

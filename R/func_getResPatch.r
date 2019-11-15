@@ -18,7 +18,9 @@ funcGetResPatch <- function(somedata,
                             makeSf = FALSE){
   # handle global variable issues
   time <- timediff <- type <- x <- y <- npoints <- NULL
-
+  patch <- nfixes <- id <- tidalcycle <- data <- tidaltime <- NULL
+  patchSummary <- time_start <- time_end <- duration <- nfixes <- NULL
+     
   # check somedata is a data.frame and has a resTime column
   {
     assertthat::assert_that("data.frame" %in% class(somedata),

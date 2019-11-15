@@ -12,6 +12,7 @@ funcGetPatchData = function(resPatchData,
                             dataColumn = "data",
                             whichData = "points")
 {
+  data <- NULL
   # check somedata is a data.frame and has a resTime column
   {
     assertthat::assert_that("data.frame" %in% class(resPatchData),

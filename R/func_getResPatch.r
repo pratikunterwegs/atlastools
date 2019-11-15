@@ -1,4 +1,4 @@
-#' classifyPath
+#' getResPatch
 #'
 #' @param somedata A dataframe of values of any class that is or extends data.frame. The dataframe must contain at least two spatial coordinates, \code{x} and \code{y}, and a temporal coordinate, \code{time}. The names of columns specifying these can be passed as arguments below.
 #' @param bufferSize A numeric value specifying the radius of the buffer to be considered around each coordinate point. May be thought of as the distance that an individual can access, assess, or otherwise cover when at a discrete point in space.
@@ -11,16 +11,21 @@
 #' @export
 #'
 
-funcClassifyPath <- function(somedata,
-                             bufferSize = 10,
-                             spatIndepLim = 50,
-                             tempIndepLim = 3600,
-                             makeSf = FALSE){
+funcGetResPatch <- function(somedata,
+                            bufferSize = 10,
+                            spatIndepLim = 100,
+                            tempIndepLim = 1800,
+                            makeSf = FALSE){
+  # handle global variable issues
+  time <- timediff <- type <- x <- y <- npoints <- NULL
 
   # check somedata is a data.frame and has a resTime column
   {
     assertthat::assert_that("data.frame" %in% class(somedata),
                             msg = "not a dataframe object!")
+
+    assertthat::assert_that(min(as.numeric(diff(somedata$time))) >= 0,
+                            msg = "not ordered in time!")
   }
 
   # get names and numeric variables
@@ -37,11 +42,6 @@ funcClassifyPath <- function(somedata,
 
   # make datatable to use functions
   if(is.data.table(somedata) != TRUE) {setDT(somedata)}
-
-  # handle global variable issues
-  resTime <- resTimeBool <- rollResTime <- NULL
-  time <- timediff <- type <- x <- y <- npoints <- NULL
-
   # sort by time
   data.table::setorder(somedata, time)
 
@@ -56,7 +56,7 @@ funcClassifyPath <- function(somedata,
       # identify spatial overlap
       {
         # assign spat diff columns
-        somedata[,`:=`(spatdiff = watlasUtils::funcDistance(somedata = somedata,
+        somedata[,`:=`(spatdiff = watlasUtils::funcDistance(df = somedata,
                                                             x = "x", y = "y"))]
 
         # first spatial difference is infinity for calculation purposes
@@ -64,7 +64,7 @@ funcClassifyPath <- function(somedata,
 
         # merge points if not spatially independent
         # compare distance from previous point to buffersize
-        somedata <- somedata[,patch := cumsum(spatdiff > (2*resPatchSpatDiff))]
+        somedata <- somedata[,patch := cumsum(spatdiff > (2*bufferSize))]
       }
 
       # count fixes and patch and remove small patches
@@ -72,8 +72,8 @@ funcClassifyPath <- function(somedata,
         # count number of points per patch
         somedata <- somedata[,nfixes := .N, by = c("id", "tidalcycle", "patch")]
 
-        # remove patches with 5 or fewer points
-        somedata[nfixes > 5, ]
+        # remove patches with 2 or fewer points
+        somedata <- somedata[nfixes > 2, ]
       }
 
       # get time mean and extreme points for spatio-temporal independence calc
@@ -83,16 +83,8 @@ funcClassifyPath <- function(somedata,
         somedata <- dplyr::group_by(somedata, id, tidalcycle, patch, type)
         # nest data to keep for some operations
         somedata <- tidyr::nest(somedata)
-        somedata <- dplyr::summarise(somedata,
-                                     nfixes = purrr::map_int(data, nrow))
-
-        # get patch distances
-        somedata <- dplyr::summarise(somedata,
-                                     distInPatch = purrr::map(data, function(df){
-                                       sum(watlasUtils::funcDistance(df),
-                                           na.rm = TRUE)
-                                     }))
-
+        somedata <- dplyr::mutate(somedata,
+                                  nfixes = purrr::map_int(data, nrow))
         # summarise mean, first and last
         somedata <- dplyr::mutate(somedata,
                                   patchSummary = purrr::map(data, function(df){
@@ -107,9 +99,14 @@ funcClassifyPath <- function(somedata,
         # ungroup to prevent within group calcs
         somedata <- dplyr::ungroup(somedata)
 
+        # arrange by time
+        somedata <- dplyr::arrange(somedata, time_start)
+
+        # get time bewteen start of n+1 and end of n
         somedata <- dplyr::mutate(somedata,
                                   timediff = c(Inf,
-                                               as.numeric(diff(time_mean))))
+                                               as.numeric(time_start[2:length(time_start)] -
+                                                            time_end[1:length(time_end)-1])))
         # get spatial difference from last to first point
         spatdiff <- watlasUtils::funcBwPatchDist(df = somedata,
                                                  x1 = "x_end", x2 = "x_start",
@@ -127,9 +124,16 @@ funcClassifyPath <- function(somedata,
 
       # basic patch metrics for new patches
       {
-        somedata <- dplyr::group_by(patchSummary, id, tidalcycle, patch)
-        # summarise data as bind rows
-        somedata <- dplyr::summarise(data = dplyr::bind_rows(data)) # might have issues
+        somedata <- dplyr::group_by(somedata, id, tidalcycle, patch, type)
+        # select main data
+        somedata <- dplyr::select(somedata,
+                                  id, tidalcycle, patch, type, data) # might have issues
+        # unnest
+        somedata <- tidyr::unnest(somedata, cols = data)
+        # summarise data by new patch, ungrouping type
+        somedata <- dplyr::ungroup(somedata, type)
+        somedata <- dplyr::group_by(somedata, id, tidalcycle, patch)
+        somedata <- tidyr::nest(somedata)
         # basic metrics by new patch
         somedata <- dplyr::mutate(somedata,
                                   patchSummary = purrr::map(data, function(df){
@@ -139,31 +143,37 @@ funcClassifyPath <- function(somedata,
                                                                      end = dplyr::last,
                                                                      mean = mean))
                                   }))
-        # advanced metrics
+      }
+      # advanced metrics on ungrouped data
+      {
+        somedata <- dplyr::ungroup(somedata)
+        # distance in a patch
         somedata <- dplyr::mutate(somedata,
                                   distInPatch = purrr::map_dbl(data, function(df){
-                                    sum(funcDistance(df = df), na.rm = TRUE)
-                                  }),
-                                  distBwPatch = purrr::map_dbl(data, function(df){
-                                    sum(watlasUtils::funcBwPatchDist(df = df,
-                                                                     x1 = "x_end", x2 = "x_start",
-                                                                     y1 = "y_end", y2 = "y_start"),
-                                        na.rm = TRUE)
-                                  }),
-                                  type = dplyr::case_when(
-                                    sum(c("inferred","real") %in% type) == 2 ~ "mixed",
-                                    length(unique(type)) == 1 ~ unique(type),
-                                    TRUE ~ as.character(NA)
-                                  ))
-      }
+                                    sum(watlasUtils::funcDistance(df = df), na.rm = TRUE)
+                                  }))
+        # distance between patches
+        somedata <- tidyr::unnest(somedata, cols = patchSummary)
+        somedata <- dplyr::mutate(somedata,
+                                  distBwPatch = watlasUtils::funcBwPatchDist(df = somedata,
+                                                                             x1 = "x_end", x2 = "x_start",
+                                                                             y1 = "y_end", y2 = "y_start"))
+        # type of patch
+        somedata <- dplyr::mutate(somedata,
+                                  type = purrr::map_chr(data, function(df){
+                                    a <- ifelse(sum(c("real", "inferred") %in% df$type) == 2,
+                                                "mixed", first(df$type))
+                                    return(a)
+                                    }))
 
+      }
       # even more advanced metrics
       {
         somedata <- dplyr::mutate(somedata,
+                                  nfixes = purrr::map_int(data, nrow),
                                   duration = (time_end - time_start),
                                   propfixes = nfixes/(duration/3))
       }
-
       # true spatial metrics
       {
         somedata <- dplyr::mutate(somedata, polygons = purrr::map(data, function(df){
@@ -174,22 +184,28 @@ funcClassifyPath <- function(somedata,
         }))
 
         somedata <- dplyr::mutate(somedata,
-                                  area = purrr::map_dbl(p2, sf::st_area))
+                                  area = purrr::map_dbl(polygons, sf::st_area))
+      }
+      # remove old nfixes and type
+      {
+        somedata$data <- purrr::map(somedata$data, function(df){
+          df <- dplyr::select(df, -nfixes, -type)
+          return(df)
+        })
       }
 
-      if(returnSf == TRUE){
-        somedata <- sf::st_as_sf(somedata, sf_column_name = polygons)
+      if(makeSf == TRUE){
+        polygons <- purrr::reduce(somedata$polygons, c)
+        somedata$polygons <- polygons
+        somedata <- sf::st_as_sf(somedata, sf_column_name = "polygons")
       }
-
-      print(glue::glue('residence patches of {unique(somedata$id)} in tide {unique(somedata$tidalcycle)} constructed'))
-
       return(somedata)
     },
     # null error function, with option to collect data on errors
     error= function(e)
     {
       print(glue::glue('\nthere was an error in id_tide combination...
-                                  {unique(df$id)} {unique(df$tidalcycle)}\n'))
+                                  {unique(somedata$id)} {unique(somedata$tidalcycle)}\n'))
       # dfErrors <- append(dfErrors, glue(z$id, "_", z$tidalCycle))
     }
   )

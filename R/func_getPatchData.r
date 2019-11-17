@@ -10,8 +10,9 @@
 #' @examples
 funcGetPatchData = function(resPatchData,
                             dataColumn = "data",
-                            whichData = "points")
+                            whichData = "spatial")
 {
+  data <- NULL
   # check somedata is a data.frame and has a resTime column
   {
     assertthat::assert_that("data.frame" %in% class(resPatchData),
@@ -29,9 +30,7 @@ funcGetPatchData = function(resPatchData,
 
     thisdata <- dplyr::select(resPatchData, -data)
     return(thisdata)
-  }
-  # drop geometry and remove spatials if points requested
-  else{
+  }else{
     this_data <- sf::st_drop_geometry(resPatchData)
     rm(resPatchData)
     # this_data <- dplyr::select(this_data, -polygons)

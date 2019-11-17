@@ -22,3 +22,5 @@ addons:
 branches:
   only:
   - master
+  - simplShinyapp
+  - simplified

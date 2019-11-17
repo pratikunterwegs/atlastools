@@ -8,8 +8,7 @@ testthat::test_that("residence inference works", {
   # run function
   testoutput <- funcInferResidence(revdata = revdata,
                                          htdata = htdata,
-                                         resTimeLimit = 2,
-                                         travelSeg = 5,
+                                         infResTime = 2,
                                          infPatchTimeDiff = 1800,
                                          infPatchSpatDiff = 100)
   # do tests

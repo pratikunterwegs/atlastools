@@ -29,7 +29,8 @@ Imports:
     stats,
     zoo,
     assertthat,
-    shiny
+    shiny,
+    shinythemes
 RoxygenNote: 6.1.1
 Suggests:
     testthat (>= 2.1.0)

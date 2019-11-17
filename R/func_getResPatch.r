@@ -3,9 +3,7 @@
 #' @param somedata A dataframe of values of any class that is or extends data.frame. The dataframe must contain at least two spatial coordinates, \code{x} and \code{y}, and a temporal coordinate, \code{time}. The names of columns specifying these can be passed as arguments below.
 #' @param bufferSize A numeric value specifying the radius of the buffer to be considered around each coordinate point. May be thought of as the distance that an individual can access, assess, or otherwise cover when at a discrete point in space.
 #' @param spatIndepLim A numeric value of time in seconds of the time difference between two patches for them to be considered independent.
-#' @param makeSf Whether to return an sf object rather than simply a dataframe, the geometry being the patch outlines.
 #' @param tempIndepLim A numeric value of distance in metres of the spatial distance between two patches for them to the considered independent.
-#'
 #' @return A data.frame extension object. This dataframe has the added column \code{resPatch} based on cumulative patch summing. Depending on whether \code{inferPatches = TRUE}, the dataframe has additional inferred points. An additional column is created in each case, indicating whether the data are empirical fixes ('real') or 'inferred'.
 #' @import data.table
 #' @export
@@ -14,10 +12,11 @@
 funcGetResPatch <- function(somedata,
                             bufferSize = 10,
                             spatIndepLim = 100,
-                            tempIndepLim = 1800,
-                            makeSf = FALSE){
+                            tempIndepLim = 1800){
   # handle global variable issues
   time <- timediff <- type <- x <- y <- npoints <- NULL
+  patch <- nfixes <- id <- tidalcycle <- data <- tidaltime <- NULL
+  patchSummary <- time_start <- time_end <- duration <- nfixes <- NULL
 
   # check somedata is a data.frame and has a resTime column
   {
@@ -26,6 +25,10 @@ funcGetResPatch <- function(somedata,
 
     assertthat::assert_that(min(as.numeric(diff(somedata$time))) >= 0,
                             msg = "not ordered in time!")
+
+    assertthat::assert_that(min(c(bufferSize, spatIndepLim, tempIndepLim)) > 0,
+                            msg = "funcGetResPatch: function needs positive arguments")
+
   }
 
   # get names and numeric variables
@@ -194,12 +197,12 @@ funcGetResPatch <- function(somedata,
         })
       }
 
-      if(makeSf == TRUE){
+      # make spatial polygons
+      {
         polygons <- purrr::reduce(somedata$polygons, c)
         somedata$polygons <- polygons
         somedata <- sf::st_as_sf(somedata, sf_column_name = "polygons")
       }
-      return(somedata)
     },
     # null error function, with option to collect data on errors
     error= function(e)

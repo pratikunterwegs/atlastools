@@ -14,7 +14,7 @@ funcPatchTraj <- function(df, x1 = "x_end", x2 = "x_start",
   # must assert df has correct columns
 
   # convert df to data_frame
-  df <- sf::st_drop_geometry(df)
+  # df <- sf::st_drop_geometry(df)
   data.table::setDT(df)
 
   # select cols from dfs

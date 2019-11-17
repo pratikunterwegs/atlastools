@@ -4,17 +4,15 @@
 \alias{funcInferResidence}
 \title{segPath2}
 \usage{
-funcInferResidence(revdata, htdata, resTimeLimit = 2, travelSeg = 5,
+funcInferResidence(revdata, htdata, infResTime = 2,
   infPatchTimeDiff = 1800, infPatchSpatDiff = 100)
 }
 \arguments{
-\item{revdata}{A string filepath to data in csv format. The data must be the output of recurse analysis, or must include, in addition to X, Y and time columns, a residence time column named resTime, id, and tidalcycle.}
+\item{revdata}{A dataframe of recurse analysis, or must include, in addition to X, Y and time columns, a residence time column named resTime, id, and tidalcycle.}
 
-\item{htdata}{A string filepath to data in csv format. The data must be the output of tidal cycle finding analysis, or must include, in addition to X, Y and time columns, a tidaltime column named tidaltime; also id, and tidalcycle for merging.}
+\item{htdata}{A dataframe output of tidal cycle finding analysis, or must include, in addition to X, Y and time columns, a tidaltime column named tidaltime; also id, and tidalcycle for merging.}
 
-\item{resTimeLimit}{A numeric giving the time limit in minutes against which residence time is compared.}
-
-\item{travelSeg}{A numeric value of the number of fixes, or rows, over which a smoother function is applied.}
+\item{infResTime}{A numeric giving the time limit in minutes against which residence time is compared.}
 
 \item{infPatchTimeDiff}{A numeric duration in seconds, of the minimum time difference between two points, above which, it is assumed worthwhile to examine whether there is a missing residence patch to be inferred.}
 

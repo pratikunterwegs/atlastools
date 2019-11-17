@@ -5,7 +5,7 @@ testthat::test_that("residence classification works", {
   revdata = data.table::fread("../testdata/recdata/recurse435_008.csv")
 
   # run function
-  testoutput <- watlasUtils::funcClassifyPath(somedata = revdata)
+  testoutput <- watlasUtils::funcClassifyPath(somedata = revdata, travelSeg = 5, resTimeLimit = 2)
 
   # do tests
   # test that the vector class is data.table and data.frame

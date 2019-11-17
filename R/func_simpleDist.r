@@ -7,7 +7,7 @@
 #' @return Returns a vector of distances between consecutive points.
 #' @export
 #'
-funcDistance = function(df, x = "x", y = "y"){
+funcDistance <- function(df, x = "x", y = "y"){
   #check for basic assumptions
   assertthat::assert_that(is.data.frame(df),
                           is.character(x),

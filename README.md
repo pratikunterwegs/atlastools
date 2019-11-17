@@ -29,9 +29,8 @@ devtools::install_github("pratikunterwegs/watlasUtils", ref = "simplShinyapp")
 
 ---
 
-## Functions
+[[https://github.com/pratikunterwegs/watlasUtils/blob/simplShinyapp/screenshot_app.png]]
 
----
 
 ## Functions
 
@@ -45,6 +44,7 @@ The package currently has the following main functions which are simplified vers
   - `funcDistance` Fast Euclidean-distance calculation between a series of points.
   - `funcPatchTraj` Construction of `sf`-based spatial data representing distance between patches.
   - `runTweakApp` Runs a local `shiny` app that visualises the effect of tweaking parameters on suitable data. 
+
 
 
 ---

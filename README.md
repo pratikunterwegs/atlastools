@@ -1,5 +1,7 @@
 # WATLAS Utilities
 
+## Shiny app development branch
+
 ---
 
 **Functions to handle data from the Wadden Sea ATLAS project**
@@ -22,24 +24,29 @@ install.packages("devtools")
 
 # library("devtools")
 # installation of the simplified branch
-devtools::install_github("pratikunterwegs/watlasUtils", ref = "simplified")
+devtools::install_github("pratikunterwegs/watlasUtils", ref = "simplShinyapp")
 ```
 
 ---
 
-## Simplified functions
+## Functions
+
+---
+
+## Functions
 
 The package currently has the following main functions which are simplified versions of the functions in master/devbranch:
 
   - `funcInferResidence` Inference of presumed residence patches from gaps in the tracking data.
   - `funcClassifyPath` Manual classification of empirical and inferred positions into stationary or travelling segments; filtering for residence points.
-  - `funcGetResPatch` Non-`sf` based calculation of residence points into contiguous and spatio-temporally independent residence patches.
+  - `funcGetResPatch` Non-`sf` based calculation of residence points into contiguous and spatio-temporally independent residence patches. Returns a nested dataframe containing spatial patch outlines and underlying point data.
+  - `funcGetPatchData` Retrieves either spatial or point data from the calculated patch object.
   - `funcBwPatchDistance` Calculation of the distance between the first and last points of a series of patches.
   - `funcDistance` Fast Euclidean-distance calculation between a series of points.
-  - `funcPatchTraj` Construction of `sf`-based spatial data representing distance between patches. 
+  - `funcPatchTraj` Construction of `sf`-based spatial data representing distance between patches.
+  - `runTweakApp` Runs a local `shiny` app that visualises the effect of tweaking parameters on suitable data. 
 
-## Example patch construction
 
-![An example of point classification and patch construction.](https://github.com/pratikunterwegs/watlasUtils/blob/simplified/tests/testdata/fig02_testFunc.png)
+---
 
 ---

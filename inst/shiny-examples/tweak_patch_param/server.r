@@ -60,15 +60,17 @@ server <- function(input, output) {
       id, tidalcycle, patch,
       type,
       tidaltime_mean,
+      duration,
       distInPatch,
       distBwPatch,
-      propfixes,
-      area)
+      nfixes,
+      area,
+      circularity)
     return(patchSummary)
   })
 
   #### patches map plot ####
-  output$this_map_label <- renderPrint(
+  output$this_map_label <- renderText(
     {paste("bird tag id = ", unique((dataOut())$id),
           "tidal cycle = ", unique((dataOut())$tidalcycle))}
     )

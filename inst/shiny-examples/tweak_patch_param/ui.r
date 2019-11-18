@@ -70,6 +70,5 @@ ui <- fluidPage(
      )
     )
   )
-    # theme = shinytheme("yeti")
-  #   )
-  # )
+
+# ends here

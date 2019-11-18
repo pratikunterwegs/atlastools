@@ -9,12 +9,13 @@ testthat::test_that("patch calc on empirical data", {
   inference_output <- watlasUtils::funcInferResidence(revdata = revdata,
                                                       htdata = htdata,
                                                       infResTime = 2,
-                                                      infPatchTimeDiff = 1800,
+                                                      infPatchTimeDiff = 30,
                                                       infPatchSpatDiff = 100)
 
 
   # run function for classification
-  classified_output <- watlasUtils::funcClassifyPath(somedata = inference_output)
+  classified_output <- watlasUtils::funcClassifyPath(somedata = inference_output,
+                                                     smoother = 5)
 
   # run function for patch construction
   testoutput <- watlasUtils::funcGetResPatch(somedata = classified_output,

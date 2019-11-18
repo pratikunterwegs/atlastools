@@ -3,6 +3,7 @@ library(glue)
 library(ggplot2)
 library(data.table)
 library(pals)
+library(gridExtra)
 
 server <- function(input, output) {
 
@@ -129,11 +130,14 @@ server <- function(input, output) {
 
       patch_point_data <- dplyr::left_join(dataRaw(),
         patch_point_data,
-        by = c("x", "y", "coordIdx", "time", "id", "tidalcycle", "resTime", "fpt", "revisits"))
-    }
+        by = c("x", "y", "coordIdx", "time", "id", "tidalcycle", "resTime","fpt", "revisits"))
 
-    return(
-      ggplot()+
+      patch_point_data <- dplyr::arrange(patch_point_data, time)
+      patch_point_data <- dplyr::mutate(patch_point_data, 
+        rollResTime = zoo::rollmean(resTime, k = input$travelSeg, fill = input$resTimeLimit))
+    }
+    {
+      plot1 <- ggplot()+
       geom_hline(yintercept = input$resTimeLimit, col = 2, lty = 2)+
       geom_line(data = patch_point_data,
         aes(time, resTime, group = tidalcycle), col = "grey50", size = 0.1)+
@@ -148,8 +152,25 @@ server <- function(input, output) {
       scale_color_manual(values = kovesi.rainbow(max(patch_point_data$patch, 
         na.rm = TRUE)), na.value = "grey90")+
       ggthemes::theme_few()+
-      theme(legend.position = 'none')+
-      labs(x = "time", y = "residence time (mins)", col = "patch")
+      theme(legend.position = 'none',
+            axis.title = element_text(size = rel(0.6)))+
+      labs(x = "time", y = "raw (mins)", col = "patch")
+
+      plot2 <- ggplot()+
+      geom_hline(yintercept = input$resTimeLimit, col = 1, lty = 2)+
+      geom_line(data = patch_point_data,
+        aes(time, rollResTime, group = tidalcycle),
+        col = ifelse(patch_point_data$rollResTime >= input$resTimeLimit, "blue", "red" ))+
+      ggthemes::theme_few()+
+      theme(legend.position = 'none',
+            axis.title = element_text(size = rel(0.6)),
+            axis.text.x = element_blank())+
+      labs(x = "time", y = "smoothed (mins)")
+    }
+
+    return(
+      gridExtra::grid.arrange(plot2, plot1, ncol = 1, layout_matrix = matrix(c(1,1,2,2,2)))
+
       )
 
   }, 

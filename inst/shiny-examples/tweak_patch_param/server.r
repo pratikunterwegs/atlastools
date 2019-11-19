@@ -28,7 +28,7 @@ server <- function(input, output) {
       somedata = inference_output,
       restimeCol = input$resTimeCol,
       resTimeLimit = input$resTimeLimit,
-      travelSeg = input$travelSeg
+      smoother = input$smoother
       )
 
     # run patch construction
@@ -37,7 +37,8 @@ server <- function(input, output) {
       somedata = classified_output,
       bufferSize = input$bufferSize,
       spatIndepLim = input$spatIndepLimit,
-      tempIndepLim = input$tempIndepLimit
+      tempIndepLim = input$tempIndepLimit,
+      restIndepLim = input$restIndepLimit
       )
 
     return(patch_output)
@@ -94,15 +95,14 @@ server <- function(input, output) {
 
     return(
       ggplot()+
-      geom_point(data = dataRaw(), aes(x,y), col = "grey30", 
+      geom_point(data = dataRaw(), aes(x,y), col = "grey30",
         size = 0.1, shape = 4, alpha = 0.2)+
       geom_sf(data = patchSummary,
         aes(fill = (patch), geometry = polygons),
         alpha = 0.8, col = 'transparent')+
-      
+
       geom_sf(data = patchtraj, col = "black", size = 0.2)+
-      scale_fill_gradientn(colours = pals::kovesi.rainbow(max(patchSummary$patch)),
-        breaks = 1:max(patchSummary$patch))+
+      scale_fill_distiller(palette = "Spectral")+
       ggthemes::theme_few()+
       theme(axis.text = element_blank(),
         axis.title = element_text(size = rel(0.5)),
@@ -113,7 +113,7 @@ server <- function(input, output) {
         plot.title = element_text(size = rel(0.5)))+
       labs(x = "long", y = "lat", fill = "patch",
         title = paste("bird tag = ",
-          unique((dataRaw())$id), 
+          unique((dataRaw())$id),
           "tidal cycle = ",
           unique((dataRaw())$tidalcycle)))
       )
@@ -135,8 +135,17 @@ server <- function(input, output) {
         by = c("x", "y", "coordIdx", "time", "id", "tidalcycle", "resTime","fpt", "revisits"))
 
       patch_point_data <- dplyr::arrange(patch_point_data, time)
-      patch_point_data <- dplyr::mutate(patch_point_data, 
+      patch_point_data <- dplyr::mutate(patch_point_data,
         rollResTime = zoo::rollmean(resTime, k = input$travelSeg, fill = input$resTimeLimit))
+    }
+    # get patch summary for vert lines
+    {
+      # get patch outlines
+    patchSummary <- funcGetPatchData(resPatchData = dataOut(),
+      dataColumn = "data",
+      whichData = "spatial")
+
+    patchSummary <- sf::st_drop_geometry(patchSummary)
     }
     {
       plot1 <- ggplot()+
@@ -146,13 +155,10 @@ server <- function(input, output) {
       geom_point(data = patch_point_data,
        aes(time, resTime, col = factor(patch)),
        alpha = 0.2)+
-        # facet_wrap(~tidalcycle, ncol = 1, scales = "free_x",
-        #            labeller = "label_both")+
-      scale_x_time(labels = scales::time_format(format = "%Y-%m-%d\n %H:%M"))+
+       scale_x_time(labels = scales::time_format(format = "%Y-%m-%d\n %H:%M"))+
         # geom_text(aes(time_mean, 100, label = patch))+
-        # geom_vline(aes(xintercept = time_end), lty = 3, size = 0.2)+
-      scale_color_manual(values = kovesi.rainbow(max(patch_point_data$patch, 
-        na.rm = TRUE)), na.value = "grey90")+
+      geom_vline(data = patchSummary, aes(xintercept = time_end), lty = 3, size = 0.2)+
+      scale_color_distiller(palette = "Spectral", na.value = "grey")+
       ggthemes::theme_few()+
       theme(legend.position = 'none',
             axis.title = element_text(size = rel(0.6)))+
@@ -175,7 +181,7 @@ server <- function(input, output) {
 
       )
 
-  }, 
+  },
   res = 100)
 }
 # ends here

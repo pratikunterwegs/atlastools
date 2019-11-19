@@ -32,7 +32,7 @@ funcGetResPatch <- function(somedata,
     assertthat::assert_that(min(as.numeric(diff(somedata$time))) >= 0,
                             msg = "funcGetResPatch: not ordered in time!")
 
-    assertthat::assert_that(min(c(bufferSize, spatIndepLim, tempIndepLim)) > 0,
+    assertthat::assert_that(min(c(bufferSize, spatIndepLim, tempIndepLim, minFixes)) > 0,
                             msg = "funcGetResPatch: function needs positive arguments")
 
   }

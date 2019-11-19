@@ -79,11 +79,11 @@ funcInferResidence <- function(revdata,
   tempdf[,infPatch := cumsum((timediff > infPatchTimeDiff) & (spatdiff < infPatchSpatDiff))]
 
   # subset the data to collect only the first two points of an inferred patch
+  # these are the first and last points of a travel trajectory
   tempdf[,posId := 1:(.N), by = "infPatch"]
   # remove NA patches
   tempdf <- tempdf[posId <= 2 & !is.na(infPatch),]
   # now count the max posId per patch, if less than 2, merge with next patch
-  # merging is by incrementing infPatch by 1
   tempdf[,npoints:=max(posId), by="infPatch"]
   tempdf[,infPatch:=ifelse(npoints == 2, yes = infPatch, no = infPatch+1)]
   tempdf <- tempdf[npoints >= 2,]
@@ -109,7 +109,9 @@ funcInferResidence <- function(revdata,
     infPatchDf <- tempdf[,nfixes:=length(seq(from = min(time, na.rm = T),
                                              to = max(time, na.rm = T), by = 3)),
                          by = c("id", "tidalcycle", "infPatch")]
-    infPatchDf <- infPatchDf[,.(time = seq(from = min(time), to = max(time), by = 3),
+    # an expectation of integer type is created in time
+    infPatchDf <- infPatchDf[,.(time = seq(from = min(time, na.rm = T),
+                                           to = max(time, na.rm = T), by = 3),
                                 x = mean(x),
                                 y = mean(y),
                                 resTime = infResTime),

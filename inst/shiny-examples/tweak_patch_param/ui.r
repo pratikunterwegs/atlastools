@@ -51,10 +51,16 @@
       ),
 
       column(2,
-      h4("getPatches: construct residence patches"),
+      h4("getPatches: basic patch filters"),
       numericInput("bufferSize",
         p("spatial buffer size (m)"),
         value = 10.0),
+      numericInput("minfixes",
+        p("min. fixes in patch (#)"),
+        value = 3)
+      ),
+      column(2,
+      h4("getPatches: patch independence"),
       numericInput("tempIndepLimit",
         p("temp indep limit (min)"),
         value = 30),

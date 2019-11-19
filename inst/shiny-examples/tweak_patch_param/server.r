@@ -37,7 +37,8 @@ server <- function(input, output) {
         bufferSize = input$bufferSize,
         spatIndepLim = input$spatIndepLimit,
         tempIndepLim = input$tempIndepLimit,
-        restIndepLim = input$restIndepLimit
+        restIndepLim = input$restIndepLimit,
+        minFixes = input$minfixes
       )
 
     return(patch_output)
@@ -55,6 +56,8 @@ server <- function(input, output) {
       patchSummary <- sf::st_drop_geometry(funcGetPatchData(resPatchData = dataOut(),
                                                             dataColumn = "data",
                                                             whichData = "spatial"))
+
+      patchSummary <- dplyr::mutate(patchSummary, duration = duration/60)
 
       patchSummary <- dplyr::select(patchSummary,
                                     id, tidalcycle, patch,
@@ -98,7 +101,7 @@ server <- function(input, output) {
                      size = 0.1, shape = 4, alpha = 0.2)+
           geom_sf(data = patchSummary,
                   aes(fill = (patch), geometry = polygons),
-                  alpha = 0.6, col = 'black', lwd = 0.1)+
+                  alpha = 0.4, col = 'black', lwd = 0.1)+
 
           geom_sf(data = patchtraj, col = "black", size = 0.2)+
           scale_fill_distiller(palette = "Paired")+

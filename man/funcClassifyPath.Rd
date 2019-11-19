@@ -4,8 +4,7 @@
 \alias{funcClassifyPath}
 \title{classifyPath}
 \usage{
-funcClassifyPath(somedata, restimeCol = "resTime", resTimeLimit = 2,
-  travelSeg = 5)
+funcClassifyPath(somedata, restimeCol = "resTime", resTimeLimit = 2)
 }
 \arguments{
 \item{somedata}{A data frame which must have a column for the residence time at each point.}
@@ -13,8 +12,6 @@ funcClassifyPath(somedata, restimeCol = "resTime", resTimeLimit = 2,
 \item{restimeCol}{The residence time column name.}
 
 \item{resTimeLimit}{A numeric giving the time limit in minutes against which residence time is compared.}
-
-\item{travelSeg}{A numeric value of the number of fixes, or rows, over which a smoother function is applied.}
 }
 \value{
 A data.frame extension object, which retains only points classified as residence points if residence time is below \code{resTimeLimit} over \code{travelSeg} points.

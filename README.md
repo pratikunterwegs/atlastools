@@ -1,6 +1,6 @@
 # WATLAS Utilities
 
----
+## Shiny app development branch
 
 **Functions to handle data from the Wadden Sea ATLAS project**
 
@@ -22,14 +22,13 @@ install.packages("devtools")
 
 # library("devtools")
 # installation of the simplified branch
+
 devtools::install_github("pratikunterwegs/watlasUtils", ref = "devbranch")
+
 ```
 
----
+![](https://github.com/pratikunterwegs/watlasUtils/raw/simplShinyapp/screenshot_app.png)
 
-## Functions on the development branch
-
----
 
 ## Functions
 
@@ -42,9 +41,6 @@ The package currently has the following functions:
   - `funcBwPatchDistance` Calculation of the distance between the first and last points of a series of patches.
   - `funcDistance` Fast Euclidean-distance calculation between a series of points.
   - `funcPatchTraj` Construction of `sf`-based spatial data representing distance between patches.
-  - `runTweakApp` Runs a local `shiny` app that visualises the effect of tweaking parameters on suitable data. 
-
-
----
+  - `runTweakApp` Runs a local `shiny` app that visualises the effect of tweaking parameters on suitable data.
 
 ---

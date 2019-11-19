@@ -2,8 +2,11 @@
 #'
 #' @param somedata A dataframe of values of any class that is or extends data.frame. The dataframe must contain at least two spatial coordinates, \code{x} and \code{y}, and a temporal coordinate, \code{time}. The names of columns specifying these can be passed as arguments below.
 #' @param bufferSize A numeric value specifying the radius of the buffer to be considered around each coordinate point. May be thought of as the distance that an individual can access, assess, or otherwise cover when at a discrete point in space.
-#' @param spatIndepLim A numeric value of time in seconds of the time difference between two patches for them to be considered independent.
+#' @param spatIndepLim A numeric value of time in minutes of the time difference between two patches for them to be considered independent.
+#' @param restIndepLim A numeric value of time in minutes of the difference in residence times between two patches for them to be considered independent.
 #' @param tempIndepLim A numeric value of distance in metres of the spatial distance between two patches for them to the considered independent.
+#' @param minFixes The minimum number of fixes for a group of spatially-proximate number of ponts to be considered a preliminary residence patch.
+#'
 #' @return A data.frame extension object. This dataframe has the added column \code{resPatch} based on cumulative patch summing. Depending on whether \code{inferPatches = TRUE}, the dataframe has additional inferred points. An additional column is created in each case, indicating whether the data are empirical fixes ('real') or 'inferred'.
 #' @import data.table
 #' @export
@@ -12,28 +15,36 @@
 funcGetResPatch <- function(somedata,
                             bufferSize = 10,
                             spatIndepLim = 100,
-                            tempIndepLim = 1800){
+                            tempIndepLim = 30,
+                            restIndepLim = 30,
+                            minFixes = 3){
   # handle global variable issues
   time <- timediff <- type <- x <- y <- npoints <- NULL
   patch <- nfixes <- id <- tidalcycle <- data <- tidaltime <- NULL
   patchSummary <- time_start <- time_end <- duration <- nfixes <- NULL
+  resTime <- resTime_mean <- resTimeDiff <- area <- NULL
 
   # check somedata is a data.frame and has a resTime column
   {
     assertthat::assert_that("data.frame" %in% class(somedata),
-                            msg = "not a dataframe object!")
+                            msg = "funcGetResPatch: not a dataframe object!")
 
     assertthat::assert_that(min(as.numeric(diff(somedata$time))) >= 0,
-                            msg = "not ordered in time!")
+                            msg = "funcGetResPatch: not ordered in time!")
 
-    assertthat::assert_that(min(c(bufferSize, spatIndepLim, tempIndepLim)) > 0,
+    assertthat::assert_that(min(c(bufferSize, spatIndepLim, tempIndepLim, minFixes)) > 0,
                             msg = "funcGetResPatch: function needs positive arguments")
 
   }
 
+  # convert variable units
+  {
+    tempIndepLim = tempIndepLim*60
+  }
+
   # get names and numeric variables
   dfnames <- names(somedata)
-  namesReq <- c("id", "tidalcycle", "x", "y", "time", "type")
+  namesReq <- c("id", "tidalcycle", "x", "y", "time", "type", "resTime")
 
   # include asserts checking for required columns
   {
@@ -76,7 +87,7 @@ funcGetResPatch <- function(somedata,
         somedata <- somedata[,nfixes := .N, by = c("id", "tidalcycle", "patch")]
 
         # remove patches with 2 or fewer points
-        somedata <- somedata[nfixes > 2, ]
+        somedata <- somedata[nfixes >= minFixes, ]
       }
 
       # get time mean and extreme points for spatio-temporal independence calc
@@ -92,7 +103,7 @@ funcGetResPatch <- function(somedata,
         somedata <- dplyr::mutate(somedata,
                                   patchSummary = purrr::map(data, function(df){
                                     dplyr::summarise_at(.tbl = df,
-                                                        .vars = dplyr::vars(time, x, y, tidaltime),
+                                                        .vars = dplyr::vars(time, x, y, resTime),
                                                         .funs = list(start = dplyr::first,
                                                                      end = dplyr::last,
                                                                      mean = mean))
@@ -119,10 +130,15 @@ funcGetResPatch <- function(somedata,
         somedata <- dplyr::mutate(somedata, spatdiff = spatdiff)
         rm(spatdiff)
 
+        # get differences in mean residence time
+        somedata <- dplyr::mutate(somedata,
+                                  resTimeDiff = c(Inf, abs(as.numeric(diff(resTime_mean)))))
+
         # assess independence
         somedata <- dplyr::mutate(somedata,
-                                  patch = cumsum(timediff > tempIndepLim |
-                                                   spatdiff > spatIndepLim))
+                                  patch = cumsum((timediff > tempIndepLim) |
+                                                   (spatdiff > spatIndepLim) |
+                                                   resTimeDiff > restIndepLim))
       }
 
       # basic patch metrics for new patches
@@ -141,7 +157,7 @@ funcGetResPatch <- function(somedata,
         somedata <- dplyr::mutate(somedata,
                                   patchSummary = purrr::map(data, function(df){
                                     dplyr::summarise_at(.tbl = df,
-                                                        .vars = dplyr::vars(time, x, y, tidaltime),
+                                                        .vars = dplyr::vars(time, x, y, tidaltime, resTime),
                                                         .funs = list(start = dplyr::first,
                                                                      end = dplyr::last,
                                                                      mean = mean))
@@ -177,6 +193,7 @@ funcGetResPatch <- function(somedata,
                                   duration = (time_end - time_start),
                                   propfixes = nfixes/(duration/3))
       }
+
       # true spatial metrics
       {
         somedata <- dplyr::mutate(somedata, polygons = purrr::map(data, function(df){
@@ -186,8 +203,15 @@ funcGetResPatch <- function(somedata,
           return(p2)
         }))
 
+        # add area and circularity
         somedata <- dplyr::mutate(somedata,
                                   area = purrr::map_dbl(polygons, sf::st_area))
+        somedata <- dplyr::mutate(somedata,
+                                  circularity = (4*pi*area)/purrr::map_dbl(polygons, function(pgon){
+                                    boundary <- sf::st_boundary(pgon)
+                                    perimeter <- sf::st_length(boundary)
+                                    return(as.numeric(perimeter)^2)
+                                  }))
       }
       # remove old nfixes and type
       {

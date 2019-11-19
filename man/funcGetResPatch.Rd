@@ -5,16 +5,20 @@
 \title{getResPatch}
 \usage{
 funcGetResPatch(somedata, bufferSize = 10, spatIndepLim = 100,
-  tempIndepLim = 1800)
+  tempIndepLim = 30, restIndepLim = 30, minFixes = 3)
 }
 \arguments{
 \item{somedata}{A dataframe of values of any class that is or extends data.frame. The dataframe must contain at least two spatial coordinates, \code{x} and \code{y}, and a temporal coordinate, \code{time}. The names of columns specifying these can be passed as arguments below.}
 
 \item{bufferSize}{A numeric value specifying the radius of the buffer to be considered around each coordinate point. May be thought of as the distance that an individual can access, assess, or otherwise cover when at a discrete point in space.}
 
-\item{spatIndepLim}{A numeric value of time in seconds of the time difference between two patches for them to be considered independent.}
+\item{spatIndepLim}{A numeric value of time in minutes of the time difference between two patches for them to be considered independent.}
 
 \item{tempIndepLim}{A numeric value of distance in metres of the spatial distance between two patches for them to the considered independent.}
+
+\item{restIndepLim}{A numeric value of time in minutes of the difference in residence times between two patches for them to be considered independent.}
+
+\item{minFixes}{The minimum number of fixes for a group of spatially-proximate number of ponts to be considered a preliminary residence patch.}
 }
 \value{
 A data.frame extension object. This dataframe has the added column \code{resPatch} based on cumulative patch summing. Depending on whether \code{inferPatches = TRUE}, the dataframe has additional inferred points. An additional column is created in each case, indicating whether the data are empirical fixes ('real') or 'inferred'.

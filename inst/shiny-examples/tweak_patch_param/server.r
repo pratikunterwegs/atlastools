@@ -3,6 +3,7 @@ library(glue)
 library(ggplot2)
 library(data.table)
 library(pals)
+library(gridExtra)
 
 server <- function(input, output) {
 
@@ -14,29 +15,30 @@ server <- function(input, output) {
 
     # run the inference func
     inference_output <-
-    funcInferResidence(
-      revdata = revdata,
-      htdata = htdata,
-      infResTime = input$infResTime,
-      infPatchTimeDiff = input$infPatchTimeDiff,
-      infPatchSpatDiff = input$infPatchSpatDiff)
+      funcInferResidence(
+        revdata = revdata,
+        htdata = htdata,
+        infResTime = input$restIndepLimit,
+        infPatchTimeDiff = input$infPatchTimeDiff,
+        infPatchSpatDiff = input$infPatchSpatDiff)
 
     # run the classification func
     classified_output <-
-    funcClassifyPath(
-      somedata = inference_output,
-      restimeCol = input$resTimeCol,
-      resTimeLimit = input$resTimeLimit,
-      travelSeg = input$travelSeg
+      funcClassifyPath(
+        somedata = inference_output,
+        restimeCol = input$resTimeCol,
+        resTimeLimit = input$resTimeLimit
       )
 
     # run patch construction
     patch_output <-
-    funcGetResPatch(
-      somedata = classified_output,
-      bufferSize = input$bufferSize,
-      spatIndepLim = input$spatIndepLimit,
-      tempIndepLim = input$tempIndepLimit
+      funcGetResPatch(
+        somedata = classified_output,
+        bufferSize = input$bufferSize,
+        spatIndepLim = input$spatIndepLimit,
+        tempIndepLim = input$tempIndepLimit,
+        restIndepLim = input$restIndepLimit,
+        minFixes = input$minfixes
       )
 
     return(patch_output)
@@ -50,109 +52,129 @@ server <- function(input, output) {
 
   ### patch summary ####
   output$patchSummary <- renderTable(
-  {
-    patchSummary <- sf::st_drop_geometry(funcGetPatchData(resPatchData = dataOut(),
-      dataColumn = "data",
-      whichData = "spatial"))
+    {
+      patchSummary <- sf::st_drop_geometry(funcGetPatchData(resPatchData = dataOut(),
+                                                            dataColumn = "data",
+                                                            whichData = "spatial"))
 
-    patchSummary <- dplyr::select(patchSummary,
-      id, tidalcycle, patch,
-      type,
-      tidaltime_mean,
-      distInPatch,
-      distBwPatch,
-      propfixes,
-      area)
-    return(patchSummary)
-  })
+      patchSummary <- dplyr::mutate(patchSummary, duration = duration/60)
+
+      patchSummary <- dplyr::select(patchSummary,
+                                    id, tidalcycle, patch,
+                                    type,
+                                    tidaltime_mean,
+                                    duration,
+                                    distInPatch,
+                                    distBwPatch,
+                                    nfixes,
+                                    area,
+                                    circularity)
+      return(patchSummary)
+    })
 
   #### patches map plot ####
-  output$this_map_label <- renderPrint(
+  output$this_map_label <- renderText(
     {paste("bird tag id = ", unique((dataOut())$id),
-          "tidal cycle = ", unique((dataOut())$tidalcycle))}
-    )
+           "tidal cycle = ", unique((dataOut())$tidalcycle))}
+  )
 
   output$patch_map <- renderPlot(
-  {
+    {
       # get patch outlines
-    patchSummary <- funcGetPatchData(resPatchData = dataOut(),
-      dataColumn = "data",
-      whichData = "spatial")
+      patchSummary <- funcGetPatchData(resPatchData = dataOut(),
+                                       dataColumn = "data",
+                                       whichData = "spatial")
       # get trajectories
-    {
-      patchtraj <- funcPatchTraj(df = patchSummary)
-    }
+      {
+        patchtraj <- funcPatchTraj(df = patchSummary)
+      }
       # get points
-    {
-      patchdata <- funcGetPatchData(resPatchData = dataOut(),
-        dataColumn = "data",
-        whichData = "points")
-    }
+      {
+        patchdata <- funcGetPatchData(resPatchData = dataOut(),
+                                      dataColumn = "data",
+                                      whichData = "points")
+      }
 
-    return(
-      ggplot()+
-      geom_point(data = dataRaw(), aes(x,y), col = "grey30", 
-        size = 0.1, shape = 4, alpha = 0.2)+
-      geom_sf(data = patchSummary,
-        aes(fill = (patch), geometry = polygons),
-        alpha = 0.8, col = 'transparent')+
-      
-      geom_sf(data = patchtraj, col = "black", size = 0.2)+
-      scale_fill_gradientn(colours = pals::kovesi.rainbow(max(patchSummary$patch)),
-        breaks = 1:max(patchSummary$patch))+
-      ggthemes::theme_few()+
-      theme(axis.text = element_blank(),
-        axis.title = element_text(size = rel(0.5)),
-        legend.title = element_text(size = rel(0.5)),
-        legend.text = element_text(size = rel(0.5)),
-        legend.position = "bottom",
-        legend.key.height = unit(0.05, "cm"),
-        plot.title = element_text(size = rel(0.5)))+
-      labs(x = "long", y = "lat", fill = "patch",
-        title = paste("bird tag = ",
-          unique((dataRaw())$id), 
-          "tidal cycle = ",
-          unique((dataRaw())$tidalcycle)))
+      return(
+        ggplot()+
+          geom_point(data = dataRaw(), aes(x,y), col = "grey30",
+                     size = 0.1, shape = 4, alpha = 0.2)+
+          geom_sf(data = patchSummary,
+                  aes(fill = (patch), geometry = polygons),
+                  alpha = 0.4, col = 'black', lwd = 0.1)+
+
+          geom_sf(data = patchtraj, col = "black", size = 0.2)+
+          scale_fill_distiller(palette = "Paired")+
+          theme_bw()+
+          theme(axis.text = element_blank(),
+                axis.title = element_text(size = rel(0.5)),
+                legend.title = element_text(size = rel(0.5)),
+                legend.text = element_text(size = rel(0.5)),
+                legend.position = "bottom",
+                legend.key.height = unit(0.05, "cm"),
+                plot.title = element_text(size = rel(0.5)),
+                panel.grid = element_blank())+
+          labs(x = "long", y = "lat", fill = "patch",
+               title = paste("bird tag = ",
+                             unique((dataRaw())$id),
+                             "tidal cycle = ",
+                             unique((dataRaw())$tidalcycle)))
       )
 
-  }, res = 150)
+    }, res = 150)
 
   ### restime time plot ####
   output$resTime_time <- renderPlot(
-  {
-    # get patch points and join to raw data
     {
-      patch_point_data <- funcGetPatchData(
-        resPatchData = dataOut(),
-        dataColumn = "data",
-        whichData = "points")
+      # get patch points and join to raw data
+      {
+        patch_point_data <- funcGetPatchData(
+          resPatchData = dataOut(),
+          dataColumn = "data",
+          whichData = "points")
 
-      patch_point_data <- dplyr::left_join(dataRaw(),
-        patch_point_data,
-        by = c("x", "y", "coordIdx", "time", "id", "tidalcycle", "resTime", "fpt", "revisits"))
-    }
+        patch_point_data <- dplyr::left_join(dataRaw(),
+                                             patch_point_data,
+                                             by = c("x", "y", "coordIdx", "time", "id", "tidalcycle", "resTime","fpt", "revisits"))
 
-    return(
-      ggplot()+
-      geom_hline(yintercept = input$resTimeLimit, col = 2, lty = 2)+
-      geom_line(data = patch_point_data,
-        aes(time, resTime, group = tidalcycle), col = "grey50", size = 0.1)+
-      geom_point(data = patch_point_data,
-       aes(time, resTime, col = factor(patch)),
-       alpha = 0.2)+
-        # facet_wrap(~tidalcycle, ncol = 1, scales = "free_x",
-        #            labeller = "label_both")+
-      scale_x_time(labels = scales::time_format(format = "%Y-%m-%d\n %H:%M"))+
-        # geom_text(aes(time_mean, 100, label = patch))+
-        # geom_vline(aes(xintercept = time_end), lty = 3, size = 0.2)+
-      scale_color_manual(values = kovesi.rainbow(max(patch_point_data$patch, 
-        na.rm = TRUE)), na.value = "grey90")+
-      ggthemes::theme_few()+
-      theme(legend.position = 'none')+
-      labs(x = "time", y = "residence time (mins)", col = "patch")
-      )
+        patch_point_data <- dplyr::filter(patch_point_data, type != "inferred")
 
-  }, 
-  res = 100)
+        patch_point_data <- dplyr::arrange(patch_point_data, time)
+      }
+      # get patch summary for vert lines
+      {
+        # get patch outlines
+        patchSummary <- funcGetPatchData(resPatchData = dataOut(),
+                                         dataColumn = "data",
+                                         whichData = "spatial")
+
+        patchSummary <- sf::st_drop_geometry(patchSummary)
+      }
+      {
+        plot1 <- ggplot()+
+          geom_hline(yintercept = input$resTimeLimit, col = 2, lty = 2)+
+          geom_line(data = patch_point_data,
+                    aes(time, resTime, group = tidalcycle), col = "grey50", size = 0.1)+
+          geom_point(data = patch_point_data,
+                     aes(time, resTime, col = patch),
+                     alpha = 0.2)+
+          scale_x_time(labels = scales::time_format(format = "%Y-%m-%d\n %H:%M"))+
+
+          geom_label(data = patchSummary, aes(time_mean, 100, label = patch, fill = patch))+
+          geom_vline(data = patchSummary, aes(xintercept = time_end), lty = 3, size = 0.2)+
+
+          scale_color_distiller(palette = "Paired", na.value = "grey")+
+          scale_fill_distiller(palette = "Paired", na.value = "grey")+
+          theme_bw()+
+          theme(legend.position = 'none',
+                axis.title = element_text(size = rel(0.6)),
+                panel.grid = element_blank())+
+          labs(x = "time", y = "raw (mins)", col = "patch")
+      }
+
+      return(plot1)
+
+    },
+    res = 100)
 }
 # ends here

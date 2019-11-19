@@ -47,10 +47,7 @@
         value = 2.0),
       textInput("resTimeCol",
         p("residence time column"),
-        value = "resTime"),
-      numericInput("smoother",
-        p("smoother window (fixes)"),
-        value = 5.0)
+        value = "resTime")
       ),
 
       column(2,

@@ -22,14 +22,15 @@ funcGetResPatch <- function(somedata,
   time <- timediff <- type <- x <- y <- npoints <- NULL
   patch <- nfixes <- id <- tidalcycle <- data <- tidaltime <- NULL
   patchSummary <- time_start <- time_end <- duration <- nfixes <- NULL
+  resTime <- resTime_mean <- resTimeDiff <- area <- NULL
 
   # check somedata is a data.frame and has a resTime column
   {
     assertthat::assert_that("data.frame" %in% class(somedata),
-                            msg = "not a dataframe object!")
+                            msg = "funcGetResPatch: not a dataframe object!")
 
     assertthat::assert_that(min(as.numeric(diff(somedata$time))) >= 0,
-                            msg = "not ordered in time!")
+                            msg = "funcGetResPatch: not ordered in time!")
 
     assertthat::assert_that(min(c(bufferSize, spatIndepLim, tempIndepLim)) > 0,
                             msg = "funcGetResPatch: function needs positive arguments")

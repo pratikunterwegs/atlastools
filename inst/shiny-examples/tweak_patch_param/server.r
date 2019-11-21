@@ -96,11 +96,11 @@ server <- function(input, output) {
 
       return(
         ggplot()+
-          geom_point(data = dataRaw(), aes(x,y), col = "grey30",
-                     size = 0.1, shape = 4, alpha = 0.2)+
           geom_sf(data = patchSummary,
-                  aes(fill = (patch), geometry = polygons),
-                  alpha = 0.4, col = 'black', lwd = 0.1)+
+                  aes(geometry = polygons, fill = patch),
+                  alpha = 0.8, col = 'black', lwd = 0.1)+
+          geom_point(data = dataRaw(), aes(x,y), col = "grey80", 
+                     size = 0.01, shape = 4, alpha = 0.01)+
 
           geom_sf(data = patchtraj, col = "black", size = 0.2)+
           scale_fill_distiller(palette = "Paired")+

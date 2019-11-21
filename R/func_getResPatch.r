@@ -6,6 +6,7 @@
 #' @param restIndepLim A numeric value of time in minutes of the difference in residence times between two patches for them to be considered independent.
 #' @param tempIndepLim A numeric value of distance in metres of the spatial distance between two patches for them to the considered independent.
 #' @param minFixes The minimum number of fixes for a group of spatially-proximate number of ponts to be considered a preliminary residence patch.
+#' @param tideLims A vector of two positions giving the limits of tidal time to consider. Lower first, higher second.
 #'
 #' @return A data.frame extension object. This dataframe has the added column \code{resPatch} based on cumulative patch summing. Depending on whether \code{inferPatches = TRUE}, the dataframe has additional inferred points. An additional column is created in each case, indicating whether the data are empirical fixes ('real') or 'inferred'.
 #' @import data.table
@@ -17,7 +18,8 @@ funcGetResPatch <- function(somedata,
                             spatIndepLim = 100,
                             tempIndepLim = 30,
                             restIndepLim = 30,
-                            minFixes = 3){
+                            minFixes = 3,
+                            tideLims = c(4, 9)){
   # handle global variable issues
   time <- timediff <- type <- x <- y <- npoints <- NULL
   patch <- nfixes <- id <- tidalcycle <- data <- tidaltime <- NULL
@@ -40,11 +42,12 @@ funcGetResPatch <- function(somedata,
   # convert variable units
   {
     tempIndepLim = tempIndepLim*60
+    tideLims = tideLims*60
   }
 
   # get names and numeric variables
   dfnames <- names(somedata)
-  namesReq <- c("id", "tidalcycle", "x", "y", "time", "type", "resTime")
+  namesReq <- c("id", "tidalcycle", "x", "y", "time", "type", "resTime", "tidaltime")
 
   # include asserts checking for required columns
   {
@@ -219,6 +222,12 @@ funcGetResPatch <- function(somedata,
           df <- dplyr::select(df, -nfixes, -type)
           return(df)
         })
+      }
+      # filter for low tide
+      {
+        somedata <- dplyr::filter(somedata, tidaltime_mean %between% tideLims)
+        # rename patches
+        somedata <- dplyr::mutate(somedata, patch = 1:nrow(somedata))
       }
 
       # make spatial polygons

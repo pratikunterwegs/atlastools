@@ -5,7 +5,8 @@
 \title{getResPatch}
 \usage{
 funcGetResPatch(somedata, bufferSize = 10, spatIndepLim = 100,
-  tempIndepLim = 30, restIndepLim = 30, minFixes = 3)
+  tempIndepLim = 30, restIndepLim = 30, minFixes = 3,
+  tideLims = c(4, 9))
 }
 \arguments{
 \item{somedata}{A dataframe of values of any class that is or extends data.frame. The dataframe must contain at least two spatial coordinates, \code{x} and \code{y}, and a temporal coordinate, \code{time}. The names of columns specifying these can be passed as arguments below.}
@@ -19,6 +20,8 @@ funcGetResPatch(somedata, bufferSize = 10, spatIndepLim = 100,
 \item{restIndepLim}{A numeric value of time in minutes of the difference in residence times between two patches for them to be considered independent.}
 
 \item{minFixes}{The minimum number of fixes for a group of spatially-proximate number of ponts to be considered a preliminary residence patch.}
+
+\item{tideLims}{A vector of two positions giving the limits of tidal time to consider. Lower first, higher second.}
 }
 \value{
 A data.frame extension object. This dataframe has the added column \code{resPatch} based on cumulative patch summing. Depending on whether \code{inferPatches = TRUE}, the dataframe has additional inferred points. An additional column is created in each case, indicating whether the data are empirical fixes ('real') or 'inferred'.

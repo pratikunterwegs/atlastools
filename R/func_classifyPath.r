@@ -13,10 +13,10 @@ funcClassifyPath <- function(somedata,
   # check somedata is a data.frame and has a resTime column
   {
     assertthat::assert_that("data.frame" %in% class(somedata),
-                            msg = "not a dataframe object!")
+                            msg = "classifypath: not a dataframe object!")
 
     assertthat::assert_that("resTime" %in% names(somedata),
-                            msg = "data has no residence time column")
+                            msg = "classifypath: data has no residence time column")
     assertthat::assert_that(min(c(resTimeLimit)) > 1,
                             msg = "funcClassifyPath: function arguments are not positive")
   }

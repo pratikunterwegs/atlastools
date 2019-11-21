@@ -26,7 +26,6 @@ server <- function(input, output) {
     classified_output <-
       funcClassifyPath(
         somedata = inference_output,
-        restimeCol = input$resTimeCol,
         resTimeLimit = input$resTimeLimit
       )
 

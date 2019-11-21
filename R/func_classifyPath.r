@@ -2,7 +2,6 @@
 #'
 #' @param somedata A data frame which must have a column for the residence time at each point.
 #' @param resTimeLimit A numeric giving the time limit in minutes against which residence time is compared.
-#' @param restimeCol The residence time column name.
 #'
 #' @return A data.frame extension object, which retains only points classified as residence points if residence time is below \code{resTimeLimit} over \code{travelSeg} points.
 #' @import data.table
@@ -10,14 +9,13 @@
 #'
 
 funcClassifyPath <- function(somedata,
-                             restimeCol = "resTime",
                              resTimeLimit = 2) {
   # check somedata is a data.frame and has a resTime column
   {
     assertthat::assert_that("data.frame" %in% class(somedata),
                             msg = "not a dataframe object!")
 
-    assertthat::assert_that(restimeCol %in% names(somedata),
+    assertthat::assert_that("resTime" %in% names(somedata),
                             msg = "data has no residence time column")
     assertthat::assert_that(min(c(resTimeLimit)) > 1,
                             msg = "funcClassifyPath: function arguments are not positive")
@@ -44,11 +42,11 @@ funcClassifyPath <- function(somedata,
   # prep to assign sequence to res patches
   # to each id.tide combination
   # remove NA vals in resTime
-  somedata <- somedata[!is.na(restimeCol),]
+  somedata <- somedata[!is.na(resTime),]
 
   # drop NAs in rolling residence time evaluation
   # essentially the first and last elements will be dropped
-  somedata <- somedata[restimeCol >= resTimeLimit, ]
+  somedata <- somedata[resTime >= resTimeLimit, ]
 
   # print message if dataframe has few rows
   {

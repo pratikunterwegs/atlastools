@@ -4,12 +4,10 @@
 \alias{funcClassifyPath}
 \title{classifyPath}
 \usage{
-funcClassifyPath(somedata, restimeCol = "resTime", resTimeLimit = 2)
+funcClassifyPath(somedata, resTimeLimit = 2)
 }
 \arguments{
 \item{somedata}{A data frame which must have a column for the residence time at each point.}
-
-\item{restimeCol}{The residence time column name.}
 
 \item{resTimeLimit}{A numeric giving the time limit in minutes against which residence time is compared.}
 }

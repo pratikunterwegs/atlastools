@@ -44,10 +44,7 @@
       h4("classifyPath: classify as stationary"),
       numericInput("resTimeLimit",
         p("residence time limit (min)"),
-        value = 2.0),
-      textInput("resTimeCol",
-        p("residence time column"),
-        value = "resTime")
+        value = 10.0)
       ),
 
       column(2,

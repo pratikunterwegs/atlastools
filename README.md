@@ -27,7 +27,7 @@ devtools::install_github("pratikunterwegs/watlasUtils", ref = "devbranch")
 
 ```
 
-![](https://github.com/pratikunterwegs/watlasUtils/raw/simplShinyapp/screenshot_app.png)
+![](https://github.com/pratikunterwegs/watlasUtils/raw/devbranch/screenshot_app.png)
 
 
 ## Functions

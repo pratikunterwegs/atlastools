@@ -2,8 +2,7 @@
 library(glue)
 library(ggplot2)
 library(data.table)
-library(pals)
-library(gridExtra)
+library(plotly)
 
 server <- function(input, output) {
 

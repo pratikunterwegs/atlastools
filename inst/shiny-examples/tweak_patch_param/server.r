@@ -36,7 +36,8 @@ server <- function(input, output) {
         spatIndepLim = input$spatIndepLimit,
         tempIndepLim = input$tempIndepLimit,
         restIndepLim = input$restIndepLimit,
-        minFixes = input$minfixes
+        minFixes = input$minfixes,
+        tideLims = c(input$lim1, input$lim2)
       )
 
     return(patch_output)

@@ -71,7 +71,7 @@
         p("spat indep limit (m)"),
         value = 100.0),
         numericInput("restIndepLimit",
-        p("res. time indep limit (m)"),
+        p("res. time indep limit (min)"),
         value = 30.0)
       )
       )

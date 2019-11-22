@@ -9,7 +9,7 @@
       column(5,
         h4("Residence patches"),
         # textOutput("this_map_label"),
-        plotOutput("patch_map", height = "600px")
+        plotlyOutput("patch_map", height = "600px")
         ),
 
       column(3,
@@ -54,7 +54,13 @@
         value = 10.0),
       numericInput("minfixes",
         p("min. fixes in patch (#)"),
-        value = 3)
+        value = 3),
+      numericInput("lim1",
+        p("tide limit 1 (hrs)"),
+        value = 4),
+      numericInput("lim2",
+        p("tide limit 2 (hrs)"),
+        value = 10)
       ),
       column(2,
       h4("getPatches: patch independence"),

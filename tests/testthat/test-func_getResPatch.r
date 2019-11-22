@@ -2,8 +2,8 @@ context("residence patches and classified points")
 testthat::test_that("patch calc on empirical data", {
 
   # read in data
-  revdata = data.table::fread("../testdata/recdata/recurse435_008.csv")
-  htdata = data.table::fread("../testdata/htdata/435_008.csv")
+  revdata = data.table::fread("../testdata/recdata/recurse435_009.csv")
+  htdata = data.table::fread("../testdata/htdata/435_009.csv")
 
   # run function for patch inference
   inference_output <- watlasUtils::funcInferResidence(revdata = revdata,

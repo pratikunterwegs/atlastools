@@ -77,7 +77,7 @@ server <- function(input, output) {
            "tidal cycle = ", unique((dataOut())$tidalcycle))}
   )
 
-  output$patch_map <- renderPlot(
+  output$patch_map <- renderPlotly(
     {
       # get patch outlines
       patchSummary <- funcGetPatchData(resPatchData = dataOut(),
@@ -93,17 +93,18 @@ server <- function(input, output) {
                                       dataColumn = "data",
                                       whichData = "points")
       }
-
-      return(
+      # make plot
+      {
+        map_plot <- 
         ggplot()+
           geom_sf(data = patchSummary,
                   aes(geometry = polygons, fill = patch),
                   alpha = 0.8, col = 'black', lwd = 0.1)+
-          geom_point(data = dataRaw(), aes(x,y), col = "grey80", 
-                     size = 0.01, shape = 4, alpha = 0.01)+
+          geom_point(data = dataRaw(), aes(x,y), col = "grey20", 
+                     size = 0.05, shape = 4, alpha = 0.3)+
 
           geom_sf(data = patchtraj, col = "black", size = 0.2)+
-          scale_fill_distiller(palette = "Paired")+
+          scale_fill_distiller(palette = "Spectral", na.value = "grey")+
           theme_bw()+
           theme(axis.text = element_blank(),
                 axis.title = element_text(size = rel(0.5)),
@@ -118,9 +119,14 @@ server <- function(input, output) {
                              unique((dataRaw())$id),
                              "tidal cycle = ",
                              unique((dataRaw())$tidalcycle)))
+      }
+
+      return(
+        ggplotly(map_plot)  
       )
 
-    }, res = 150)
+    }
+    )
 
   ### restime time plot ####
   output$resTime_time <- renderPlot(
@@ -132,13 +138,11 @@ server <- function(input, output) {
           dataColumn = "data",
           whichData = "points")
 
-        patch_point_data <- dplyr::left_join(dataRaw(),
-                                             patch_point_data,
-                                             by = c("x", "y", "coordIdx", "time", "id", "tidalcycle", "resTime","fpt", "revisits"))
+        patch_point_data <- (dataRaw())
 
-        patch_point_data <- dplyr::filter(patch_point_data, type != "inferred")
+        # patch_point_data <- dplyr::filter(patch_point_data, type != "inferred")
 
-        patch_point_data <- dplyr::arrange(patch_point_data, time)
+        # patch_point_data <- dplyr::arrange(patch_point_data, time)
       }
       # get patch summary for vert lines
       {
@@ -149,31 +153,39 @@ server <- function(input, output) {
 
         patchSummary <- sf::st_drop_geometry(patchSummary)
       }
+      # make plot
       {
+        
+
         plot1 <- ggplot()+
+
+          geom_rect(data = patchSummary, aes(xmin = time_start, xmax = time_end,
+            ymin = 0, ymax = max(patch_point_data$resTime), fill = patch), alpha = 0.2)+
           geom_hline(yintercept = input$resTimeLimit, col = 2, lty = 2)+
-          geom_line(data = patch_point_data,
-                    aes(time, resTime, group = tidalcycle), col = "grey50", size = 0.1)+
+          # geom_line(data = patch_point_data,
+          #           aes(time, resTime, group = tidalcycle), col = "grey50", size = 0.1)+
           geom_point(data = patch_point_data,
-                     aes(time, resTime, col = patch),
-                     alpha = 0.2)+
+                     aes(time, resTime),
+                     alpha = 0.2, size = 0.2)+
           scale_x_time(labels = scales::time_format(format = "%Y-%m-%d\n %H:%M"))+
 
-          geom_label(data = patchSummary, aes(time_mean, 100, label = patch, fill = patch))+
-          geom_vline(data = patchSummary, aes(xintercept = time_end), lty = 3, size = 0.2)+
+          geom_label(data = patchSummary, aes(time_mean, max(patch_point_data$resTime), label = patch))+
+          geom_vline(data = patchSummary, aes(xintercept = time_end), col = 2, lty = 3, size = 0.2)+
+          geom_vline(data = patchSummary, aes(xintercept = time_start), col = 4, lty = 3, size = 0.2)+
 
-          scale_color_distiller(palette = "Paired", na.value = "grey")+
-          scale_fill_distiller(palette = "Paired", na.value = "grey")+
+          # scale_color_manual(values = somecolours, na.value = "grey")+
+          scale_fill_distiller(palette = "Spectral",na.value = "grey")+
           theme_bw()+
+          ylim(0, max(patch_point_data$resTime))+
           theme(legend.position = 'none',
                 axis.title = element_text(size = rel(0.6)),
                 panel.grid = element_blank())+
           labs(x = "time", y = "raw (mins)", col = "patch")
       }
 
-      return(plot1)
+      return((plot1))
 
-    },
-    res = 100)
+    }, res = 100
+    )
 }
 # ends here

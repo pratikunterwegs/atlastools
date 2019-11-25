@@ -29,6 +29,7 @@ funcGetPatchData = function(resPatchData,
 
 
     thisdata <- dplyr::select(resPatchData, -data)
+    thisdata <- sf::st_cast(thisdata, "MULTIPOLYGON")
     return(thisdata)
   }else{
     this_data <- sf::st_drop_geometry(resPatchData)

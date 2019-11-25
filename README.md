@@ -1,6 +1,6 @@
 # WATLAS Utilities
 
----
+## Shiny app development branch
 
 **Functions to handle data from the Wadden Sea ATLAS project**
 
@@ -25,11 +25,11 @@ install.packages("devtools")
 devtools::install_github("pratikunterwegs/watlasUtils")
 ```
 
----
+![](https://github.com/pratikunterwegs/watlasUtils/raw/master/screenshot_app.png)
 
 ## Functions
 
-The package currently has the following main functions which are simplified versions of the functions in master/devbranch:
+The package currently has the following functions:
 
   - `funcInferResidence` Inference of presumed residence patches from gaps in the tracking data.
   - `funcClassifyPath` Manual classification of empirical and inferred positions into stationary or travelling segments; filtering for residence points.
@@ -39,6 +39,5 @@ The package currently has the following main functions which are simplified vers
   - `funcDistance` Fast Euclidean-distance calculation between a series of points.
   - `funcPatchTraj` Construction of `sf`-based spatial data representing distance between patches.
   - `runTweakApp` Runs a local `shiny` app that visualises the effect of tweaking parameters on suitable data. 
-
-
+ 
 ---

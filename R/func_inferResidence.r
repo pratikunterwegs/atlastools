@@ -3,7 +3,7 @@
 #' @param revdata A dataframe of recurse analysis, or must include, in addition to X, Y and time columns, a residence time column named resTime, id, and tidalcycle.
 #' @param htdata A dataframe output of tidal cycle finding analysis, or must include, in addition to X, Y and time columns, a tidaltime column named tidaltime; also id, and tidalcycle for merging.
 #' @param infResTime A numeric giving the time limit in minutes against which residence time is compared.
-#' @param infPatchTimeDiff A numeric duration in seconds, of the minimum time difference between two points, above which, it is assumed worthwhile to examine whether there is a missing residence patch to be inferred.
+#' @param infPatchTimeDiff A numeric duration in minutes, of the minimum time difference between two points, above which, it is assumed worthwhile to examine whether there is a missing residence patch to be inferred.
 #' @param infPatchSpatDiff A numeric distance in metres, of the maximum spatial distance between two points, below which it may be assumed few extreme movements took place between them.
 #' @return A data.frame extension object. This dataframe has additional inferred points, indicated by the additional column for empirical fixes ('real') or 'inferred'.
 #' @import data.table
@@ -13,7 +13,7 @@
 funcInferResidence <- function(revdata,
                                htdata,
                                infResTime = 2,
-                               infPatchTimeDiff = 1800,
+                               infPatchTimeDiff = 30,
                                infPatchSpatDiff = 100){
 
   # handle global variable issues
@@ -36,6 +36,11 @@ funcInferResidence <- function(revdata,
     # merge with ht data
     df <- base::merge(df, htdf, by = intersect(names(df), names(htdf)), all = FALSE)
     rm(htdf); gc()
+  }
+
+  # convert argument units
+  {
+    infPatchTimeDiff = infPatchTimeDiff*60
   }
 
   # get names and numeric variables
@@ -71,14 +76,14 @@ funcInferResidence <- function(revdata,
 
   # find missing patches if timediff is greater than specified (default 30 mins)
   # AND spatdiff is less than specified (100 m)
-  tempdf[,infPatch := cumsum(timediff > infPatchTimeDiff & spatdiff < infPatchSpatDiff)]
+  tempdf[,infPatch := cumsum((timediff > infPatchTimeDiff) & (spatdiff < infPatchSpatDiff))]
 
   # subset the data to collect only the first two points of an inferred patch
+  # these are the first and last points of a travel trajectory
   tempdf[,posId := 1:(.N), by = "infPatch"]
   # remove NA patches
   tempdf <- tempdf[posId <= 2 & !is.na(infPatch),]
   # now count the max posId per patch, if less than 2, merge with next patch
-  # merging is by incrementing infPatch by 1
   tempdf[,npoints:=max(posId), by="infPatch"]
   tempdf[,infPatch:=ifelse(npoints == 2, yes = infPatch, no = infPatch+1)]
   tempdf <- tempdf[npoints >= 2,]
@@ -92,6 +97,7 @@ funcInferResidence <- function(revdata,
 
   # handle cases where there are inferred patches
 
+
   # add type to real data
   df[,type:="real"]
 
@@ -100,15 +106,18 @@ funcInferResidence <- function(revdata,
   {
     # make list column of expected times with 3 second interval
     # assume coordinate is the mean between 'takeoff' and 'landing'
-    infPatchDf <- tempdf[,nfixes:=length(seq(from = min(time), to = max(time), by = 3)),
-                         by = c("id", "tidalcycle", "infPatch")
-                         ][,.(time = seq(from = min(time), to = max(time), by = 3),
-                              x = mean(x),
-                              y = mean(y),
-                              resTime = infResTime),
-                           by = c("id", "tidalcycle", "infPatch","nfixes")
-                           ][infPatch > 0,
-                             ][,type:="inferred"]
+    infPatchDf <- tempdf[,nfixes:=length(seq(from = min(time, na.rm = T),
+                                             to = max(time, na.rm = T), by = 3)),
+                         by = c("id", "tidalcycle", "infPatch")]
+    # an expectation of integer type is created in time
+    infPatchDf <- infPatchDf[,.(time = seq(from = min(time, na.rm = T),
+                                           to = max(time, na.rm = T), by = 3),
+                                x = mean(x),
+                                y = mean(y),
+                                resTime = infResTime),
+                             by = c("id", "tidalcycle", "infPatch","nfixes")]
+    infPatchDf <- infPatchDf[infPatch > 0,]
+    infPatchDf <- infPatchDf[,type:="inferred"]
 
     rm(tempdf); gc()
 

@@ -97,13 +97,16 @@ server <- function(input, output) {
       {
         map_plot <- 
         ggplot()+
+          
+          geom_path(data = dataRaw(), aes(x,y), col = "grey60", 
+                     size = 0.1, alpha = 0.3)+
+          geom_point(data = dataRaw(), aes(x,y), col = "grey20", 
+                     size = 0.2, shape = 4, alpha = 0.3)+
           geom_sf(data = patchSummary,
                   aes(geometry = polygons, fill = patch),
-                  alpha = 0.8, col = 'black', lwd = 0.1)+
-          geom_point(data = dataRaw(), aes(x,y), col = "grey20", 
-                     size = 0.05, shape = 4, alpha = 0.3)+
+                  alpha = 0.5, col = 'black', lwd = 0.1)+
 
-          geom_sf(data = patchtraj, col = "black", size = 0.2)+
+          geom_sf(data = patchtraj, col = "black", size = 0.3)+
           scale_fill_distiller(palette = "Spectral", na.value = "grey")+
           theme_bw()+
           theme(axis.text = element_blank(),
@@ -162,8 +165,8 @@ server <- function(input, output) {
           geom_rect(data = patchSummary, aes(xmin = time_start, xmax = time_end,
             ymin = 0, ymax = max(patch_point_data$resTime), fill = patch), alpha = 0.2)+
           geom_hline(yintercept = input$resTimeLimit, col = 2, lty = 2)+
-          # geom_line(data = patch_point_data,
-          #           aes(time, resTime, group = tidalcycle), col = "grey50", size = 0.1)+
+          geom_line(data = patch_point_data,
+                    aes(time, resTime, group = tidalcycle), col = "grey50", size = 0.1)+
           geom_point(data = patch_point_data,
                      aes(time, resTime),
                      alpha = 0.2, size = 0.2)+

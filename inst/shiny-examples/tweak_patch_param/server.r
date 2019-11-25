@@ -161,10 +161,9 @@ server <- function(input, output) {
         
 
         plot1 <- ggplot()+
-
+          geom_hline(yintercept = input$resTimeLimit, col = 2, lty = 2)+
           geom_rect(data = patchSummary, aes(xmin = time_start, xmax = time_end,
             ymin = 0, ymax = max(patch_point_data$resTime), fill = patch), alpha = 0.2)+
-          geom_hline(yintercept = input$resTimeLimit, col = 2, lty = 2)+
           geom_line(data = patch_point_data,
                     aes(time, resTime, group = tidalcycle), col = "grey50", size = 0.1)+
           geom_point(data = patch_point_data,

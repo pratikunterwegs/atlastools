@@ -32,6 +32,6 @@ Imports:
     shiny,
     plotly,
     RColorBrewer
-RoxygenNote: 6.1.1
+RoxygenNote: 7.0.1
 Suggests:
     testthat (>= 2.1.0)

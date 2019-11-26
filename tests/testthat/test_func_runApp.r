@@ -1,7 +1,3 @@
 context("shiny app")
-testthat::test_that("shiny app starts", {
 
-  # requires library shinytest
-  # not currently tested
-
-})
+  shinytest::testApp("inst/shiny-examples/tweak_patch_param/", "test-func_runTweakApp.R")

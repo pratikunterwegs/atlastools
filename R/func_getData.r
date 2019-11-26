@@ -54,28 +54,32 @@ funcGetData<-function(tag,
     mydb = dbConnect(MySQL(), user=username, password=password, dbname=database, host=host)
   }
 
-  ## SQL code to retrive data
-  sql<-paste("select TAG, TIME, X, Y, NBS, VARX, VARY, COVXY  from LOCALIZATIONS where TAG = ", tag, " AND ","TIME > '",tracking_time_start,"' AND ","TIME < '",tracking_time_end,"' ","ORDER BY TIME ASC",sep="")
-
-  # getdata
-  d<-dbGetQuery(mydb, sql)
-
-  ## add aproximate SD of localization
-  # d$SD<-maxSD(d)
-  ## a bit indirect, but there were some strange warnings with NaN produced.
-  if(nrow(d)>0){
-    tmp <- d$VARX + d$VARY + 2*d$COVXY
-    d$SD<-0
-    d$SD[tmp>0]<- sqrt(tmp[tmp>0])
-  }else{
-    d$SD<-numeric(0)	# ander krijg je een error als je geen data hebt
+  # SQL code to retrive data
+  {
+    sql <- paste("select TAG, TIME, X, Y, NBS, VARX, VARY, COVXY  from LOCALIZATIONS where TAG = ", tag, " AND ","TIME > '",tracking_time_start,"' AND ","TIME < '",tracking_time_end,"' ","ORDER BY TIME ASC",sep="")
   }
 
-  ## close connection
+  # getdata
+  d <- dbGetQuery(mydb, sql)
+
+  # add aproximate SD of localization
+  # d$SD<-maxSD(d)
+  # a bit indirect, but there were some strange warnings with NaN produced.
+  if(nrow(d)>0)
+  {
+    tmp <- d$VARX + d$VARY + 2*d$COVXY
+    d$SD <- 0
+    d$SD[tmp>0] <- sqrt(tmp[tmp>0])
+  }else{
+    d$SD <- numeric(0)
+  }
+
+  # close connection
   dbDisconnect(mydb)
 
-  ## or close all connections
-  #lapply( dbListConnections(MySQL()), function(x) dbDisconnect(x)
+  # or close all connections
+  # lapply( dbListConnections(MySQL()), function(x) dbDisconnect(x)
 
+  # return a dataframe of values
   return(d)
 }

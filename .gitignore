@@ -1,5 +1,10 @@
+# ignore r history
 .Rproj.user
 .Rhistory
 .RData
 
+# ignore all zip files
 *zip
+
+# ignore experiments folder
+/experiments

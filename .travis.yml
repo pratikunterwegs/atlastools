@@ -22,5 +22,5 @@ addons:
 branches:
   only:
   - master
-  - simplShinyapp
-  - simplified
+  - accessbranch
+  - devbranch

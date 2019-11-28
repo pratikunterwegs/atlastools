@@ -30,6 +30,7 @@ Imports:
     zoo,
     assertthat,
     shiny,
+    shinytest,
     plotly,
     RColorBrewer,
     RMySQL

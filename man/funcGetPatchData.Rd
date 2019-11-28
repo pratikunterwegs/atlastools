@@ -4,7 +4,8 @@
 \alias{funcGetPatchData}
 \title{getPatchData}
 \usage{
-funcGetPatchData(resPatchData, dataColumn = "data", whichData = "spatial")
+funcGetPatchData(resPatchData, dataColumn = "data",
+  whichData = "spatial")
 }
 \arguments{
 \item{resPatchData}{A tibble with a nested list column of the raw data underlying each patch. This column is specified in the argument \code{dataColumn}}

@@ -7,7 +7,6 @@
 #' @return An object of type \code{sf} or \code{tibble} depending on which data is requested.
 #' @export
 #'
-#' @examples
 funcGetPatchData = function(resPatchData,
                             dataColumn = "data",
                             whichData = "spatial")

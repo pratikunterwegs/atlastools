@@ -9,7 +9,7 @@
 #' @param password Password to access the data. Contact \code{allert.bijleveld@nioz.nl} to get access.
 #' @param tag_prefix A numeric specifying the tag prefix. Defaults to \code{31001000}
 #'
-#' @return
+#' @return A dataframe of agent positions.
 #' @import RMySQL
 #' @export
 #'

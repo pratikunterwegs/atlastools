@@ -1,3 +1,6 @@
 .Rproj.user
 .Rhistory
 .RData
+
+# ignore all in private
+private/*

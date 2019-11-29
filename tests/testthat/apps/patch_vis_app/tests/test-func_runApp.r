@@ -1,5 +1,6 @@
 context("shiny app")
 library(shinytest)
+shinytest::installDependencies()
 testthat::test_that("shiny app runs",{
   #skip_on_cran()
   

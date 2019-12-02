@@ -9,7 +9,7 @@
 #' @return A datatable class object (extends data.frame) which has the additional columns posID and ts, which is TIME converted to human readable POSIXct format.
 #' @export
 #'
-clean<-function(somedata,
+funcCleanData <- function(somedata,
                 moving_window=5,
                 nbs_min=0,
                 sd_threshold=500000,
@@ -22,6 +22,7 @@ clean<-function(somedata,
 
     # include asserts checking for required columns
     {
+      dfnames <- colnames(somedata)
       namesReq <- c("X", "Y", "SD", "NBS", "TAG", "TIME")
       for (i in 1:length(namesReq)) {
         assertthat::assert_that(namesReq[i] %in% dfnames,
@@ -30,9 +31,9 @@ clean<-function(somedata,
     }
 
     # check args positive
-    assertthat::assert_that(min(c(size_moving_window)) > 1,
+    assertthat::assert_that(min(c(moving_window)) > 1,
                             msg = "cleanData: function arguments are not positive")
-    assertthat::assert_that(min(c(min_number_receivers)) >= 0,
+    assertthat::assert_that(min(c(nbs_min)) >= 0,
                             msg = "cleanData: function arguments are not positive")
   }
 
@@ -60,8 +61,9 @@ clean<-function(somedata,
     somedata[,lapply(.SD, function(z){runmed(rev(runmed(z, moving_window)), moving_window)}),
              .SDcols = c("X", "Y")]
 
-    if(Plot==TRUE)
+    if(plot==TRUE)
     {
+      x11()
       plot(Y_raw~X_raw,data=somedata)
       lines(Y_raw~X_raw, data=somedata,col=1)
       lines(Y~X, data=somedata,col=2)
@@ -70,7 +72,7 @@ clean<-function(somedata,
     }
 
     ## postprocess (clean) data
-    d <- d[,.(TAG, posID, TIME, ts, X_raw, Y_raw, NBS, VARX, VARY, COVXY, X, Y, SD)]
+    somedata <- somedata[,.(TAG, posID, TIME, ts, X_raw, Y_raw, NBS, VARX, VARY, COVXY, X, Y, SD)]
 
   }else{
 

@@ -30,8 +30,10 @@ Imports:
     zoo,
     assertthat,
     shiny,
+    shinytest,
     plotly,
-    RColorBrewer
-RoxygenNote: 6.1.1
+    RColorBrewer,
+    RMySQL
+RoxygenNote: 7.0.1
 Suggests:
     testthat (>= 2.1.0)

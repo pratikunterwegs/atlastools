@@ -64,6 +64,7 @@ server <- function(input, output) {
                                     tidaltime_mean,
                                     duration,
                                     distInPatch,
+                                    dispInPatch,
                                     distBwPatch,
                                     nfixes,
                                     area,
@@ -95,12 +96,12 @@ server <- function(input, output) {
       }
       # make plot
       {
-        map_plot <- 
+        map_plot <-
         ggplot()+
-          
-          geom_path(data = dataRaw(), aes(x,y), col = "grey60", 
+
+          geom_path(data = dataRaw(), aes(x,y), col = "grey60",
                      size = 0.1, alpha = 0.3)+
-          geom_point(data = dataRaw(), aes(x,y), col = "grey20", 
+          geom_point(data = dataRaw(), aes(x,y), col = "grey20",
                      size = 0.2, shape = 4, alpha = 0.3)+
           geom_sf(data = patchSummary,
                   aes(geometry = polygons, fill = patch),
@@ -115,7 +116,7 @@ server <- function(input, output) {
                 legend.text = element_text(size = rel(0.5)),
                 legend.position = "bottom",
                 legend.key.height = unit(0.05, "cm"),
-                plot.title = element_text(size = rel(0.5)),
+                plot.title = element_text(size = rel(1.5)),
                 panel.grid = element_blank())+
           labs(x = "long", y = "lat", fill = "patch",
                title = paste("bird tag = ",
@@ -125,7 +126,7 @@ server <- function(input, output) {
       }
 
       return(
-        ggplotly(map_plot)  
+        ggplotly(map_plot)
       )
 
     }
@@ -158,13 +159,12 @@ server <- function(input, output) {
       }
       # make plot
       {
-        
+
 
         plot1 <- ggplot()+
-
+          geom_hline(yintercept = input$resTimeLimit, colour = "red", lty = 2)+
           geom_rect(data = patchSummary, aes(xmin = time_start, xmax = time_end,
             ymin = 0, ymax = max(patch_point_data$resTime), fill = patch), alpha = 0.2)+
-          geom_hline(yintercept = input$resTimeLimit, col = 2, lty = 2)+
           geom_line(data = patch_point_data,
                     aes(time, resTime, group = tidalcycle), col = "grey50", size = 0.1)+
           geom_point(data = patch_point_data,

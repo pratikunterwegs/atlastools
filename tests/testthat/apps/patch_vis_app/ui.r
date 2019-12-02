@@ -2,6 +2,7 @@
 library(plotly)
 library(shiny)
 library(shinythemes)
+library(watlasUtils)
 
 ui <- fluidPage(
   titlePanel("WATLAS Utilities App"),

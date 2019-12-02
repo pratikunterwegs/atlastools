@@ -174,12 +174,17 @@ funcGetResPatch <- function(somedata,
                                   distInPatch = purrr::map_dbl(data, function(df){
                                     sum(watlasUtils::funcDistance(df = df), na.rm = TRUE)
                                   }))
+        
         # distance between patches
         somedata <- tidyr::unnest(somedata, cols = patchSummary)
         somedata <- dplyr::mutate(somedata,
                                   distBwPatch = watlasUtils::funcBwPatchDist(df = somedata,
                                                                              x1 = "x_end", x2 = "x_start",
                                                                              y1 = "y_end", y2 = "y_start"))
+        # displacement in a patch
+        # apply func bw patch dist reversing usual end and begin
+        somedata <- dplyr::mutate(somedata,
+                                  dispInPatch = sqrt((x_end - x_start)^2 + (y_end - y_start)^2))
         # type of patch
         somedata <- dplyr::mutate(somedata,
                                   type = purrr::map_chr(data, function(df){

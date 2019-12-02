@@ -1,6 +1,11 @@
+# ignore r history
 .Rproj.user
 .Rhistory
 .RData
+
+
+# ignore all zip files
+*zip
 
 # ignore all in private
 private/*

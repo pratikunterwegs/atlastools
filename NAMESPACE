@@ -2,6 +2,7 @@
 
 export(funcBwPatchDist)
 export(funcClassifyPath)
+export(funcCleanData)
 export(funcDistance)
 export(funcGetData)
 export(funcGetPatchData)

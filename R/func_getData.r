@@ -9,11 +9,11 @@
 #' @param password Password to access the data. Contact \code{allert.bijleveld@nioz.nl} to get access.
 #' @param tag_prefix A numeric specifying the tag prefix. Defaults to \code{31001000}
 #'
-#' @return A dataframe of agent positions.
+#' @return A dataframe of agent positions, filtered between the required tracking times.
 #' @import RMySQL
 #' @export
 #'
-funcGetData<-function(tag,
+funcGetData <- function(tag,
                       tracking_time_start,
                       tracking_time_end,
                       tag_prefix="31001000",
@@ -39,7 +39,7 @@ funcGetData<-function(tag,
 
   # process function arguments for sql database
   {
-    tag<- paste(tag_prefix,tag,sep="")
+    tag <- paste(tag_prefix,tag,sep="")
     # convert to POSIXct format
     tracking_time_start <- as.POSIXct(tracking_time_start, tz="CET")
     tracking_time_end <- as.POSIXct(tracking_time_end, tz="CET")

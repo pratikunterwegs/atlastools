@@ -4,9 +4,16 @@
 \alias{funcGetData}
 \title{getData}
 \usage{
-funcGetData(tag, tracking_time_start, tracking_time_end,
-  tag_prefix = "31001000", database = "db", host = "abtdb1.nioz.nl",
-  username = "someuser", password = "somepassword")
+funcGetData(
+  tag,
+  tracking_time_start,
+  tracking_time_end,
+  tag_prefix = "31001000",
+  database = "db",
+  host = "abtdb1.nioz.nl",
+  username = "someuser",
+  password = "somepassword"
+)
 }
 \arguments{
 \item{tag}{A three digit numeric representing the ToA tag.}
@@ -26,7 +33,7 @@ funcGetData(tag, tracking_time_start, tracking_time_end,
 \item{password}{Password to access the data. Contact \code{allert.bijleveld@nioz.nl} to get access.}
 }
 \value{
-A dataframe of agent positions.
+A dataframe of agent positions, filtered between the required tracking times.
 }
 \description{
 getData

@@ -49,7 +49,7 @@ The inferred localisations all have an X and Y coordinate value that is the mean
 
 ### Path classification
 
-Individual trajectories are classified by `funcClassifyPath` into residence or travelling points depending on the residence time `resTimeLimit` [^1] -- ideally, this is based in the biology of the tracked animal. The travelling points are removed, and the residence points returned in a data frame.
+Individual trajectories are classified by `funcClassifyPath` into residence or travelling points depending on the residence time `resTimeLimit` calculated using the _recurse_ package [(Bracis et al. 2018)](https://onlinelibrary.wiley.com/doi/abs/10.1111/ecog.03618) -- ideally, this is based in the biology of the tracked animal. The travelling points are removed, and the residence points returned in a data frame.
 
 ### Residence patch construction
 
@@ -57,16 +57,15 @@ The individual trajectory retaining only the presumed residence points is cluste
 
 The procedure adopted here is as follows:
 
-1. The distance between consecutive locations is calculated, and compared against 2 $\times$ `bufferSize`, which has a default value of 10m[^2]. Points within 20m of the previous point are clustered together.
-
+1. The distance between consecutive locations is calculated, and compared against 2 * `bufferSize`, which has a default value of 10m [^1]. Points within 20m of the previous point are clustered together.
 2. The function counts the number of locations in each of these preliminary clusters, and removes entire clusters which have fewer than `minFixes` locations.
 
 3. The first, last, and mean value of time, X coordinate, Y coordinate, and residence time of each of the clusters is counted. These are used to assess spatio-temporal independence between successive clusters as follows:
-  1. The time between the last timestamp of cluster _N_ and the first timestamp of _N+1_ is compared against `tempIndepLim`[^3].
-  2. The distance between the last position of cluster _N_ and the first position of _N+1_ is compared against `spatIndepLim`[^3].
-  3. The absolute difference in mean residence times between _N_ and _N+1_ is compared against `restIndepLim`.
-  4. If any of the three comparisons satisfies a greater-than predicate, the clusters are considered independent.
-  5. If not, cluster _N+1_ is merged with _N_.
+    1. The time between the last timestamp of cluster _N_ and the first timestamp of _N+1_ is compared against `tempIndepLim` [^2].
+    2. The distance between the last position of cluster _N_ and the first position of _N+1_ is compared against `spatIndepLim` [^2].
+    3. The absolute difference in mean residence times between _N_ and _N+1_ is compared against `restIndepLim`.
+    4. If any of the three comparisons satisfies a greater-than predicate, the clusters are considered independent.
+    5. If not, cluster _N+1_ is merged with _N_.
 
 4. These merged clusters are called residence patches, and the first, last, and mean of each of the following are calculated: _time, X coordinate, Y coordinate, time since high tide, and residence time_.
 
@@ -74,7 +73,7 @@ The procedure adopted here is as follows:
 
 6. Quality metrics are added: the _number of locations_, _duration_, and _proportion of fixes_ in a patch.
 
-7. The patches are converted into `sf` based spatial polygons by constructing and dissolving buffers of `bufferSize` around each point. From these, _patch area_ and _circularity_[^4] measures are added. The Polsby-Popper metric of roundness is used: $\frac {4\pi A(patch)} {P(patch)^2}$, $A(patch)$ is the patch area, $P(patch)$ is the patch perimeter. A perfect circle would have a value of 1.0 using this method.
+7. The patches are converted into `sf` based spatial polygons by constructing and dissolving buffers of `bufferSize` around each point. From these, _patch area_ and _circularity_  measures are added. The Polsby-Popper metric of roundness [(Polsby and Popper. 1991)](https://pdfs.semanticscholar.org/0524/95555a23d961a674ccf1c82ceb475ac21821.pdf) is used: _4 * pi * patch area / patch perimeter squared_. A perfect circle would have a value of 1.0 using this method.
 
 8. A column for patch _type_ is added, indicating whether the patch consists only of empirical `real` points, `inferred` points, or `mixed` points.
 
@@ -93,11 +92,6 @@ There are three functions that are used in the main methods that implement fast 
 
 ## Footnotes
 
-[^1]: [Bracis et al. (2018)](https://onlinelibrary.wiley.com/doi/abs/10.1111/ecog.03618)
+[^1]: The distance of the first point from the previous point is considered unknown, and assigned `Inf` for calculation. 2 * `bufferSize` is the maximum distance possible between the centres of two circles for buffers of radius `bufferSize` m around them to just touch.
 
-[^2]: The distance of the first point from the previous point is considered unknown, and assigned `Inf` for calculation. 2 $\times$ `bufferSize` is the maximum distance possible between the centres of two circles for buffers of radius `bufferSize`m around them to just touch.
-
-[^3]: As before, the first cluster's time and spatial difference to the cluster prior is unknown and set to `Inf`.
-
-[^4]: [Polsby, Daniel D., and Robert D. Popper. 1991. “The Third Criterion: Compactness as a procedural safeguard against partisan gerrymandering.” Yale Law & Policy Review 9 (2): 301–353.](https://pdfs.semanticscholar.org/0524/95555a23d961a674ccf1c82ceb475ac21821.pdf)
----
+[^2]: As before, the first cluster's time and spatial difference to the cluster prior is unknown and set to `Inf`.

@@ -40,5 +40,5 @@ testthat::test_that("cleaning raw data works", {
   testthat::expect_gt(nrow(testdata), nrow(testoutput))
 
   # check that time is correctly handled
-  testthat::expect_identical(testoutput[1,]$ts, starttime)
+  testthat::expect_equal(testoutput[1,]$ts, starttime)
 })

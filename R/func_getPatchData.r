@@ -20,6 +20,15 @@ funcGetPatchData = function(resPatchData,
                             msg = "data column not present!")
 
   }
+
+  # return only summary if requested
+  if(whichData %in% c("summary"))
+  {
+    resPatchData <- sf::st_drop_geometry(resPatchData)
+    resPatchData <- dplyr::select(resPatchData, -data)
+    return(resPatchData)
+  }
+
   # return only spatial summary if requested
   if(whichData %in% c("spatial","Spatial"))
   {

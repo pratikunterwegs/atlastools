@@ -9,7 +9,7 @@
 #'
 funcGetPatchData = function(resPatchData,
                             dataColumn = "data",
-                            whichData = "spatial")
+                            whichData = "summary")
 {
   data <- NULL
   # check somedata is a data.frame and has a resTime column
@@ -22,7 +22,7 @@ funcGetPatchData = function(resPatchData,
   }
 
   # return only summary if requested
-  if(whichData %in% c("summary"))
+  if(whichData %in% c("summary", "summary"))
   {
     resPatchData <- sf::st_drop_geometry(resPatchData)
     resPatchData <- dplyr::select(resPatchData, -data)

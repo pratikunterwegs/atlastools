@@ -46,13 +46,16 @@ funcCleanData <- function(somedata,
   # delete positions with approximated standard deviations above SD_threshold, and below minimum number of base stations (NBS_min)
   somedata <- somedata[SD < sd_threshold & NBS >= nbs_min,]
 
+  prefix_num <- 31001000000
 
   # begin processing if there is data
   if(nrow(somedata) > 1)
   {
-    # add ID
+    # add position id and change time to seconds
     somedata[,`:=`(posID = 1:nrow(somedata),
-                   ts = .POSIXct(TIME/1000, tz = "CET"),
+                  TIME = TIME/1e3,
+                   ts = .POSIXct(TIME, tz = "CET"),
+                   TAG = as.numeric(TAG) - prefix_num,
                    X_raw = X,
                    Y_raw = Y)]
 
@@ -74,10 +77,13 @@ funcCleanData <- function(somedata,
     ## postprocess (clean) data
     somedata <- somedata[,.(TAG, posID, TIME, ts, X_raw, Y_raw, NBS, VARX, VARY, COVXY, X, Y, SD)]
 
+    # rename x,y,time to lower case
+    setnames(somedata, old = c("X","Y","TAG"), new = c("x","y","id"))
+
   }else{
 
     somedata <- data.frame(matrix(NA, nrow = 0, ncol = 12))
-    colnames(somedata) <- c("TAG", "posID", "TIME", "ts", "X_raw", "Y_raw", "NBS", "VARX", "VARY", "COVXY", "X", "Y")
+    colnames(somedata) <- c("id", "posID", "time", "ts", "X_raw", "Y_raw", "NBS", "VARX", "VARY", "COVXY", "x", "y")
   }
 
   assertthat::assert_that("data.frame" %in% class(somedata),

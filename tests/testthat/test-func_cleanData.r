@@ -4,7 +4,7 @@ testthat::test_that("cleaning raw data works", {
   # make testdata
   starttime <- Sys.time()
   attr(starttime, "tzone") <- "CET"
-  starttime_num <- as.numeric(Sys.time())*1000
+  starttime_num <- as.numeric(Sys.time())
 
   testdata <- data.table::data.table(X = cumsum(runif(n = 1e3, min=0, max=1)),
                                      Y = runif(n = 1e3, min=0, max=1),

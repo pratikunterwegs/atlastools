@@ -2,12 +2,10 @@ context("residence patches and classified points")
 testthat::test_that("patch calc on empirical data", {
 
   # read in data
-  revdata = data.table::fread("../testdata/recdata/recurse435_009.csv")
-  htdata = data.table::fread("../testdata/htdata/435_009.csv")
+  somedata = data.table::fread("../testdata/435_007.csv")
 
   # run function for patch inference
-  inference_output <- watlasUtils::funcInferResidence(revdata = revdata,
-                                                      htdata = htdata,
+  inference_output <- watlasUtils::funcInferResidence(somedata,
                                                       infResTime = 2,
                                                       infPatchTimeDiff = 30,
                                                       infPatchSpatDiff = 100)
@@ -44,12 +42,10 @@ testthat::test_that("patch calc on empirical data", {
 testthat::test_that("patch data access function works", {
 
   # read in data
-  revdata = data.table::fread("../testdata/recdata/recurse435_008.csv")
-  htdata = data.table::fread("../testdata/htdata/435_008.csv")
+  somedata = data.table::fread("../testdata/435_007.csv")
 
   # run function for patch inference
-  inference_output <- watlasUtils::funcInferResidence(revdata = revdata,
-                                                      htdata = htdata,
+  inference_output <- watlasUtils::funcInferResidence(df = somedata,
                                                       infResTime = 2,
                                                       infPatchTimeDiff = 30,
                                                       infPatchSpatDiff = 100)
@@ -95,12 +91,9 @@ testthat::test_that("patch data access function works", {
 
 testthat::test_that("residence patch construction works on artificial data", {
   # read in data and segment it
-  testrevdata = data.table::fread("../testdata/test_revdata.csv")
-  testrevdata$resTime = 500
-  testhtdata = data.table::fread("../testdata/test_htdata.csv")
+  testdata <- data.table::fread("../testdata/test_revdata.csv")
   # run function for patch inference
-  inference_output <- watlasUtils::funcInferResidence(revdata = testrevdata,
-                                                      htdata = testhtdata,
+  inference_output <- watlasUtils::funcInferResidence(df = testdata,
                                                       infResTime = 2,
                                                       infPatchTimeDiff = 30,
                                                       infPatchSpatDiff = 100)

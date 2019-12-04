@@ -66,7 +66,6 @@ funcCleanData <- function(somedata,
 
     if(plot==TRUE)
     {
-      x11()
       plot(Y_raw~X_raw,data=somedata)
       lines(Y_raw~X_raw, data=somedata,col=1)
       lines(Y~X, data=somedata,col=2)

@@ -9,22 +9,31 @@
 #'
 funcGetPatchData = function(resPatchData,
                             dataColumn = "data",
-                            whichData = "spatial")
+                            whichData = "summary")
 {
   data <- NULL
   # check somedata is a data.frame and has a resTime column
   {
-    assertthat::assert_that("data.frame" %in% class(resPatchData),
-                            msg = "not a dataframe object!")
+    assertthat::assert_that(is.data.frame(resPatchData),
+                            msg = glue::glue('getPatchData: input not a dataframe object, has class {stringr::str_flatten(class(resPatchData), collapse = " ")}!'))
     assertthat::assert_that(dataColumn %in% names(resPatchData),
-                            msg = "data column not present!")
+                            msg = "getPatchData: data column not present in input!")
 
   }
+
+  # return only summary if requested
+  if(whichData %in% c("summary", "summary"))
+  {
+    resPatchData <- sf::st_drop_geometry(resPatchData)
+    resPatchData <- dplyr::select(resPatchData, -data)
+    return(resPatchData)
+  }
+
   # return only spatial summary if requested
   if(whichData %in% c("spatial","Spatial"))
   {
     assertthat::assert_that("sf" %in% class(resPatchData),
-                            msg = "not a spatial object, cannot return spatial data!")
+                            msg = "getPatchData: not a spatial object, cannot return spatial data!")
 
 
     thisdata <- dplyr::select(resPatchData, -data)

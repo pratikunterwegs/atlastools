@@ -1,6 +1,6 @@
 #' segPath2
 #'
-#' @param revdata A dataframe of recurse analysis, or must include, in addition to X, Y and time columns, a residence time column named resTime, id, and tidalcycle.
+#' @param revdata A dataframe of recurse analysis, or must include, in addition to x, y and time columns, a residence time column named resTime, TAG, and tidalcycle.
 #' @param htdata A dataframe output of tidal cycle finding analysis, or must include, in addition to X, Y and time columns, a tidaltime column named tidaltime; also id, and tidalcycle for merging.
 #' @param infResTime A numeric giving the time limit in minutes against which residence time is compared.
 #' @param infPatchTimeDiff A numeric duration in minutes, of the minimum time difference between two points, above which, it is assumed worthwhile to examine whether there is a missing residence patch to be inferred.
@@ -10,8 +10,7 @@
 #' @export
 #'
 
-funcInferResidence <- function(revdata,
-                               htdata,
+funcInferResidence <- function(df,
                                infResTime = 2,
                                infPatchTimeDiff = 30,
                                infPatchSpatDiff = 100){
@@ -24,18 +23,15 @@ funcInferResidence <- function(revdata,
   # adding the inferPatches argument to prep for inferring
   # residence patches from missing data between travel segments
 
+  # check if data frame
+  assertthat::assert_that(is.data.frame(df),
+                          msg = glue::glue('inferResidence: input not a dataframe object, has class {stringr::str_flatten(class(df), collapse = " ")}!'))
+
   # read the file in
   {
-    df <- revdata
-    htdf <- htdata
-
     # convert both to DT if not
     if(is.data.table(df) != TRUE) {setDT(df)}
-    if(is.data.table(htdf) != TRUE) {setDT(htdf)}
 
-    # merge with ht data
-    df <- base::merge(df, htdf, by = intersect(names(df), names(htdf)), all = FALSE)
-    rm(htdf); gc()
   }
 
   # convert argument units

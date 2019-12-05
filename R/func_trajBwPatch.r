@@ -12,6 +12,9 @@
 funcPatchTraj <- function(df, x1 = "x_end", x2 = "x_start",
                           y1 = "y_end", y2 = "y_start"){
   # must assert df has correct columns
+  # check if data frame
+  assertthat::assert_that(is.data.frame(df),
+                          msg = glue::glue('trajPatch: input not a dataframe object, has class {stringr::str_flatten(class(df), collapse = " ")}!'))
 
   # convert df to data_frame
   # df <- sf::st_drop_geometry(df)

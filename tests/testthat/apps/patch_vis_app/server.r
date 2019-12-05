@@ -9,14 +9,12 @@ server <- function(input, output) {
   #### general data handling ####
   dataOut <- eventReactive(input$go, {
     # reads in data
-    revdata <- data.table::fread(input$revfile$datapath)
-    htdata <- data.table::fread(input$htfile$datapath)
+    somedata <- data.table::fread(input$datafile$datapath)
 
     # run the inference func
     inference_output <-
       funcInferResidence(
-        revdata = revdata,
-        htdata = htdata,
+        df = somedata,
         infResTime = input$restIndepLimit,
         infPatchTimeDiff = input$infPatchTimeDiff,
         infPatchSpatDiff = input$infPatchSpatDiff)
@@ -46,7 +44,7 @@ server <- function(input, output) {
   #### raw data ####
   dataRaw <- eventReactive(input$go, {
     # reads in data
-    revdata <- data.table::fread(input$revfile$datapath)
+    somedata <- data.table::fread(input$datafile$datapath)
   })
 
   ### patch summary ####

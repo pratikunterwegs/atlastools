@@ -12,8 +12,9 @@ funcClassifyPath <- function(somedata,
                              resTimeLimit = 2) {
   # check somedata is a data.frame and has a resTime column
   {
-    assertthat::assert_that("data.frame" %in% class(somedata),
-                            msg = "classifypath: not a dataframe object!")
+    # check if data frame
+    assertthat::assert_that(is.data.frame(somedata),
+                            msg = glue::glue('classifyPath: input not a dataframe object, has class {stringr::str_flatten(class(somedata), collapse = " ")}!'))
 
     assertthat::assert_that("resTime" %in% names(somedata),
                             msg = "classifypath: data has no residence time column")

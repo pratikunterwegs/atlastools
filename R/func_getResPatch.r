@@ -28,8 +28,9 @@ funcGetResPatch <- function(somedata,
 
   # check somedata is a data.frame and has a resTime column
   {
-    assertthat::assert_that("data.frame" %in% class(somedata),
-                            msg = "funcGetResPatch: not a dataframe object!")
+    # check if data frame
+    assertthat::assert_that(is.data.frame(somedata),
+                            msg = glue::glue('getResPatch: input not a dataframe object, has class {stringr::str_flatten(class(somedata), collapse = " ")}!'))
 
     assertthat::assert_that(min(as.numeric(diff(somedata$time))) >= 0,
                             msg = "funcGetResPatch: not ordered in time!")

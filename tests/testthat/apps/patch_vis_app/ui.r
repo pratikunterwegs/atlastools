@@ -27,8 +27,7 @@ ui <- fluidPage(
   fluidRow(
     column(2,
            h4("Patch construction data"),
-           fileInput("revfile", p("Recurse data")),
-           fileInput("htfile", p("Tide data")),
+           fileInput("datafile", p("Movement data")),
            actionButton(inputId = "go", label = "Run")
     ),
 

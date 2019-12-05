@@ -12,7 +12,7 @@ funcDistance <- function(df, x = "x", y = "y"){
   assertthat::assert_that(is.data.frame(df),
                           is.character(x),
                           is.character(y),
-                          msg = "some df assumptions are not met")
+                          msg = "simpleDist: some df assumptions are not met")
 
   dist <- dplyr::case_when(nrow(df) > 1 ~
                              # cases where sufficient data

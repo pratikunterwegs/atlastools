@@ -23,6 +23,10 @@ funcInferResidence <- function(df,
   # adding the inferPatches argument to prep for inferring
   # residence patches from missing data between travel segments
 
+  # check if data frame
+  assertthat::assert_that(is.data.frame(df),
+                          msg = glue::glue('inferResidence: input not a dataframe object, has class {stringr::str_flatten(class(df), collapse = " ")}!'))
+
   # read the file in
   {
     # convert both to DT if not

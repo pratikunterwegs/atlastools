@@ -15,7 +15,7 @@ funcBwPatchDist = function(df, x1 = "x_end", x2 = "x_start",
   assertthat::assert_that(is.data.frame(df),
                           is.character(x1),
                           is.character(y1),
-                          msg = "some df assumptions are not met")
+                          msg = "bwPatchDist: some df assumptions are not met")
   # get distance
   dist <- dplyr::case_when(nrow(df) > 1 ~
                              # get x and y

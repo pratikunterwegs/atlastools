@@ -60,6 +60,11 @@ testthat::test_that("patch data access function works", {
                                              spatIndepLim = 50,
                                              tempIndepLim = 30)
 
+  # access testoutput summary
+  data_access_summary <- watlasUtils::funcGetPatchData(resPatchData = testoutput,
+                                                       dataColumn = "data",
+                                                       whichData = "summary")
+
   # access testoutput spatial
   data_access_sf <- watlasUtils::funcGetPatchData(resPatchData = testoutput,
                                                   dataColumn = "data",
@@ -70,10 +75,13 @@ testthat::test_that("patch data access function works", {
                                                   dataColumn = "data",
                                                   whichData = "points")
 
+  # test class summary
+  testthat::expect_s3_class(object = data_access_summary, class = c("data.frame", "tbl"))
   # test class pts
   testthat::expect_s3_class(object = data_access_pt, class = c("data.frame", "tbl"))
   # test class sf
   testthat::expect_s3_class(object = data_access_sf, class = c("sf"))
+
   # test that names are present in output cols
   expnames <- c("id", "tidalcycle", "type", "patch", "time_mean",
                 "tidaltime_mean", "x_mean", "y_mean", "duration", "distInPatch",
@@ -116,10 +124,20 @@ testthat::test_that("residence patch construction works on artificial data", {
                           info = glue::glue('{expnames[i]} expected in output but not produced'))
   }
 
-  # do tests - WORKING TESTS
-  # test that there are 2 patches
-  # testthat::expect_equivalent(max(testoutput$patch), 12)
-  # there may need to be a better test
+  # access testoutput summary
+  data_access_summary <- watlasUtils::funcGetPatchData(resPatchData = testoutput,
+                                                       dataColumn = "data",
+                                                       whichData = "summary")
+
+  # access testoutput summary
+  data_access_spatial <- watlasUtils::funcGetPatchData(resPatchData = testoutput,
+                                                       dataColumn = "data",
+                                                       whichData = "spatial")
+
+  # test class summary
+  testthat::expect_s3_class(object = data_access_summary, class = c("data.frame", "tbl"))
+  # test class spatial
+  testthat::expect_s3_class(object = data_access_spatial, class = c("data.frame", "tbl", "sf"))
 
 })
 

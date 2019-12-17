@@ -2,7 +2,7 @@
 library(glue)
 library(ggplot2)
 library(data.table)
-library(plotly)
+library(leaflet)
 library(tmap)
 
 server <- function(input, output) {
@@ -77,63 +77,52 @@ server <- function(input, output) {
            "tidal cycle = ", unique((dataOut())$tidalcycle))}
   )
 
-  output$patch_map <- renderPlotly(
+  output$patch_map <- renderLeaflet(
     {
-      # get patch outlines
       patchSummary <- funcGetPatchData(resPatchData = dataOut(),
-                                       dataColumn = "data",
-                                       whichData = "spatial")
+                                                            dataColumn = "data",
+                                                            whichData = "spatial")
+      patchSummary <- dplyr::mutate(patchSummary, duration = duration/60)
+      sf::st_crs(patchSummary) <- 32631
       # get trajectories
       {
-        patchtraj <- funcPatchTraj(df = patchSummary)
+        patchtraj <- funcPatchTraj(df = dataOut())
+        # sf::st_crs(patchtraj) <- 32631
       }
       # get points
       {
-        raw_pts <- dplyr::arrange((dataRaw()[,c("x","y","time")]), time)
-        raw_pts <- sf::st_as_sf(patchdata[,c("x","y")], coords=c("x","y"))
+        raw_pts <- dplyr::arrange((dataRaw()[,c("x","y","time","resTime")]), time)
+        raw_pts <- sf::st_as_sf(raw_pts[,c("x","y","time","resTime")], coords=c("x","y"))
+        sf::st_crs(raw_pts) <- 32631
 
-        raw_lines <- sf::st_cast(sf::st_union(raw_pts), "LINESTRING")
+        raw_pts <- dplyr::arrange(raw_pts, time)
+        raw_lines <- sf::st_cast(sf::st_combine(raw_pts), "LINESTRING")
+        sf::st_crs(raw_lines) <- 32631
       }
       # make plot
       {
-        map_plot <-
-        tm_shape(raw_pts)+
-          tm_dots()+
-        tm_shape(raw_lines)+
-          tm_lines()+
-        tm_shape(patchSummary)+
-          tm_polygons()
-        # ggplot()+
+        labels <- sprintf(
+          "<strong>%s</strong><br/>%g area = m<sup>2</sup>",
+          patchSummary$patch, patchSummary$area
+        ) %>% lapply(htmltools::HTML)
 
-        #   geom_path(data = dataRaw(), aes(x,y), col = "grey60",
-        #              size = 0.1, alpha = 0.3)+
-        #   geom_point(data = dataRaw(), aes(x,y), col = "grey20",
-        #              size = 0.2, shape = 4, alpha = 0.3)+
-        #   geom_sf(data = patchSummary,
-        #           aes(geometry = polygons, fill = patch),
-        #           alpha = 0.5, col = 'black', lwd = 0.1)+
+        main_map <- tm_basemap(leaflet::providers$Esri.WorldImagery)+
+          tm_shape(patchSummary)+
+          tm_polygons(col="patch", palette = "Greys",
+                      border.col = "blue",
+                      alpha = 0.9, style = "cat",
+                      popup.vars = c("patch","duration","area","tidaltime_mean"))+
 
-        #   geom_sf(data = patchtraj, col = "black", size = 0.3)+
-        #   scale_fill_distiller(palette = "Spectral", na.value = "grey")+
-        #   theme_bw()+
-        #   theme(axis.text = element_blank(),
-        #         axis.title = element_text(size = rel(0.5)),
-        #         legend.title = element_text(size = rel(0.5)),
-        #         legend.text = element_text(size = rel(0.5)),
-        #         legend.position = "bottom",
-        #         legend.key.height = unit(0.05, "cm"),
-        #         plot.title = element_text(size = rel(1.5)),
-        #         panel.grid = element_blank())+
-        #   labs(x = "long", y = "lat", fill = "patch",
-        #        title = paste("bird tag = ",
-        #                      unique((dataRaw())$id),
-        #                      "tidal cycle = ",
-        #                      unique((dataRaw())$tidalcycle)))
+          tm_shape(raw_lines)+
+          tm_lines(lwd = 0.1, col = "blue")+
+          tm_shape(raw_pts)+
+          tm_symbols(size=0.01, col = "resTime", alpha = 0.3, border.col = NULL,
+                     style = "pretty")
+
+          tm_scale_bar()
       }
 
-      return(
-        ggplotly(map_plot)
-      )
+      return(tmap_leaflet(main_map))
 
     }
     )
@@ -143,11 +132,6 @@ server <- function(input, output) {
     {
       # get patch points and join to raw data
       {
-        patch_point_data <- funcGetPatchData(
-          resPatchData = dataOut(),
-          dataColumn = "data",
-          whichData = "points")
-
         patch_point_data <- (dataRaw())
 
         # patch_point_data <- dplyr::filter(patch_point_data, type != "inferred")
@@ -163,14 +147,13 @@ server <- function(input, output) {
 
         patchSummary <- sf::st_drop_geometry(patchSummary)
       }
+
       # make plot
       {
-
-
         plot1 <- ggplot()+
           geom_hline(yintercept = input$resTimeLimit, colour = "red", lty = 2)+
           geom_rect(data = patchSummary, aes(xmin = time_start, xmax = time_end,
-            ymin = 0, ymax = max(patch_point_data$resTime), fill = patch), alpha = 0.2)+
+            ymin = 0, ymax = max(patch_point_data$resTime), fill = patch), alpha = 0.6)+
           geom_line(data = patch_point_data,
                     aes(time, resTime, group = tidalcycle), col = "grey50", size = 0.1)+
           geom_point(data = patch_point_data,
@@ -183,7 +166,7 @@ server <- function(input, output) {
           geom_vline(data = patchSummary, aes(xintercept = time_start), col = 4, lty = 3, size = 0.2)+
 
           # scale_color_manual(values = somecolours, na.value = "grey")+
-          scale_fill_distiller(palette = "Spectral",na.value = "grey")+
+          scale_fill_distiller(palette = "Greys",na.value = "blue", direction = 1)+
           theme_bw()+
           ylim(0, max(patch_point_data$resTime))+
           theme(legend.position = 'none',
@@ -197,4 +180,5 @@ server <- function(input, output) {
     }, res = 100
     )
 }
+
 # ends here

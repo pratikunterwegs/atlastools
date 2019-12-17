@@ -5,7 +5,7 @@
 #'
 runTweakApp <- function()
 {
-  appDir <- "inst/patch_vis_app/"
+  appDir <- "patch_vis_app/"
   if (appDir == "") {
     stop("Could not find app directory. Try re-installing `watlasUtils`.", call. = FALSE)
   }

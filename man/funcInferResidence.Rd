@@ -4,12 +4,8 @@
 \alias{funcInferResidence}
 \title{segPath2}
 \usage{
-funcInferResidence(
-  df,
-  infResTime = 2,
-  infPatchTimeDiff = 30,
-  infPatchSpatDiff = 100
-)
+funcInferResidence(df, infResTime = 2, infPatchTimeDiff = 30,
+  infPatchSpatDiff = 100)
 }
 \arguments{
 \item{infResTime}{A numeric giving the time limit in minutes against which residence time is compared.}

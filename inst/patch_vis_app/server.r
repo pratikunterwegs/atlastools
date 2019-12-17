@@ -3,6 +3,7 @@ library(glue)
 library(ggplot2)
 library(data.table)
 library(plotly)
+library(tmap)
 
 server <- function(input, output) {
 
@@ -88,39 +89,46 @@ server <- function(input, output) {
       }
       # get points
       {
-        patchdata <- funcGetPatchData(resPatchData = dataOut(),
-                                      dataColumn = "data",
-                                      whichData = "points")
+        raw_pts <- dplyr::arrange((dataRaw()[,c("x","y","time")]), time)
+        raw_pts <- sf::st_as_sf(patchdata[,c("x","y")], coords=c("x","y"))
+
+        raw_lines <- sf::st_cast(sf::st_union(raw_pts), "LINESTRING")
       }
       # make plot
       {
         map_plot <-
-        ggplot()+
+        tm_shape(raw_pts)+
+          tm_dots()+
+        tm_shape(raw_lines)+
+          tm_lines()+
+        tm_shape(patchSummary)+
+          tm_polygons()
+        # ggplot()+
 
-          geom_path(data = dataRaw(), aes(x,y), col = "grey60",
-                     size = 0.1, alpha = 0.3)+
-          geom_point(data = dataRaw(), aes(x,y), col = "grey20",
-                     size = 0.2, shape = 4, alpha = 0.3)+
-          geom_sf(data = patchSummary,
-                  aes(geometry = polygons, fill = patch),
-                  alpha = 0.5, col = 'black', lwd = 0.1)+
+        #   geom_path(data = dataRaw(), aes(x,y), col = "grey60",
+        #              size = 0.1, alpha = 0.3)+
+        #   geom_point(data = dataRaw(), aes(x,y), col = "grey20",
+        #              size = 0.2, shape = 4, alpha = 0.3)+
+        #   geom_sf(data = patchSummary,
+        #           aes(geometry = polygons, fill = patch),
+        #           alpha = 0.5, col = 'black', lwd = 0.1)+
 
-          geom_sf(data = patchtraj, col = "black", size = 0.3)+
-          scale_fill_distiller(palette = "Spectral", na.value = "grey")+
-          theme_bw()+
-          theme(axis.text = element_blank(),
-                axis.title = element_text(size = rel(0.5)),
-                legend.title = element_text(size = rel(0.5)),
-                legend.text = element_text(size = rel(0.5)),
-                legend.position = "bottom",
-                legend.key.height = unit(0.05, "cm"),
-                plot.title = element_text(size = rel(1.5)),
-                panel.grid = element_blank())+
-          labs(x = "long", y = "lat", fill = "patch",
-               title = paste("bird tag = ",
-                             unique((dataRaw())$id),
-                             "tidal cycle = ",
-                             unique((dataRaw())$tidalcycle)))
+        #   geom_sf(data = patchtraj, col = "black", size = 0.3)+
+        #   scale_fill_distiller(palette = "Spectral", na.value = "grey")+
+        #   theme_bw()+
+        #   theme(axis.text = element_blank(),
+        #         axis.title = element_text(size = rel(0.5)),
+        #         legend.title = element_text(size = rel(0.5)),
+        #         legend.text = element_text(size = rel(0.5)),
+        #         legend.position = "bottom",
+        #         legend.key.height = unit(0.05, "cm"),
+        #         plot.title = element_text(size = rel(1.5)),
+        #         panel.grid = element_blank())+
+        #   labs(x = "long", y = "lat", fill = "patch",
+        #        title = paste("bird tag = ",
+        #                      unique((dataRaw())$id),
+        #                      "tidal cycle = ",
+        #                      unique((dataRaw())$tidalcycle)))
       }
 
       return(

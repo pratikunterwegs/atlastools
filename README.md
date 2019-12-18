@@ -23,7 +23,7 @@ install.packages("devtools")
 devtools::install_github("pratikunterwegs/watlasUtils", ref = "devbranch")
 ```
 
-![](https://github.com/pratikunterwegs/watlasUtils/raw/devbranch/screenshot_app.png)
+![](https://github.com/pratikunterwegs/watlasUtils/raw/bettermap/inst/screenshot_app.png)
 
 ## Main functions
 

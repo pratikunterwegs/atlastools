@@ -61,7 +61,7 @@ funcCleanData <- function(somedata,
 
     # median filter
     #includes reversed smoothing to get rid of a possible phase shift
-    somedata[,lapply(.SD, function(z){runmed(rev(runmed(z, moving_window)), moving_window)}),
+    somedata[,lapply(.SD, function(z){stats::runmed(rev(stats::runmed(z, moving_window)), moving_window)}),
              .SDcols = c("X", "Y")]
 
     if(plot==TRUE)

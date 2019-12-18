@@ -4,8 +4,13 @@
 \alias{funcCleanData}
 \title{cleanData}
 \usage{
-funcCleanData(somedata, moving_window = 5, nbs_min = 0,
-  sd_threshold = 5e+05, plot = FALSE)
+funcCleanData(
+  somedata,
+  moving_window = 5,
+  nbs_min = 0,
+  sd_threshold = 5e+05,
+  plot = FALSE
+)
 }
 \arguments{
 \item{somedata}{A dataframe object returned by getData. Must contain the columns "X", "Y", "SD", "NBS", "TAG", "TIME"; these are the X coordinate, Y coordinate, standard deviation in measurement, number of ATLAS towers that received the signal, the tag number, and the numeric time, in milliseconds from 1970-01-01.}

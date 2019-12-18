@@ -32,14 +32,15 @@ funcGetPatchData = function(resPatchData,
   # return only spatial summary if requested
   if(whichData %in% c("spatial","Spatial"))
   {
-    assertthat::assert_that("sf" %in% class(resPatchData),
-                            msg = "getPatchData: not a spatial object, cannot return spatial data!")
-
-
     thisdata <- dplyr::select(resPatchData, -data)
+    thisdata <- sf::st_as_sf(thisdata, sf_column_name = "polygons")
     thisdata <- sf::st_cast(thisdata, "MULTIPOLYGON")
     return(thisdata)
-  }else{
+  }
+
+  if(whichData %in% c("points"))
+  {
+
     this_data <- sf::st_drop_geometry(resPatchData)
     rm(resPatchData)
     # this_data <- dplyr::select(this_data, -polygons)

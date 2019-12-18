@@ -1,7 +1,6 @@
 # ui function
-library(plotly)
+library(leaflet)
 library(shiny)
-library(shinythemes)
 library(watlasUtils)
 
 ui <- fluidPage(
@@ -11,7 +10,7 @@ ui <- fluidPage(
     column(5,
            h4("Residence patches"),
            # textOutput("this_map_label"),
-           plotlyOutput("patch_map", height = "600px")
+           leafletOutput("patch_map", height = "600px")
     ),
 
     column(3,

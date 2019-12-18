@@ -175,7 +175,7 @@ funcGetResPatch <- function(somedata,
                                   distInPatch = purrr::map_dbl(data, function(df){
                                     sum(watlasUtils::funcDistance(df = df), na.rm = TRUE)
                                   }))
-        
+
         # distance between patches
         somedata <- tidyr::unnest(somedata, cols = patchSummary)
         somedata <- dplyr::mutate(somedata,
@@ -226,7 +226,6 @@ funcGetResPatch <- function(somedata,
       {
         somedata$data <- purrr::map(somedata$data, function(df){
           df <- dplyr::select(df, -nfixes, -type)
-          return(df)
         })
       }
       # filter for low tide

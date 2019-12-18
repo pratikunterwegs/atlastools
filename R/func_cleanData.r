@@ -2,7 +2,6 @@
 #'
 #' @param somedata A dataframe object returned by getData. Must contain the columns "X", "Y", "SD", "NBS", "TAG", "TIME"; these are the X coordinate, Y coordinate, standard deviation in measurement, number of ATLAS towers that received the signal, the tag number, and the numeric time, in milliseconds from 1970-01-01.
 #' @param sd_threshold A threshold value above which rows are removed.
-#' @param plot Whether to plot the raw and cleaned data or not.
 #' @param nbs_min The minimum number of base stations (ATLAS towers) that received tag signal.
 #' @param moving_window The size of the moving window for the running median calculation.
 #'
@@ -12,8 +11,10 @@
 funcCleanData <- function(somedata,
                 moving_window=5,
                 nbs_min=0,
-                sd_threshold=500000,
-                plot=FALSE){
+                sd_threshold=500000){
+  
+  SD <- NBS <- TIME <- TAG <- X <- Y <- NULL
+  posID <- ts <- X_raw <- Y_raw <- VARX <- VARY <- COVXY <- NULL
 
   # check parameter types and assumptions
   {
@@ -63,15 +64,6 @@ funcCleanData <- function(somedata,
     #includes reversed smoothing to get rid of a possible phase shift
     somedata[,lapply(.SD, function(z){stats::runmed(rev(stats::runmed(z, moving_window)), moving_window)}),
              .SDcols = c("X", "Y")]
-
-    if(plot==TRUE)
-    {
-      plot(Y_raw~X_raw,data=somedata)
-      lines(Y_raw~X_raw, data=somedata,col=1)
-      lines(Y~X, data=somedata,col=2)
-      # add legend
-      legend("topleft", legend=c("raw","filter"), pch=c(1,-1), col=c(1,2), bty="n", lty=c(1,1), cex=1)
-    }
 
     ## postprocess (clean) data
     somedata <- somedata[,.(TAG, posID, TIME, ts, X_raw, Y_raw, NBS, VARX, VARY, COVXY, X, Y, SD)]

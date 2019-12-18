@@ -12,7 +12,7 @@ funcCleanData <- function(somedata,
                 moving_window=5,
                 nbs_min=0,
                 sd_threshold=500000){
-  
+
   SD <- NBS <- TIME <- TAG <- X <- Y <- NULL
   posID <- ts <- X_raw <- Y_raw <- VARX <- VARY <- COVXY <- NULL
 
@@ -55,7 +55,7 @@ funcCleanData <- function(somedata,
     # add position id and change time to seconds
     somedata[,`:=`(posID = 1:nrow(somedata),
                   TIME = TIME/1e3,
-                   ts = .POSIXct(TIME, tz = "CET"),
+                   ts = as.POSIXct(TIME, tz = "CET", origin = "1970-01-01"),
                    TAG = as.numeric(TAG) - prefix_num,
                    X_raw = X,
                    Y_raw = Y)]

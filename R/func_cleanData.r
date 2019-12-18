@@ -2,7 +2,6 @@
 #'
 #' @param somedata A dataframe object returned by getData. Must contain the columns "X", "Y", "SD", "NBS", "TAG", "TIME"; these are the X coordinate, Y coordinate, standard deviation in measurement, number of ATLAS towers that received the signal, the tag number, and the numeric time, in milliseconds from 1970-01-01.
 #' @param sd_threshold A threshold value above which rows are removed.
-#' @param plot Whether to plot the raw and cleaned data or not.
 #' @param nbs_min The minimum number of base stations (ATLAS towers) that received tag signal.
 #' @param moving_window The size of the moving window for the running median calculation.
 #'
@@ -13,10 +12,10 @@ funcCleanData <- function(somedata,
                 moving_window=5,
                 nbs_min=0,
                 sd_threshold=500000){
+  
+  SD <- NBS <- TIME <- TAG <- X <- Y <- NULL
+  posID <- ts <- X_raw <- Y_raw <- VARX <- VARY <- COVXY <- NULL
 
-  # set vars to NULL
-  SD <- NBS <- TIME <- TAG <- X <- Y <- posID <- ts <- NULL
-  X_raw <- Y_raw <- VARX <- VARY <- NULL
 
   # check parameter types and assumptions
   {

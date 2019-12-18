@@ -4,8 +4,7 @@
 \alias{funcCleanData}
 \title{cleanData}
 \usage{
-funcCleanData(somedata, moving_window = 5, nbs_min = 0,
-  sd_threshold = 5e+05, plot = FALSE)
+funcCleanData(somedata, moving_window = 5, nbs_min = 0, sd_threshold = 5e+05)
 }
 \arguments{
 \item{somedata}{A dataframe object returned by getData. Must contain the columns "X", "Y", "SD", "NBS", "TAG", "TIME"; these are the X coordinate, Y coordinate, standard deviation in measurement, number of ATLAS towers that received the signal, the tag number, and the numeric time, in milliseconds from 1970-01-01.}
@@ -15,8 +14,6 @@ funcCleanData(somedata, moving_window = 5, nbs_min = 0,
 \item{nbs_min}{The minimum number of base stations (ATLAS towers) that received tag signal.}
 
 \item{sd_threshold}{A threshold value above which rows are removed.}
-
-\item{plot}{Whether to plot the raw and cleaned data or not.}
 }
 \value{
 A datatable class object (extends data.frame) which has the additional columns posID and ts, which is TIME converted to human readable POSIXct format.

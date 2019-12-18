@@ -25,6 +25,7 @@ funcGetResPatch <- function(somedata,
   patch <- nfixes <- id <- tidalcycle <- data <- tidaltime <- NULL
   patchSummary <- time_start <- time_end <- duration <- nfixes <- NULL
   resTime <- resTime_mean <- resTimeDiff <- area <- NULL
+  x_end <- y_end <- x_start <- y_start <- tidaltime_mean <- NULL
 
   # check somedata is a data.frame and has a resTime column
   {

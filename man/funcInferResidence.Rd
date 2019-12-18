@@ -4,8 +4,12 @@
 \alias{funcInferResidence}
 \title{segPath2}
 \usage{
-funcInferResidence(df, infResTime = 2, infPatchTimeDiff = 30,
-  infPatchSpatDiff = 100)
+funcInferResidence(
+  df,
+  infResTime = 2,
+  infPatchTimeDiff = 30,
+  infPatchSpatDiff = 100
+)
 }
 \arguments{
 \item{df}{A dataframe of recurse analysis, or must include, in addition to x, y and time columns, a residence time column named resTime, TAG, and tidalcycle, a tidaltime column named tidaltime; also id, and tidalcycle for merging.}

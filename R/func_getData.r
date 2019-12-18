@@ -33,7 +33,7 @@ funcGetData <- function(tag,
     for(i in 1:length(db_params))
     {
       assertthat::assert_that(is.character(db_params[i]),
-                              msg = glue('{db_params[i]} is not a character'))
+                              msg = glue::glue('{db_params[i]} is not a character'))
     }
   }
 
@@ -62,7 +62,7 @@ funcGetData <- function(tag,
   }
 
   # getdata
-  d <- dbGetQuery(mydb, sql)
+  d <- DBI::dbGetQuery()(mydb, sql)
 
   # add aproximate SD of localization
   # d$SD<-maxSD(d)

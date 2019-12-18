@@ -1,7 +1,6 @@
 #' segPath2
 #'
-#' @param revdata A dataframe of recurse analysis, or must include, in addition to x, y and time columns, a residence time column named resTime, TAG, and tidalcycle.
-#' @param htdata A dataframe output of tidal cycle finding analysis, or must include, in addition to X, Y and time columns, a tidaltime column named tidaltime; also id, and tidalcycle for merging.
+#' @param df A dataframe of recurse analysis, or must include, in addition to x, y and time columns, a residence time column named resTime, TAG, and tidalcycle, a tidaltime column named tidaltime; also id, and tidalcycle for merging.
 #' @param infResTime A numeric giving the time limit in minutes against which residence time is compared.
 #' @param infPatchTimeDiff A numeric duration in minutes, of the minimum time difference between two points, above which, it is assumed worthwhile to examine whether there is a missing residence patch to be inferred.
 #' @param infPatchSpatDiff A numeric distance in metres, of the maximum spatial distance between two points, below which it may be assumed few extreme movements took place between them.

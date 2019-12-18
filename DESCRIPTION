@@ -34,7 +34,10 @@ Imports:
     stringr,
     plotly,
     RColorBrewer,
-    RMySQL
+    RMySQL,
+    DBI,
+    tmap,
+    leaflet
 RoxygenNote: 7.0.1
 Suggests:
     testthat (>= 2.1.0)

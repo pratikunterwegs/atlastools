@@ -25,6 +25,7 @@ funcGetResPatch <- function(somedata,
   patch <- nfixes <- id <- tidalcycle <- data <- tidaltime <- NULL
   patchSummary <- time_start <- time_end <- duration <- nfixes <- NULL
   resTime <- resTime_mean <- resTimeDiff <- area <- NULL
+  x_end <- y_end <- x_start <- y_start <- tidaltime_mean <- NULL
 
   # check somedata is a data.frame and has a resTime column
   {
@@ -175,7 +176,7 @@ funcGetResPatch <- function(somedata,
                                   distInPatch = purrr::map_dbl(data, function(df){
                                     sum(watlasUtils::funcDistance(df = df), na.rm = TRUE)
                                   }))
-        
+
         # distance between patches
         somedata <- tidyr::unnest(somedata, cols = patchSummary)
         somedata <- dplyr::mutate(somedata,
@@ -226,7 +227,6 @@ funcGetResPatch <- function(somedata,
       {
         somedata$data <- purrr::map(somedata$data, function(df){
           df <- dplyr::select(df, -nfixes, -type)
-          return(df)
         })
       }
       # filter for low tide

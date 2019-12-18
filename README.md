@@ -20,10 +20,10 @@ install.packages("devtools")
 
 # library("devtools")
 # installation of the simplified branch
-devtools::install_github("pratikunterwegs/watlasUtils", ref = "devbranch")
+devtools::install_github("pratikunterwegs/watlasUtils", ref = "master")
 ```
 
-![](https://github.com/pratikunterwegs/watlasUtils/raw/devbranch/inst/screenshot_app.png)
+![](https://github.com/pratikunterwegs/watlasUtils/raw/master/inst/screenshot_app.png)
 
 ## Main functions
 

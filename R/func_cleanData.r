@@ -1,4 +1,4 @@
-#' cleanData
+#' A function to clean data accessed from the NIOZ WATLAS server. Allows filtering on standard deviation, and the number of receivers that detected the tag. Applies a moving-window median filter, whose size can be specified.
 #'
 #' @param somedata A dataframe object returned by getData. Must contain the columns "X", "Y", "SD", "NBS", "TAG", "TIME"; these are the X coordinate, Y coordinate, standard deviation in measurement, number of ATLAS towers that received the signal, the tag number, and the numeric time, in milliseconds from 1970-01-01.
 #' @param sd_threshold A threshold value above which rows are removed.
@@ -15,6 +15,7 @@ funcCleanData <- function(somedata,
 
   SD <- NBS <- TIME <- TAG <- X <- Y <- NULL
   posID <- ts <- X_raw <- Y_raw <- VARX <- VARY <- COVXY <- NULL
+
 
   # check parameter types and assumptions
   {

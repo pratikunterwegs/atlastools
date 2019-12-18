@@ -23,8 +23,7 @@ testthat::test_that("cleaning raw data works", {
   testoutput <- watlasUtils::funcCleanData(somedata = testdata,
                                            moving_window=5,
                                            nbs_min=3,
-                                           sd_threshold=5e5,
-                                           plot=FALSE)
+                                           sd_threshold=5e5)
 
   # do tests
   # test that the vector class is data.table and data.frame

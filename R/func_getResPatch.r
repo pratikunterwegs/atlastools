@@ -22,7 +22,7 @@ funcGetResPatch <- function(somedata,
                             tideLims = c(4, 9)){
   # handle global variable issues
   time <- timediff <- type <- x <- y <- npoints <- NULL
-  patch <- nfixes <- id <- tidalcycle <- data <- tidaltime <- NULL
+  patch <- nfixes <- id <- tide_number <- data <- tidaltime <- NULL
   patchSummary <- time_start <- time_end <- duration <- nfixes <- NULL
   resTime <- resTime_mean <- resTimeDiff <- area <- NULL
   x_end <- y_end <- x_start <- y_start <- tidaltime_mean <- NULL
@@ -49,7 +49,7 @@ funcGetResPatch <- function(somedata,
 
   # get names and numeric variables
   dfnames <- names(somedata)
-  namesReq <- c("id", "tidalcycle", "x", "y", "time", "type", "resTime", "tidaltime")
+  namesReq <- c("id", "tide_number", "x", "y", "time", "type", "resTime", "tidaltime")
 
   # include asserts checking for required columns
   {
@@ -89,7 +89,7 @@ funcGetResPatch <- function(somedata,
       # count fixes and patch and remove small patches
       {
         # count number of points per patch
-        somedata <- somedata[,nfixes := .N, by = c("id", "tidalcycle", "patch")]
+        somedata <- somedata[,nfixes := .N, by = c("id", "tide_number", "patch")]
 
         # remove patches with 2 or fewer points
         somedata <- somedata[nfixes >= minFixes, ]
@@ -99,7 +99,7 @@ funcGetResPatch <- function(somedata,
       {
         setDF(somedata)
 
-        somedata <- dplyr::group_by(somedata, id, tidalcycle, patch, type)
+        somedata <- dplyr::group_by(somedata, id, tide_number, patch, type)
         # nest data to keep for some operations
         somedata <- tidyr::nest(somedata)
         somedata <- dplyr::mutate(somedata,
@@ -148,15 +148,15 @@ funcGetResPatch <- function(somedata,
 
       # basic patch metrics for new patches
       {
-        somedata <- dplyr::group_by(somedata, id, tidalcycle, patch, type)
+        somedata <- dplyr::group_by(somedata, id, tide_number, patch, type)
         # select main data
         somedata <- dplyr::select(somedata,
-                                  id, tidalcycle, patch, type, data) # might have issues
+                                  id, tide_number, patch, type, data) # might have issues
         # unnest
         somedata <- tidyr::unnest(somedata, cols = data)
         # summarise data by new patch, ungrouping type
         somedata <- dplyr::ungroup(somedata, type)
-        somedata <- dplyr::group_by(somedata, id, tidalcycle, patch)
+        somedata <- dplyr::group_by(somedata, id, tide_number, patch)
         somedata <- tidyr::nest(somedata)
         # basic metrics by new patch
         somedata <- dplyr::mutate(somedata,
@@ -247,7 +247,7 @@ funcGetResPatch <- function(somedata,
     error= function(e)
     {
       print(glue::glue('\nthere was an error in id_tide combination...
-                                  {unique(somedata$id)} {unique(somedata$tidalcycle)}\n'))
+                                  {unique(somedata$id)} {unique(somedata$tide_number)}\n'))
       # dfErrors <- append(dfErrors, glue(z$id, "_", z$tidalCycle))
     }
   )

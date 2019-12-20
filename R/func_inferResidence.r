@@ -1,6 +1,6 @@
 #' segPath2
 #'
-#' @param df A dataframe of recurse analysis, or must include, in addition to x, y and time columns, a residence time column named resTime, TAG, and tidalcycle, a tidaltime column named tidaltime; also id, and tidalcycle for merging.
+#' @param df A dataframe of recurse analysis, or must include, in addition to x, y and time columns, a residence time column named resTime, id, and tide_number, a tidaltime column named tidaltime.
 #' @param infResTime A numeric giving the time limit in minutes against which residence time is compared.
 #' @param infPatchTimeDiff A numeric duration in minutes, of the minimum time difference between two points, above which, it is assumed worthwhile to examine whether there is a missing residence patch to be inferred.
 #' @param infPatchSpatDiff A numeric distance in metres, of the maximum spatial distance between two points, below which it may be assumed few extreme movements took place between them.
@@ -18,7 +18,7 @@ funcInferResidence <- function(df,
   infPatch<-nfixes<-posId<-resPatch<-resTime<-resTimeBool<-rollResTime <- NULL
   spatdiff <- time <- timediff <- type <- x <- y <- npoints <- NULL
   data <- duration <- id <- nfixes <- patch <- patchSummary <- NULL
-  tidalcycle <- tidaltime <- time_end <- time_start <- NULL
+  tide_number <- tidaltime <- time_end <- time_start <- NULL
   # adding the inferPatches argument to prep for inferring
   # residence patches from missing data between travel segments
 
@@ -40,8 +40,8 @@ funcInferResidence <- function(df,
 
   # get names and numeric variables
   dfnames <- names(df)
-  namesReq <- c("id", "tidalcycle", "x", "y", "time", "resTime")
-  numvars <- c("x","y","time","resTime")
+  namesReq <- c("id", "tide_number", "x", "y", "time", "resTime")
+  numvars <- c("x","y","TIME","resTime")
 
   # include asserts checking for required columns
   {
@@ -60,7 +60,7 @@ funcInferResidence <- function(df,
                             msg = "data for segmentation is not ordered by time")
   }
 
-  # make a df with id, tidalcycle and time seq, with missing x and y
+  # make a df with id, tide_number and time seq, with missing x and y
   # identify where there are missing segments more than 2 mins long
   # there, create a sequence of points with id, tide, and time in 3s intervals
   # merge with true df
@@ -103,14 +103,14 @@ funcInferResidence <- function(df,
     # assume coordinate is the mean between 'takeoff' and 'landing'
     infPatchDf <- tempdf[,nfixes:=length(seq(from = min(time, na.rm = T),
                                              to = max(time, na.rm = T), by = 3)),
-                         by = c("id", "tidalcycle", "infPatch")]
+                         by = c("id", "tide_number", "infPatch")]
     # an expectation of integer type is created in time
     infPatchDf <- infPatchDf[,.(time = seq(from = min(time, na.rm = T),
                                            to = max(time, na.rm = T), by = 3),
                                 x = mean(x),
                                 y = mean(y),
                                 resTime = infResTime),
-                             by = c("id", "tidalcycle", "infPatch","nfixes")]
+                             by = c("id", "tide_number", "infPatch","nfixes")]
     infPatchDf <- infPatchDf[infPatch > 0,]
     infPatchDf <- infPatchDf[,type:="inferred"]
 

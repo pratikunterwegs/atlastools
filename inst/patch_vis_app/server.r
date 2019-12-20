@@ -58,7 +58,7 @@ server <- function(input, output) {
       patchSummary <- dplyr::mutate(patchSummary, duration = duration/60)
 
       patchSummary <- dplyr::select(patchSummary,
-                                    id, tidalcycle, patch,
+                                    id, tide_number, patch,
                                     type,
                                     tidaltime_mean,
                                     duration,
@@ -74,7 +74,7 @@ server <- function(input, output) {
   #### patches map plot ####
   output$this_map_label <- renderText(
     {paste("bird tag id = ", unique((dataOut())$id),
-           "tidal cycle = ", unique((dataOut())$tidalcycle))}
+           "tidal cycle = ", unique((dataOut())$tide_number))}
   )
 
   output$patch_map <- renderLeaflet(
@@ -87,7 +87,9 @@ server <- function(input, output) {
       # get trajectories
       {
         patchtraj <- funcPatchTraj(df = dataOut())
-        # sf::st_crs(patchtraj) <- 32631
+        patchtraj <- tibble::tibble(traj="this_traj", geometry=sf::st_combine(patchtraj))
+        patchtraj <- sf::st_as_sf(patchtraj, sf_column_name="geometry")
+        sf::st_crs(patchtraj) <- 32631
       }
       # get points
       {
@@ -107,12 +109,12 @@ server <- function(input, output) {
         ) %>% lapply(htmltools::HTML)
 
         main_map <- tm_basemap(leaflet::providers$Esri.WorldImagery)+
-          tm_shape(raw_lines)+
-          tm_lines(lwd = 0.2, col = "black")+
+          tm_shape(patchtraj)+
+          tm_lines(lwd = 1, col = "red")+
           tm_shape(patchSummary)+
           tm_polygons(col="patch", palette = "Blues",
                       border.col = "black",
-                      alpha = 0.6, style = "cat",
+                      alpha = 0.6, style = "cont",
                       popup.vars = c("patch","duration","area","tidaltime_mean"))+
           tm_shape(raw_pts)+
           tm_symbols(size=0.005, col = "resTime", alpha = 0.3, border.col = NULL,
@@ -154,7 +156,7 @@ server <- function(input, output) {
           geom_rect(data = patchSummary, aes(xmin = time_start, xmax = time_end,
             ymin = 0, ymax = max(patch_point_data$resTime), fill = patch), alpha = 0.6)+
           geom_line(data = patch_point_data,
-                    aes(time, resTime, group = tidalcycle), col = "grey50", size = 0.1)+
+                    aes(time, resTime, group = tide_number), col = "grey50", size = 0.1)+
           geom_point(data = patch_point_data,
                      aes(time, resTime),
                      alpha = 0.2, size = 0.2)+

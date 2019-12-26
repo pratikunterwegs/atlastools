@@ -2,7 +2,7 @@ context("residence patches and classified points")
 testthat::test_that("patch calc on empirical data", {
 
   # read in data
-  somedata = data.table::fread("../testdata/435_007_revisit.csv")
+  somedata = data.table::fread("../testdata/435_025_revisit.csv")
 
   # run function for patch inference
   inference_output <- watlasUtils::funcInferResidence(somedata,
@@ -42,7 +42,7 @@ testthat::test_that("patch calc on empirical data", {
 testthat::test_that("patch data access function works", {
 
   # read in data
-  somedata = data.table::fread("../testdata/435_007_revisit.csv")
+  somedata = data.table::fread("../testdata/435_025_revisit.csv")
 
   # run function for patch inference
   inference_output <- watlasUtils::funcInferResidence(df = somedata,

@@ -2,7 +2,7 @@
 % Please edit documentation in R/func_cleanData.r
 \name{funcCleanData}
 \alias{funcCleanData}
-\title{cleanData}
+\title{A function to clean data accessed from the NIOZ WATLAS server. Allows filtering on standard deviation, and the number of receivers that detected the tag. Applies a moving-window median filter, whose size can be specified.}
 \usage{
 funcCleanData(somedata, moving_window = 5, nbs_min = 0, sd_threshold = 5e+05)
 }
@@ -19,5 +19,5 @@ funcCleanData(somedata, moving_window = 5, nbs_min = 0, sd_threshold = 5e+05)
 A datatable class object (extends data.frame) which has the additional columns posID and ts, which is TIME converted to human readable POSIXct format.
 }
 \description{
-cleanData
+A function to clean data accessed from the NIOZ WATLAS server. Allows filtering on standard deviation, and the number of receivers that detected the tag. Applies a moving-window median filter, whose size can be specified.
 }

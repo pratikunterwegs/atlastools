@@ -56,7 +56,7 @@ funcCleanData <- function(somedata,
     # add position id and change time to seconds
     somedata[,`:=`(posID = 1:nrow(somedata),
                   TIME = TIME/1e3,
-                   ts = as.POSIXct(TIME, tz = "CET", origin = "1970-01-01"),
+                   ts = as.POSIXct(TIME/1e3, tz = "CET", origin = "1970-01-01"),
                    TAG = as.numeric(TAG) - prefix_num,
                    X_raw = X,
                    Y_raw = Y)]
@@ -70,7 +70,7 @@ funcCleanData <- function(somedata,
     somedata <- somedata[,.(TAG, posID, TIME, ts, X_raw, Y_raw, NBS, VARX, VARY, COVXY, X, Y, SD)]
 
     # rename x,y,time to lower case
-    setnames(somedata, old = c("X","Y","TAG"), new = c("x","y","id"))
+    setnames(somedata, old = c("X","Y","TAG","TIME"), new = c("x","y","id","time"))
 
   }else{
 

@@ -29,7 +29,15 @@ devtools::install_github("pratikunterwegs/watlasUtils", ref = "master")
 
 ### Shiny application
 
-Package functionality is demonstrated by the inbuilt `shiny` application, which is started by the function `runTweakApp`. The app runs locally, and accepts data of the kind that can be found in the `tests/testthat/testdata` folder of the cloned repository. NB: This folder is not available when installing using `devtools` as shown above.
+Package functionality is demonstrated by the inbuilt `shiny` application.
+
+```r
+# run the app from the package
+library(watlasUtils)
+runTweakApp()
+```
+
+The app runs locally, and accepts data of the kind that can be found in the `tests/testthat/testdata` folder of the cloned repository. NB: This folder is not available when installing using `devtools` as shown above.
 
 The application visualises the effect of tweaking the important parameters used in the main functions. The app takes two input files (for historical reasons; this is liable to change):
 

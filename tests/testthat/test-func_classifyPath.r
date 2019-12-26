@@ -2,7 +2,7 @@ context("classify residence points")
 testthat::test_that("residence classification works", {
 
   # read in data
-  revdata = data.table::fread("../testdata/435_007.csv")
+  revdata = data.table::fread("../testdata/435_025_revisit.csv")
 
   # run function
   testoutput <- watlasUtils::funcClassifyPath(somedata = revdata, resTimeLimit = 2)

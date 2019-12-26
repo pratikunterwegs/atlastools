@@ -12,7 +12,7 @@ funcInferResidence(
 )
 }
 \arguments{
-\item{df}{A dataframe of recurse analysis, or must include, in addition to x, y and time columns, a residence time column named resTime, TAG, and tidalcycle, a tidaltime column named tidaltime; also id, and tidalcycle for merging.}
+\item{df}{A dataframe of recurse analysis, or must include, in addition to x, y and time columns, a residence time column named resTime, id, and tide_number, a tidaltime column named tidaltime.}
 
 \item{infResTime}{A numeric giving the time limit in minutes against which residence time is compared.}
 

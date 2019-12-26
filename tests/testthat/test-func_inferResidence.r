@@ -2,7 +2,7 @@ context("infer residence function")
 testthat::test_that("residence inference works", {
 
   # read in data
-  somedata = data.table::fread("../testdata/435_007.csv")
+  somedata = data.table::fread("../testdata/435_025_revisit.csv")
 
   # run function
   testoutput <- funcInferResidence(df = somedata,

@@ -2,7 +2,7 @@ context("residence patches and classified points")
 testthat::test_that("patch calc on empirical data", {
 
   # read in data
-  somedata = data.table::fread("../testdata/435_007.csv")
+  somedata = data.table::fread("../testdata/435_025_revisit.csv")
 
   # run function for patch inference
   inference_output <- watlasUtils::funcInferResidence(somedata,
@@ -27,7 +27,7 @@ testthat::test_that("patch calc on empirical data", {
   testthat::expect_s3_class(object = testoutput, class = c("sf", "data.frame"))
 
   # test that names are present in output cols
-  expnames <- c("id", "tidalcycle", "type", "patch", "time_mean",
+  expnames <- c("id", "tide_number", "type", "patch", "time_mean",
                 "tidaltime_mean", "x_mean", "y_mean", "duration", "distInPatch",
                 "distBwPatch", "propfixes", "polygons")
   for(i in 1:length(expnames)){
@@ -42,7 +42,7 @@ testthat::test_that("patch calc on empirical data", {
 testthat::test_that("patch data access function works", {
 
   # read in data
-  somedata = data.table::fread("../testdata/435_007.csv")
+  somedata = data.table::fread("../testdata/435_025_revisit.csv")
 
   # run function for patch inference
   inference_output <- watlasUtils::funcInferResidence(df = somedata,
@@ -83,7 +83,7 @@ testthat::test_that("patch data access function works", {
   testthat::expect_s3_class(object = data_access_sf, class = c("sf"))
 
   # test that names are present in output cols
-  expnames <- c("id", "tidalcycle", "type", "patch", "time_mean",
+  expnames <- c("id", "tide_number", "type", "patch", "time_mean",
                 "tidaltime_mean", "x_mean", "y_mean", "duration", "distInPatch",
                 "distBwPatch", "propfixes", "polygons")
   # test col names in data access
@@ -116,7 +116,7 @@ testthat::test_that("residence patch construction works on artificial data", {
   # test that element one is a data.frame
   testthat::expect_s3_class(object = testoutput, class = c("data.frame", "tbl", "sf"))
   # test that names are present in output cols
-  expnames <- c("id", "tidalcycle", "type", "patch", "time_mean",
+  expnames <- c("id", "tide_number", "type", "patch", "time_mean",
                 "tidaltime_mean", "x_mean", "y_mean", "duration", "distInPatch",
                 "distBwPatch", "propfixes")
   for(i in 1:length(expnames)){

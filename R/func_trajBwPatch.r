@@ -9,7 +9,7 @@
 #' @return An \code{sf MULTILINESTRING} object representing the linear path between N patches, starting at the end point of the first patch, and ending at the first point of the Nth patch.
 #' @export
 #'
-funcPatchTraj <- function(df, x1 = "x_end", x2 = "x_start",
+wat_patch_traj <- function(df, x1 = "x_end", x2 = "x_start",
                           y1 = "y_end", y2 = "y_start"){
   # must assert df has correct columns
   # check if data frame

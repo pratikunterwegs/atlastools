@@ -5,7 +5,7 @@ testthat::test_that("residence inference works", {
   somedata = data.table::fread("../testdata/435_025_revisit.csv")
 
   # run function
-  testoutput <- funcInferResidence(df = somedata,
+  testoutput <- wat_infer_residence(df = somedata,
                                          infResTime = 2,
                                          infPatchTimeDiff = 1800,
                                          infPatchSpatDiff = 100)

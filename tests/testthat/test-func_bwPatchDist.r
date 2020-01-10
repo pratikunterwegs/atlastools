@@ -1,4 +1,4 @@
-context("bwPatchDist function")
+context("between patch distance function")
 testthat::test_that("simple distance works", {
 
   # make test positions
@@ -6,7 +6,7 @@ testthat::test_that("simple distance works", {
                            a_end = a_start+2,
                            b_start = 1, b_end = 1)
   # run function
-  testoutput <- watlasUtils::funcBwPatchDist(testdf, x1 = "a_end", x2 = "a_start",
+  testoutput <- watlasUtils::wat_bw_patch_dist(testdf, x1 = "a_end", x2 = "a_start",
                                              y1 = "b_end", y2 = "b_start")
   # do tests
   # should return as many elements as nrows in df

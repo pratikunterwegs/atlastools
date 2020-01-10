@@ -14,7 +14,7 @@ server <- function(input, output) {
 
     # run the inference func
     inference_output <-
-      funcInferResidence(
+      wat_infer_residence(
         df = somedata,
         infResTime = input$restIndepLimit,
         infPatchTimeDiff = input$infPatchTimeDiff,
@@ -22,14 +22,14 @@ server <- function(input, output) {
 
     # run the classification func
     classified_output <-
-      funcClassifyPath(
+      wat_classify_points(
         somedata = inference_output,
         resTimeLimit = input$resTimeLimit
       )
 
     # run patch construction
     patch_output <-
-      funcGetResPatch(
+      wat_make_res_patch(
         somedata = classified_output,
         bufferSize = input$bufferSize,
         spatIndepLim = input$spatIndepLimit,
@@ -51,7 +51,7 @@ server <- function(input, output) {
   ### patch summary ####
   output$patchSummary <- renderTable(
     {
-      patchSummary <- sf::st_drop_geometry(funcGetPatchData(resPatchData = dataOut(),
+      patchSummary <- sf::st_drop_geometry(wat_get_patch_summary(resPatchData = dataOut(),
                                                             dataColumn = "data",
                                                             whichData = "spatial"))
 
@@ -79,14 +79,14 @@ server <- function(input, output) {
 
   output$patch_map <- renderLeaflet(
     {
-      patchSummary <- funcGetPatchData(resPatchData = dataOut(),
+      patchSummary <- wat_get_patch_summary(resPatchData = dataOut(),
                                                             dataColumn = "data",
                                                             whichData = "spatial")
       patchSummary <- dplyr::mutate(patchSummary, duration = duration/60)
       sf::st_crs(patchSummary) <- 32631
       # get trajectories
       {
-        patchtraj <- funcPatchTraj(df = dataOut())
+        patchtraj <- wat_patch_traj(df = dataOut())
         patchtraj <- tibble::tibble(traj="this_traj", geometry=sf::st_combine(patchtraj))
         patchtraj <- sf::st_as_sf(patchtraj, sf_column_name="geometry")
         sf::st_crs(patchtraj) <- 32631
@@ -142,7 +142,7 @@ server <- function(input, output) {
       # get patch summary for vert lines
       {
         # get patch outlines
-        patchSummary <- funcGetPatchData(resPatchData = dataOut(),
+        patchSummary <- wat_get_patch_summary(resPatchData = dataOut(),
                                          dataColumn = "data",
                                          whichData = "spatial")
 

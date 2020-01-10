@@ -9,7 +9,7 @@
 #' @return A data frame of tracking locations with attractor points removed.
 #' @export
 #'
-funcRmAttractor <- function(df,
+wat_rmAttractor <- function(df,
                             atp_xmin = 639470,
                             atp_xmax = 639472,
                             atp_ymin = 5887143,

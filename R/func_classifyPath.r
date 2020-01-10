@@ -52,7 +52,7 @@ wat_classify_points <- function(somedata,
   # print message if dataframe has few rows
   {
     if (nrow(somedata) < 5) {
-      print(glue::glue('\n\n...segmented dataframe has < 5 rows\n\n'))
+      message(glue::glue('\n\n...segmented dataframe has < 5 rows\n\n'))
     }
   }
 

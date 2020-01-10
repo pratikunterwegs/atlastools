@@ -246,7 +246,7 @@ wat_make_res_patch <- function(somedata,
     # null error function, with option to collect data on errors
     error= function(e)
     {
-      print(glue::glue('\nthere was an error in id_tide combination...
+      message(glue::glue('\nthere was an error in id_tide combination...
                                   {unique(somedata$id)} {unique(somedata$tide_number)}\n'))
       # dfErrors <- append(dfErrors, glue(z$id, "_", z$tidalCycle))
     }

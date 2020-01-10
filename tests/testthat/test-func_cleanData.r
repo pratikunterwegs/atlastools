@@ -5,7 +5,7 @@ testthat::test_that("cleaning raw data works", {
   starttime <- Sys.time()
   attr(starttime, "tzone") <- "CET"
   starttime_num <- as.numeric(Sys.time()) * 1e3 # get numeric in milliseconds
-  print(glue::glue('starttime = {starttime} and starttime num = {starttime_num}'))
+  message(glue::glue('starttime = {starttime} and starttime num = {starttime_num}'))
 
   testdata <- data.table::data.table(X = cumsum(runif(n = 1e3, min=0, max=1)),
                                      Y = runif(n = 1e3, min=0, max=1),
@@ -41,5 +41,5 @@ testthat::test_that("cleaning raw data works", {
 
   # check that time is correctly handled
   testthat::expect_equal(testoutput[1,]$ts, starttime)
-  print(glue::glue('cleandata starttime = {testoutput[1,]$ts}'))
+  message(glue::glue('cleandata starttime = {testoutput[1,]$ts}'))
 })

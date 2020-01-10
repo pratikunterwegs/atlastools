@@ -21,7 +21,7 @@ testthat::test_that("cleaning raw data works", {
   testdata[1,]$NBS = 5e3
 
   # run function
-  testoutput <- watlasUtils::funcCleanData(somedata = testdata,
+  testoutput <- watlasUtils::wat_clean_data(somedata = testdata,
                                            moving_window=5,
                                            nbs_min=3,
                                            sd_threshold=5e5)

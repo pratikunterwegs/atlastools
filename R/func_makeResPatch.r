@@ -13,7 +13,7 @@
 #' @export
 #'
 
-funcGetResPatch <- function(somedata,
+wat_make_res_patch <- function(somedata,
                             bufferSize = 10,
                             spatIndepLim = 100,
                             tempIndepLim = 30,
@@ -34,10 +34,10 @@ funcGetResPatch <- function(somedata,
                             msg = glue::glue('getResPatch: input not a dataframe object, has class {stringr::str_flatten(class(somedata), collapse = " ")}!'))
 
     assertthat::assert_that(min(as.numeric(diff(somedata$time))) >= 0,
-                            msg = "funcGetResPatch: not ordered in time!")
+                            msg = "wat_make_res_patch: not ordered in time!")
 
     assertthat::assert_that(min(c(bufferSize, spatIndepLim, tempIndepLim, minFixes)) > 0,
-                            msg = "funcGetResPatch: function needs positive arguments")
+                            msg = "wat_make_res_patch: function needs positive arguments")
 
   }
 
@@ -75,7 +75,7 @@ funcGetResPatch <- function(somedata,
       # identify spatial overlap
       {
         # assign spat diff columns
-        somedata[,`:=`(spatdiff = watlasUtils::funcDistance(df = somedata,
+        somedata[,`:=`(spatdiff = watlasUtils::wat_simple_dist(df = somedata,
                                                             x = "x", y = "y"))]
 
         # first spatial difference is infinity for calculation purposes
@@ -127,7 +127,7 @@ funcGetResPatch <- function(somedata,
                                                as.numeric(time_start[2:length(time_start)] -
                                                             time_end[1:length(time_end)-1])))
         # get spatial difference from last to first point
-        spatdiff <- watlasUtils::funcBwPatchDist(df = somedata,
+        spatdiff <- watlasUtils::wat_bw_patch_dist(df = somedata,
                                                  x1 = "x_end", x2 = "x_start",
                                                  y1 = "y_end", y2 = "y_start")
         # set spatdiff 1 to Inf
@@ -174,13 +174,13 @@ funcGetResPatch <- function(somedata,
         # distance in a patch
         somedata <- dplyr::mutate(somedata,
                                   distInPatch = purrr::map_dbl(data, function(df){
-                                    sum(watlasUtils::funcDistance(df = df), na.rm = TRUE)
+                                    sum(watlasUtils::wat_simple_dist(df = df), na.rm = TRUE)
                                   }))
 
         # distance between patches
         somedata <- tidyr::unnest(somedata, cols = patchSummary)
         somedata <- dplyr::mutate(somedata,
-                                  distBwPatch = watlasUtils::funcBwPatchDist(df = somedata,
+                                  distBwPatch = watlasUtils::wat_bw_patch_dist(df = somedata,
                                                                              x1 = "x_end", x2 = "x_start",
                                                                              y1 = "y_end", y2 = "y_start"))
         # displacement in a patch

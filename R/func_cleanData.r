@@ -8,7 +8,7 @@
 #' @return A datatable class object (extends data.frame) which has the additional columns posID and ts, which is TIME converted to human readable POSIXct format.
 #' @export
 #'
-funcCleanData <- function(somedata,
+wat_clean_data <- function(somedata,
                 moving_window=5,
                 nbs_min=0,
                 sd_threshold=500000){

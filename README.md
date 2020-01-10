@@ -32,7 +32,7 @@ Package functionality is demonstrated by the inbuilt `shiny` application.
 ```r
 # run the app from the package
 library(watlasUtils)
-runTweakApp()
+wat_run_patch_vis_app()
 ```
 
 ## Wiki

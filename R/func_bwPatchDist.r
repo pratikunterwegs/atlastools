@@ -9,7 +9,7 @@
 #' @return A numeric vector of the length of the number of patches, or rows in the input dataframe. If the input dataframe has only a single row, the vector has a length of one, and its only element is 0. In all other cases, the vector has as its elements \code{NA}, followed by n-1 distances, where n is the number of rows.
 #' @export
 #'
-funcBwPatchDist = function(df, x1 = "x_end", x2 = "x_start",
+wat_bw_patch_dist = function(df, x1 = "x_end", x2 = "x_start",
                              y1 = "y_end", y2 = "y_start"){
   #check for basic assumptions
   assertthat::assert_that(is.data.frame(df),

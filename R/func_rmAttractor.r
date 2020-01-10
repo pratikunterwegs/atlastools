@@ -14,6 +14,7 @@ wat_rmAttractor <- function(df,
                             atp_xmax = 639472,
                             atp_ymin = 5887143,
                             atp_ymax = 5887145)
+  X <- Y <- NULL
 {
   # check input type
   assertthat::assert_that("data.frame" %in% class(df),
@@ -21,8 +22,8 @@ wat_rmAttractor <- function(df,
 
   # include asserts checking for required columns
   {
-    dfnames <- colnames(somedata)
-    namesReq <- c("X", "Y", "SD", "NBS", "TAG", "TIME")
+    dfnames <- colnames(df)
+    namesReq <- c("X", "Y")
     for (i in 1:length(namesReq)) {
       assertthat::assert_that(namesReq[i] %in% dfnames,
                               msg = glue::glue('rmAttractor: {namesReq[i]} is

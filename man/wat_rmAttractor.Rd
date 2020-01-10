@@ -15,13 +15,13 @@ wat_rmAttractor(
 \arguments{
 \item{df}{A dataframe or extension which contains capitalised X and Y coordinates.}
 
-\item{atp_xmin}{The min X coordinate of attractor locations.}
+\item{atp_xmin}{The min X coordinates of attractor locations.}
 
-\item{atp_xmax}{The max X coordinate of attractor locations.}
+\item{atp_xmax}{The max X coordinates of attractor locations.}
 
-\item{atp_ymin}{The min Y coordinate of attractor locations.}
+\item{atp_ymin}{The min Y coordinates of attractor locations.}
 
-\item{atp_ymax}{The max Y coordinate of attractor locations.}
+\item{atp_ymax}{The max Y coordinates of attractor locations.}
 }
 \value{
 A data frame of tracking locations with attractor points removed.

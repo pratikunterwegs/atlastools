@@ -10,8 +10,8 @@ testthat::test_that("attractor points removed", {
 
   # run function
   testoutput <- watlasUtils::wat_rmAttractor(df = testdata,
-                                             atp_xmin = 200, atp_xmax = 400,
-                                             atp_ymin = 700, atp_ymax = 900)
+                                             atp_xmin = 200:201, atp_xmax = 400:401,
+                                             atp_ymin = 700:701, atp_ymax = 900:901)
 
   # do tests
   # test that the vector class is data.table and data.frame

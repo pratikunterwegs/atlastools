@@ -28,15 +28,16 @@ funcCleanData <- function(somedata,
       namesReq <- c("X", "Y", "SD", "NBS", "TAG", "TIME")
       for (i in 1:length(namesReq)) {
         assertthat::assert_that(namesReq[i] %in% dfnames,
-                                msg = glue::glue('cleanData: {namesReq[i]} is required but missing from data!'))
+          msg = glue::glue('cleanData: {namesReq[i]} is
+                         required but missing from data!'))
       }
     }
 
     # check args positive
     assertthat::assert_that(min(c(moving_window)) > 1,
-                            msg = "cleanData: function arguments are not positive")
+      msg = "cleanData: function arguments are not positive")
     assertthat::assert_that(min(c(nbs_min)) >= 0,
-                            msg = "cleanData: function arguments are not positive")
+      msg = "cleanData: function arguments are not positive")
   }
 
   # convert to data.table
@@ -45,7 +46,8 @@ funcCleanData <- function(somedata,
     if(is.data.table(somedata) != TRUE) {setDT(somedata)}
   }
 
-  # delete positions with approximated standard deviations above SD_threshold, and below minimum number of base stations (NBS_min)
+  # delete positions with approximated standard deviations above SD_threshold,
+  # and below minimum number of base stations (NBS_min)
   somedata <- somedata[SD < sd_threshold & NBS >= nbs_min,]
 
   prefix_num <- 31001000000
@@ -63,23 +65,30 @@ funcCleanData <- function(somedata,
 
     # median filter
     #includes reversed smoothing to get rid of a possible phase shift
-    somedata[,lapply(.SD, function(z){stats::runmed(rev(stats::runmed(z, moving_window)), moving_window)}),
+    somedata[,lapply(.SD,
+                     function(z){
+                       stats::runmed(rev(stats::runmed(z, moving_window)),
+                                     moving_window)}),
              .SDcols = c("X", "Y")]
 
     ## postprocess (clean) data
     somedata <- somedata[,.(TAG, posID, TIME, ts, X_raw, Y_raw, NBS, VARX, VARY, COVXY, X, Y, SD)]
 
     # rename x,y,time to lower case
-    setnames(somedata, old = c("X","Y","TAG","TIME"), new = c("x","y","id","time"))
+    setnames(somedata, old = c("X","Y","TAG","TIME"),
+             new = c("x","y","id","time"))
+
+    somedata <- somedata
 
   }else{
 
     somedata <- data.frame(matrix(NA, nrow = 0, ncol = 12))
-    colnames(somedata) <- c("id", "posID", "time", "ts", "X_raw", "Y_raw", "NBS", "VARX", "VARY", "COVXY", "x", "y")
+    colnames(somedata) <- c("id", "posID", "time", "ts", "X_raw",
+                            "Y_raw", "NBS", "VARX", "VARY", "COVXY", "x", "y")
   }
 
   assertthat::assert_that("data.frame" %in% class(somedata),
-                          msg = "cleanData: cleanded data is not a dataframe object!")
+    msg = "cleanData: cleanded data is not a dataframe object!")
 
   return(somedata)
 }

@@ -7,7 +7,7 @@
 #' @return A dataframe aggregated taking the mean over the interval.
 #' @export
 #'
-wat_aggData <- function(df,
+wat_agg_data <- function(df,
                         interval = 60){
   # check input type
   assertthat::assert_that("data.frame" %in% class(df),

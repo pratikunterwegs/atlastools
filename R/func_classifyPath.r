@@ -8,7 +8,7 @@
 #' @export
 #'
 
-funcClassifyPath <- function(somedata,
+wat_classify_points <- function(somedata,
                              resTimeLimit = 2) {
   # check somedata is a data.frame and has a resTime column
   {
@@ -19,7 +19,7 @@ funcClassifyPath <- function(somedata,
     assertthat::assert_that("resTime" %in% names(somedata),
                             msg = "classifypath: data has no residence time column")
     assertthat::assert_that(min(c(resTimeLimit)) > 1,
-                            msg = "funcClassifyPath: function arguments are not positive")
+                            msg = "wat_classify_points: function arguments are not positive")
   }
 
   # make datatable to use functions
@@ -52,7 +52,7 @@ funcClassifyPath <- function(somedata,
   # print message if dataframe has few rows
   {
     if (nrow(somedata) < 5) {
-      print(glue::glue('\n\n...segmented dataframe has < 5 rows\n\n'))
+      message(glue::glue('\n\n...segmented dataframe has < 5 rows\n\n'))
     }
   }
 

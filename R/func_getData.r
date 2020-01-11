@@ -13,7 +13,7 @@
 #' @import RMySQL
 #' @export
 #'
-funcGetData <- function(tag,
+wat_get_data <- function(tag,
                       tracking_time_start,
                       tracking_time_end,
                       tag_prefix="31001000",

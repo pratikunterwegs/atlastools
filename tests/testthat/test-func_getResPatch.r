@@ -5,17 +5,17 @@ testthat::test_that("patch calc on empirical data", {
   somedata = data.table::fread("../testdata/435_025_revisit.csv")
 
   # run function for patch inference
-  inference_output <- watlasUtils::funcInferResidence(somedata,
+  inference_output <- watlasUtils::wat_infer_residence(somedata,
                                                       infResTime = 2,
                                                       infPatchTimeDiff = 30,
                                                       infPatchSpatDiff = 100)
 
 
   # run function for classification
-  classified_output <- watlasUtils::funcClassifyPath(somedata = inference_output)
+  classified_output <- watlasUtils::wat_classify_points(somedata = inference_output)
 
   # run function for patch construction
-  testoutput <- watlasUtils::funcGetResPatch(somedata = classified_output,
+  testoutput <- watlasUtils::wat_make_res_patch(somedata = classified_output,
                                              bufferSize = 10,
                                              spatIndepLim = 100,
                                              tempIndepLim = 30,
@@ -45,33 +45,33 @@ testthat::test_that("patch data access function works", {
   somedata = data.table::fread("../testdata/435_025_revisit.csv")
 
   # run function for patch inference
-  inference_output <- watlasUtils::funcInferResidence(df = somedata,
+  inference_output <- watlasUtils::wat_infer_residence(df = somedata,
                                                       infResTime = 2,
                                                       infPatchTimeDiff = 30,
                                                       infPatchSpatDiff = 100)
 
 
   # run function for classification
-  classified_output <- watlasUtils::funcClassifyPath(somedata = inference_output)
+  classified_output <- watlasUtils::wat_classify_points(somedata = inference_output)
 
   # run function for patch construction
-  testoutput <- watlasUtils::funcGetResPatch(somedata = classified_output,
+  testoutput <- watlasUtils::wat_make_res_patch(somedata = classified_output,
                                              bufferSize = 10,
                                              spatIndepLim = 50,
                                              tempIndepLim = 30)
 
   # access testoutput summary
-  data_access_summary <- watlasUtils::funcGetPatchData(resPatchData = testoutput,
+  data_access_summary <- watlasUtils::wat_get_patch_summary(resPatchData = testoutput,
                                                        dataColumn = "data",
                                                        whichData = "summary")
 
   # access testoutput spatial
-  data_access_sf <- watlasUtils::funcGetPatchData(resPatchData = testoutput,
+  data_access_sf <- watlasUtils::wat_get_patch_summary(resPatchData = testoutput,
                                                   dataColumn = "data",
                                                   whichData = "spatial")
 
   # access testoutput spatial
-  data_access_pt <- watlasUtils::funcGetPatchData(resPatchData = testoutput,
+  data_access_pt <- watlasUtils::wat_get_patch_summary(resPatchData = testoutput,
                                                   dataColumn = "data",
                                                   whichData = "points")
 
@@ -101,15 +101,15 @@ testthat::test_that("residence patch construction works on artificial data", {
   # read in data and segment it
   testdata <- data.table::fread("../testdata/test_revdata.csv")
   # run function for patch inference
-  inference_output <- watlasUtils::funcInferResidence(df = testdata,
+  inference_output <- watlasUtils::wat_infer_residence(df = testdata,
                                                       infResTime = 2,
                                                       infPatchTimeDiff = 30,
                                                       infPatchSpatDiff = 100)
   # run function for classification
-  classified_output <- watlasUtils::funcClassifyPath(somedata = inference_output)
+  classified_output <- watlasUtils::wat_classify_points(somedata = inference_output)
 
   # run function for patch construction
-  testoutput <- watlasUtils::funcGetResPatch(somedata = classified_output,
+  testoutput <- watlasUtils::wat_make_res_patch(somedata = classified_output,
                                              bufferSize = 10,
                                              spatIndepLim = 50,
                                              tempIndepLim = 30)
@@ -125,12 +125,12 @@ testthat::test_that("residence patch construction works on artificial data", {
   }
 
   # access testoutput summary
-  data_access_summary <- watlasUtils::funcGetPatchData(resPatchData = testoutput,
+  data_access_summary <- watlasUtils::wat_get_patch_summary(resPatchData = testoutput,
                                                        dataColumn = "data",
                                                        whichData = "summary")
 
   # access testoutput summary
-  data_access_spatial <- watlasUtils::funcGetPatchData(resPatchData = testoutput,
+  data_access_spatial <- watlasUtils::wat_get_patch_summary(resPatchData = testoutput,
                                                        dataColumn = "data",
                                                        whichData = "spatial")
 

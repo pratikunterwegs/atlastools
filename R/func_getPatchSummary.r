@@ -7,7 +7,7 @@
 #' @return An object of type \code{sf} or \code{tibble} depending on which data is requested.
 #' @export
 #'
-funcGetPatchData = function(resPatchData,
+wat_get_patch_summary = function(resPatchData,
                             dataColumn = "data",
                             whichData = "summary")
 {

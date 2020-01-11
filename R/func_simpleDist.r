@@ -1,4 +1,4 @@
-#' funcDistance
+#' wat_simple_dist
 #'
 #' @param x A column name in a data.frame object that contains the numeric X or longitude coordinate for position data.
 #' @param y A column name in a data.frame object that contains the numeric Y or latitude coordinate for position data.
@@ -7,7 +7,7 @@
 #' @return Returns a vector of distances between consecutive points.
 #' @export
 #'
-funcDistance <- function(df, x = "x", y = "y"){
+wat_simple_dist <- function(df, x = "x", y = "y"){
   #check for basic assumptions
   assertthat::assert_that(is.data.frame(df),
                           is.character(x),

@@ -9,7 +9,7 @@
 #' @export
 #'
 
-funcInferResidence <- function(df,
+wat_infer_residence <- function(df,
                                infResTime = 2,
                                infPatchTimeDiff = 30,
                                infPatchSpatDiff = 100){
@@ -67,7 +67,7 @@ funcInferResidence <- function(df,
   tempdf <- df[!is.na(time),]
   # get difference in time and space
   tempdf <- tempdf[,`:=`(timediff = c(diff(time), NA),
-                         spatdiff = funcDistance(df = tempdf, x = "x", y = "y"))]
+                         spatdiff = wat_simple_dist(df = tempdf, x = "x", y = "y"))]
 
   # find missing patches if timediff is greater than specified (default 30 mins)
   # AND spatdiff is less than specified (100 m)

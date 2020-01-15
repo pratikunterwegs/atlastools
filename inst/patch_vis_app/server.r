@@ -109,8 +109,7 @@ server <- function(input, output) {
         ) %>% lapply(htmltools::HTML)
 
         main_map <- tm_basemap(leaflet::providers$Esri.WorldImagery)+
-          tm_shape(patchtraj)+
-          tm_lines(lwd = 1, col = "red")+
+
           tm_shape(patchSummary)+
           tm_polygons(col="patch", palette = "Blues",
                       border.col = "black",
@@ -118,7 +117,10 @@ server <- function(input, output) {
                       popup.vars = c("patch","duration","area","tidaltime_mean"))+
           tm_shape(raw_pts)+
           tm_symbols(size=0.005, col = "resTime", alpha = 0.3, border.col = NULL,
-                     style = "cont", palette = viridis::plasma(10))
+                     style = "cont", palette = viridis::plasma(10))+
+
+          tm_shape(patchtraj)+
+          tm_lines(lwd = 1, col = "red")+
 
           tm_scale_bar()
       }
@@ -163,8 +165,10 @@ server <- function(input, output) {
           scale_x_time(labels = scales::time_format(format = "%Y-%m-%d\n %H:%M"))+
 
           geom_label(data = patchSummary, aes(time_mean, max(patch_point_data$resTime), label = patch))+
-          geom_vline(data = patchSummary, aes(xintercept = time_end), col = 2, lty = 3, size = 0.2)+
-          geom_vline(data = patchSummary, aes(xintercept = time_start), col = 4, lty = 3, size = 0.2)+
+          geom_vline(data = patchSummary, aes(xintercept = time_end),
+                     col = "red", lty = 3, size = 0.2)+
+          geom_vline(data = patchSummary, aes(xintercept = time_start),
+                     col = "blue", lty = 3, size = 0.2)+
 
           # scale_color_manual(values = somecolours, na.value = "grey")+
           scale_fill_distiller(palette = "Blues",na.value = "red", direction = 1)+

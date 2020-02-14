@@ -6,12 +6,13 @@ testthat::test_that("adding tide data works", {
 
   # process with rm attractor, clean data, and add tide
   {
-    testoutput <- watlasUtils::wat_clean_data(somedata = testdata,
+    testoutput <- wat_clean_data(somedata = testdata,
                                            moving_window=5,
                                            nbs_min=3,
                                            sd_threshold=5e5)
 
-    testoutput <- watlasUtils::wat_add_tide(df = testoutput, tide_data = "../testdata/tidesSummer2018.csv")
+    testoutput <- wat_add_tide(df = testoutput,
+                               tide_data = "../testdata/tidesSummer2018.csv")
   }
 
   # do tests
@@ -28,7 +29,7 @@ testthat::test_that("adding tide data works", {
   for(i in 1:length(expnames)){
     testthat::expect_true(expnames[i] %in% colnames(testoutput),
                           info = glue::glue('{expnames[i]} expected in output but not produced'))
-  }  
+  }
 })
 
 # ends here

@@ -10,6 +10,8 @@
 wat_add_tide <- function(df,
 				tide_data){
 
+  time <- ts <- tide_number <- tidaltime <- x <- NULL
+
 	# check correct argument types and data exists
 	{
 		assertthat::assert_that("data.frame" %in% class(df),
@@ -65,7 +67,7 @@ wat_add_tide <- function(df,
              by = tide_number]
 
     # remove bad rows and columns
-    temp_data <- temp_data[complete.cases(x),]
+    temp_data <- temp_data[stats::complete.cases(x),]
     temp_data[,`:=`(tide = NULL, level = NULL)]
 	}
   message(glue::glue('tag {unique(temp_data$id)} added time since high tide'))

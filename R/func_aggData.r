@@ -9,6 +9,9 @@
 #'
 wat_agg_data <- function(df,
                         interval = 60){
+
+  id <- time <- NULL
+
   # check input type
   assertthat::assert_that("data.frame" %in% class(df),
                           msg = "rmAttractor: input not a dataframe object!")

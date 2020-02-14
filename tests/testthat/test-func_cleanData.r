@@ -21,7 +21,14 @@ testthat::test_that("cleaning raw data works", {
   testdata[1,]$NBS = 5e3
 
   # run function
-  testoutput <- watlasUtils::wat_clean_data(somedata = testdata,
+  testoutput <- wat_clean_data(somedata = testdata,
+                                           moving_window=5,
+                                           nbs_min=3,
+                                           sd_threshold=5e5)
+
+  # test on real data
+  real_data <- data.table::fread("../testdata/whole_season_tx_435.csv")
+  testoutput_real <- wat_clean_data(somedata =real_data,
                                            moving_window=5,
                                            nbs_min=3,
                                            sd_threshold=5e5)
@@ -29,6 +36,7 @@ testthat::test_that("cleaning raw data works", {
   # do tests
   # test that the vector class is data.table and data.frame
   testthat::expect_s3_class(object = testoutput, class = c("data.table", "data.frame"))
+  testthat::expect_s3_class(object = testoutput_real, class = c("data.table", "data.frame"))
 
   # check that data are ordered in time
   testthat::expect_gt(min(as.numeric(diff(testoutput$TIME)), na.rm = TRUE), 0)

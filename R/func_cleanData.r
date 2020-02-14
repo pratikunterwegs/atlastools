@@ -57,11 +57,13 @@ wat_clean_data <- function(somedata,
   {
     # add position id and change time to seconds
     somedata[,`:=`(posID = 1:nrow(somedata),
-                  TIME = TIME/1e3,
-                   ts = as.POSIXct(TIME/1e3, tz = "CET", origin = "1970-01-01"),
+                  TIME = as.numeric(TIME)/1e3,
                    TAG = as.numeric(TAG) - prefix_num,
                    X_raw = X,
                    Y_raw = Y)]
+
+    # make separate timestamp col
+    somedata[,ts := as.POSIXct(TIME, tz = "CET", origin = "1970-01-01")]
 
     # median filter
     #includes reversed smoothing to get rid of a possible phase shift

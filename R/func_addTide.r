@@ -47,7 +47,6 @@ wat_add_tide <- function(df,
       # read in tide data
       tide_data <- fread(tide_data)[,time:=fasttime::fastPOSIXct(time)]
 
-      message(colnames(tide_data))
       for (i in 1:length(namesReq)) {
         assertthat::assert_that(namesReq[i] %in% colnames(tide_data),
           msg = glue::glue('wat_add_tide: {namesReq[i]} is

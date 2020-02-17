@@ -14,7 +14,7 @@ wat_agg_data <- function(df,
 
   # check input type
   assertthat::assert_that("data.frame" %in% class(df),
-                          msg = "rmAttractor: input not a dataframe object!")
+                          msg = "wat_agg_data: input not a dataframe object!")
 
   # include asserts checking for required columns
   {
@@ -22,7 +22,7 @@ wat_agg_data <- function(df,
     namesReq <- c("x", "y", "time")
     for (i in 1:length(namesReq)) {
       assertthat::assert_that(namesReq[i] %in% dfnames,
-                              msg = glue::glue('rmAttractor: {namesReq[i]} is
+                              msg = glue::glue('wat_agg_data: {namesReq[i]} is
                          required but missing from data!'))
     }
 

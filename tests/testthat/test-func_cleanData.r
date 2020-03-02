@@ -8,11 +8,11 @@ testthat::test_that("cleaning raw data works", {
   message(glue::glue('starttime = {starttime} and starttime num = {starttime_num}'))
 
   testdata <- data.table::data.table(X = cumsum(runif(n = 1e3, min=0, max=1)),
-                                     Y = runif(n = 1e3, min=0, max=1),
-                                     TIME = starttime_num:(starttime_num+999),
+                                     Y = cumsum(runif(n = 1e3, min=0, max=1)),
+                                     TIME = seq(starttime_num, (starttime_num+1e6), length.out = 1000),
                                      NBS = round(runif(1e3, min=1, max = 5)),
-                                     TAG = "31001435",
-                                     SD = 2e4,
+                                     TAG = "31001000435",
+                                     SD = 50,
                                      VARX = 0,
                                      VARY = 0,
                                      COVXY = 0)
@@ -22,16 +22,18 @@ testthat::test_that("cleaning raw data works", {
 
   # run function
   testoutput <- wat_clean_data(somedata = testdata,
-                                           moving_window=5,
+                                           moving_window=3,
                                            nbs_min=3,
-                                           sd_threshold=5e5)
+                                           sd_threshold=5e5,
+                               filter_speed = TRUE,
+                               speed_cutoff = 150)
 
   # test on real data
   real_data <- data.table::fread("../testdata/whole_season_tx_435.csv")
   testoutput_real <- wat_clean_data(somedata =real_data,
                                            moving_window=5,
                                            nbs_min=3,
-                                           sd_threshold=5e5)
+                                           sd_threshold=100)
 
   # do tests
   # test that the vector class is data.table and data.frame
@@ -39,7 +41,7 @@ testthat::test_that("cleaning raw data works", {
   testthat::expect_s3_class(object = testoutput_real, class = c("data.table", "data.frame"))
 
   # check that data are ordered in time
-  testthat::expect_gt(min(as.numeric(diff(testoutput$TIME)), na.rm = TRUE), 0)
+  testthat::expect_gt(min(as.numeric(diff(testoutput$time)), na.rm = TRUE), 0)
 
   # check that low nbs rows are gone
   testthat::expect_gt(min(testoutput$NBS), 2)
@@ -48,6 +50,6 @@ testthat::test_that("cleaning raw data works", {
   testthat::expect_gt(nrow(testdata), nrow(testoutput))
 
   # check that time is correctly handled
-  testthat::expect_equal(testoutput[1,]$ts, starttime)
+  testthat::expect_lte(testoutput[1,]$ts - starttime, 5)
   message(glue::glue('cleandata starttime = {testoutput[1,]$ts}'))
 })

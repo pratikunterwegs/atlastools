@@ -63,10 +63,18 @@ wat_clean_data <- function(somedata,
   {
     # add position id and change time to seconds
     somedata[,`:=`(posID = 1:nrow(somedata),
-                  TIME = as.numeric(TIME)/1e3,
+                   TIME = as.numeric(TIME)/1e3,
                    TAG = as.numeric(TAG) - prefix_num,
                    X_raw = X,
                    Y_raw = Y)]
+
+    if(filter_speed == TRUE){
+      # filter for insane speeds if asked
+      somedata[,sld := wat_simple_dist(somedata, "X", "Y")]
+      somedata[,sld_speed := sld/c(NA, as.numeric(diff(TIME)))]
+      somedata <- somedata[sld_speed <= (speed_cutoff / 3.6), ]
+      somedata[ ,`:=`(sld = NULL, sld_speed = NULL)]
+    }
 
     # make separate timestamp col
     somedata[,ts := as.POSIXct(TIME, tz = "CET", origin = "1970-01-01")]
@@ -96,7 +104,7 @@ wat_clean_data <- function(somedata,
   }
 
   assertthat::assert_that("data.frame" %in% class(somedata),
-    msg = "cleanData: cleanded data is not a dataframe object!")
+                          msg = "cleanData: cleanded data is not a dataframe object!")
 
   return(somedata)
 }

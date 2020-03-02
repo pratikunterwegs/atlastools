@@ -29,19 +29,21 @@ wat_clean_data <- function(somedata,
     # include asserts checking for required columns
     {
       dfnames <- colnames(somedata)
-      namesReq <- c("X", "Y", "SD", "NBS", "TAG", "TIME")
+      namesReq <- c("X", "Y", "SD", "NBS", "TAG", "TIME", "VARX", "VARY", "COVXY")
       for (i in 1:length(namesReq)) {
         assertthat::assert_that(namesReq[i] %in% dfnames,
-          msg = glue::glue('cleanData: {namesReq[i]} is
+                                msg = glue::glue('cleanData: {namesReq[i]} is
                          required but missing from data!'))
       }
     }
 
     # check args positive
     assertthat::assert_that(min(c(moving_window)) > 1,
-      msg = "cleanData: function arguments are not positive")
+                            msg = "cleanData: moving window not > 1")
     assertthat::assert_that(min(c(nbs_min)) >= 0,
-      msg = "cleanData: function arguments are not positive")
+                            msg = "cleanData: NBS min not positive")
+    assertthat::assert_that(min(c(speed_cutoff)) >= 0,
+                            msg = "cleanData: speed cutoff not positive")
   }
 
   # convert to data.table

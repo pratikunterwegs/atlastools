@@ -4,14 +4,18 @@
 #' @param sd_threshold A threshold value above which rows are removed.
 #' @param nbs_min The minimum number of base stations (ATLAS towers) that received tag signal.
 #' @param moving_window The size of the moving window for the running median calculation.
+#' @param speed_cutoff The maximum speed in kilometres per hour allowed in the raw data. Points with straight line displacement speeds calculated as above this are removed.
+#' @param filter_speed Logical specifiying whether to use the speed filter or not.
 #'
 #' @return A datatable class object (extends data.frame) which has the additional columns posID and ts, which is TIME converted to human readable POSIXct format.
 #' @export
 #'
 wat_clean_data <- function(somedata,
-                moving_window=5,
-                nbs_min=0,
-                sd_threshold=500000){
+                           moving_window=3,
+                           nbs_min=0,
+                           sd_threshold=500000,
+                           filter_speed=TRUE,
+                           speed_cutoff = 150){
 
   SD <- NBS <- TIME <- TAG <- X <- Y <- NULL
   posID <- ts <- X_raw <- Y_raw <- VARX <- VARY <- COVXY <- NULL

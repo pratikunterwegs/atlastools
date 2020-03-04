@@ -162,7 +162,7 @@ wat_make_res_patch <- function(somedata,
         somedata <- dplyr::mutate(somedata,
                                   patchSummary = purrr::map(data, function(df){
                                     dplyr::summarise_at(.tbl = df,
-                                                        .vars = dplyr::vars(time, x, y, tidaltime, resTime),
+                                                        .vars = dplyr::vars(time, x, y, tidaltime, resTime, waterlevel),
                                                         .funs = list(start = dplyr::first,
                                                                      end = dplyr::last,
                                                                      mean = mean))

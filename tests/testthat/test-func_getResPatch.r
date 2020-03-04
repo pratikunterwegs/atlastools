@@ -84,7 +84,7 @@ testthat::test_that("patch data access function works", {
 
   # test that names are present in output cols
   expnames <- c("id", "tide_number", "type", "patch", "time_mean",
-                "tidaltime_mean", "x_mean", "y_mean", "duration", "distInPatch",
+                "tidaltime_mean", "x_mean", "y_mean", "duration", "distInPatch", "waterlevel_mean",
                 "distBwPatch", "propfixes", "polygons")
   # test col names in data access
   for(i in 1:length(expnames)){

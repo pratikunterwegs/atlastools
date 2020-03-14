@@ -4,12 +4,8 @@
 \alias{wat_infer_residence}
 \title{segPath2}
 \usage{
-wat_infer_residence(
-  df,
-  infResTime = 2,
-  infPatchTimeDiff = 30,
-  infPatchSpatDiff = 100
-)
+wat_infer_residence(df, infResTime = 2, infPatchTimeDiff = 30,
+  infPatchSpatDiff = 100)
 }
 \arguments{
 \item{df}{A dataframe of recurse analysis, or must include, in addition to x, y and time columns, a residence time column named resTime, id, and tide_number, a tidaltime column named tidaltime.}

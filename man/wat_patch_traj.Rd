@@ -4,7 +4,8 @@
 \alias{wat_patch_traj}
 \title{patchTraj}
 \usage{
-wat_patch_traj(df, x1 = "x_end", x2 = "x_start", y1 = "y_end", y2 = "y_start")
+wat_patch_traj(df, x1 = "x_end", x2 = "x_start", y1 = "y_end",
+  y2 = "y_start")
 }
 \arguments{
 \item{df}{A dataframe with at least 2 pairs of coordinate columns, such as X_end Y_end, X_start, Y_start.}

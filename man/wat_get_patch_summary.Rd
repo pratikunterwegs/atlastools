@@ -4,7 +4,8 @@
 \alias{wat_get_patch_summary}
 \title{getPatchData}
 \usage{
-wat_get_patch_summary(resPatchData, dataColumn = "data", whichData = "summary")
+wat_get_patch_summary(resPatchData, dataColumn = "data",
+  whichData = "summary")
 }
 \arguments{
 \item{resPatchData}{A tibble with a nested list column of the raw data underlying each patch. This column is specified in the argument \code{dataColumn}}

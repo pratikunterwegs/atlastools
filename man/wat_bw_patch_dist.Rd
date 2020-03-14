@@ -4,13 +4,8 @@
 \alias{wat_bw_patch_dist}
 \title{betweenPatchDistance}
 \usage{
-wat_bw_patch_dist(
-  df,
-  x1 = "x_end",
-  x2 = "x_start",
-  y1 = "y_end",
-  y2 = "y_start"
-)
+wat_bw_patch_dist(df, x1 = "x_end", x2 = "x_start", y1 = "y_end",
+  y2 = "y_start")
 }
 \arguments{
 \item{df}{A dataframe of or extending the class data.frame. This must contain two pairs of coordinates, the start and end X and Y coordinates of a feature.}

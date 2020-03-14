@@ -75,7 +75,7 @@ wat_make_res_patch <- function(somedata,
       # identify spatial overlap
       {
         # assign spat diff columns
-        somedata[,`:=`(spatdiff = watlasUtils::wat_simple_dist(df = somedata,
+        somedata[,`:=`(spatdiff = watlastools::wat_simple_dist(df = somedata,
                                                             x = "x", y = "y"))]
 
         # first spatial difference is infinity for calculation purposes
@@ -127,7 +127,7 @@ wat_make_res_patch <- function(somedata,
                                                as.numeric(time_start[2:length(time_start)] -
                                                             time_end[1:length(time_end)-1])))
         # get spatial difference from last to first point
-        spatdiff <- watlasUtils::wat_bw_patch_dist(df = somedata,
+        spatdiff <- watlastools::wat_bw_patch_dist(df = somedata,
                                                  x1 = "x_end", x2 = "x_start",
                                                  y1 = "y_end", y2 = "y_start")
         # set spatdiff 1 to Inf
@@ -174,13 +174,13 @@ wat_make_res_patch <- function(somedata,
         # distance in a patch
         somedata <- dplyr::mutate(somedata,
                                   distInPatch = purrr::map_dbl(data, function(df){
-                                    sum(watlasUtils::wat_simple_dist(df = df), na.rm = TRUE)
+                                    sum(watlastools::wat_simple_dist(df = df), na.rm = TRUE)
                                   }))
 
         # distance between patches
         somedata <- tidyr::unnest(somedata, cols = patchSummary)
         somedata <- dplyr::mutate(somedata,
-                                  distBwPatch = watlasUtils::wat_bw_patch_dist(df = somedata,
+                                  distBwPatch = watlastools::wat_bw_patch_dist(df = somedata,
                                                                              x1 = "x_end", x2 = "x_start",
                                                                              y1 = "y_end", y2 = "y_start"))
         # displacement in a patch

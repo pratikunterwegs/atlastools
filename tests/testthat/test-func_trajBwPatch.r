@@ -6,7 +6,7 @@ testthat::test_that("trajectories are made", {
                            a_end = a_start+2,
                            b_start = 1, b_end = 1)
   # run function
-  testoutput <- watlasUtils::wat_patch_traj(testdf,
+  testoutput <- watlastools::wat_patch_traj(testdf,
     x1 = "a_end", x2 = "a_start", y1 = "b_end", y2 = "b_start")
 
   # do tests

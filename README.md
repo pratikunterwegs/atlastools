@@ -23,14 +23,13 @@ install.packages("devtools")
 
 # library("devtools")
 # installation of the simplified branch
-devtools::install_github("pratikunterwegs/watlastools", ref = "devbranch")
+devtools::install_github("pratikunterwegs/watlastools")
 ```
-
-![](https://github.com/pratikunterwegs/watlastools/raw/devbranch/inst/screenshot_app.png)
-
 ## Shiny application
 
 Package functionality is demonstrated by the inbuilt `shiny` application.
+
+![](https://github.com/pratikunterwegs/watlastools/raw/master/inst/screenshot_app.png)
 
 ```r
 # run the app from the package

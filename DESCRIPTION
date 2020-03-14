@@ -15,8 +15,8 @@ Description: Tools to process high-resolution tracking data from the Wadden Sea 
 License: GPL-3
 Encoding: UTF-8
 LazyData: true
-URL: https://github.com/pratikunterwegs/watlasUtils
-BugReports: https://github.com/pratikunterwegs/watlasUtils/issues
+URL: https://github.com/pratikunterwegs/watlastools
+BugReports: https://github.com/pratikunterwegs/watlastools/issues
 Imports:
     tidyr,
     dplyr,

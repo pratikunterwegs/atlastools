@@ -8,7 +8,7 @@ testthat::test_that("aggregated cleaned data", {
                                      ts = as.POSIXct(1:1e3, origin = "1970-01-01"),
                                      id = as.factor("abc"))
   # run function
-  testoutput <- watlasUtils::wat_agg_data(testdata, interval = 60)
+  testoutput <- watlastools::wat_agg_data(testdata, interval = 60)
 
   # do tests
   # test that the vector class is data.table and data.frame

@@ -4,15 +4,9 @@
 \alias{wat_make_res_patch}
 \title{getResPatch}
 \usage{
-wat_make_res_patch(
-  somedata,
-  bufferSize = 10,
-  spatIndepLim = 100,
-  tempIndepLim = 30,
-  restIndepLim = 30,
-  minFixes = 3,
-  tideLims = c(4, 9)
-)
+wat_make_res_patch(somedata, bufferSize = 10, spatIndepLim = 100,
+  tempIndepLim = 30, restIndepLim = 30, minFixes = 3,
+  tideLims = c(4, 9))
 }
 \arguments{
 \item{somedata}{A dataframe of values of any class that is or extends data.frame. The dataframe must contain at least two spatial coordinates, \code{x} and \code{y}, and a temporal coordinate, \code{time}. The names of columns specifying these can be passed as arguments below.}

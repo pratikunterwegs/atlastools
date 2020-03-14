@@ -1,7 +1,7 @@
 # ui function
 library(leaflet)
 library(shiny)
-library(watlasUtils)
+library(watlastools)
 
 ui <- fluidPage(
   titlePanel("WATLAS Utilities App"),

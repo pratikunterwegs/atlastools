@@ -1,5 +1,5 @@
-Package: watlasUtils
-Title: Utilities for High Resolution Tracking Data from WATLAS
+Package: watlastools
+Title: Tools for High Resolution Tracking Data from WATLAS
 Version: 0.0.0.9000
 Authors@R:
     c(person(given = "Pratik",
@@ -11,12 +11,12 @@ Authors@R:
            family = "Neves",
            role = c("ctb"),
            email = "p.m.santos.neves@rug.nl"))
-Description: Tool to process high-resolution tracking data from the Wadden Sea ATLAS system (WATLAS: https://www.nioz.nl/en/about/cos/coastal-movement-ecology/shorebird-tracking/watlas-tracking-regional-movements).
+Description: Tools to process high-resolution tracking data from the Wadden Sea ATLAS system (WATLAS: https://www.nioz.nl/en/about/cos/coastal-movement-ecology/shorebird-tracking/watlas-tracking-regional-movements).
 License: GPL-3
 Encoding: UTF-8
 LazyData: true
-URL: https://github.com/pratikunterwegs/watlasUtils
-BugReports: https://github.com/pratikunterwegs/watlasUtils/issues
+URL: https://github.com/pratikunterwegs/watlastools
+BugReports: https://github.com/pratikunterwegs/watlastools/issues
 Imports:
     tidyr,
     dplyr,

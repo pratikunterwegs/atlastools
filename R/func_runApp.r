@@ -5,9 +5,9 @@
 #'
 wat_run_patch_vis_app <- function()
 {
-  appDir <- glue::glue('{find.package("watlasUtils")}/patch_vis_app/')
+  appDir <- glue::glue('{find.package("watlastools")}/patch_vis_app/')
   if (appDir == "") {
-    stop("Could not find app directory. Try re-installing `watlasUtils`.", call. = FALSE)
+    stop("Could not find app directory. Try re-installing `watlastools`.", call. = FALSE)
   }
 
   shiny::runApp(appDir, display.mode = "normal")

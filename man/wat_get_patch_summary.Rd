@@ -4,7 +4,7 @@
 \alias{wat_get_patch_summary}
 \title{getPatchData}
 \usage{
-wat_get_patch_summary(resPatchData, dataColumn = "data",
+wat_get_patch_summary(resPatchData, dataColumn = "patchdata",
   whichData = "summary")
 }
 \arguments{

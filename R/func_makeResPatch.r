@@ -17,15 +17,15 @@ wat_make_res_patch <- function(somedata,
                             spatIndepLim = 100,
                             tempIndepLim = 30,
                             restIndepLim = 30,
-                            minFixes = 3,
-                            tideLims = c(4, 9)){
+                            minFixes = 3){
   # handle global variable issues
   time <- timediff <- type <- x <- y <- npoints <- NULL
-  patch <- nfixes <- id <- tide_number <- data <- tidaltime <- NULL
+  patch <- nfixes <- id <- tide_number <- patchdata <- tidaltime <- NULL
   patchSummary <- time_start <- time_end <- duration <- nfixes <- NULL
   resTime <- resTime_mean <- resTimeDiff <- area <- NULL
   x_end <- y_end <- x_start <- y_start <- tidaltime_mean <- NULL
-
+  spatdiff <- newpatch <- distInPatch <- distBwPatch <- dispInPatch <- NULL
+  waterlevel <- NULL
   # check somedata is a data.frame and has a resTime column
   {
     # check if data frame
@@ -43,7 +43,6 @@ wat_make_res_patch <- function(somedata,
   # convert variable units
   {
     tempIndepLim = tempIndepLim*60
-    tideLims = tideLims*60
   }
 
   # get names and numeric variables

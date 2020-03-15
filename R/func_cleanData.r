@@ -19,7 +19,7 @@ wat_clean_data <- function(somedata,
 
   SD <- NBS <- TIME <- TAG <- X <- Y <- NULL
   posID <- ts <- X_raw <- Y_raw <- VARX <- VARY <- COVXY <- NULL
-
+  sld <- sld_speed <- NULL
 
   # check parameter types and assumptions
   {

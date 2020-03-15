@@ -6,7 +6,6 @@
 #' @param restIndepLim A numeric value of time in minutes of the difference in residence times between two patches for them to be considered independent.
 #' @param tempIndepLim A numeric value of distance in metres of the spatial distance between two patches for them to the considered independent.
 #' @param minFixes The minimum number of fixes for a group of spatially-proximate number of ponts to be considered a preliminary residence patch.
-#' @param tideLims A vector of two positions giving the limits of tidal time to consider. Lower first, higher second.
 #'
 #' @return A data.frame extension object. This dataframe has the added column \code{resPatch} based on cumulative patch summing. Depending on whether \code{inferPatches = TRUE}, the dataframe has additional inferred points. An additional column is created in each case, indicating whether the data are empirical fixes ('real') or 'inferred'.
 #' @import data.table
@@ -18,15 +17,15 @@ wat_make_res_patch <- function(somedata,
                             spatIndepLim = 100,
                             tempIndepLim = 30,
                             restIndepLim = 30,
-                            minFixes = 3,
-                            tideLims = c(4, 9)){
+                            minFixes = 3){
   # handle global variable issues
   time <- timediff <- type <- x <- y <- npoints <- NULL
-  patch <- nfixes <- id <- tide_number <- data <- tidaltime <- NULL
+  patch <- nfixes <- id <- tide_number <- patchdata <- tidaltime <- NULL
   patchSummary <- time_start <- time_end <- duration <- nfixes <- NULL
   resTime <- resTime_mean <- resTimeDiff <- area <- NULL
   x_end <- y_end <- x_start <- y_start <- tidaltime_mean <- NULL
-
+  spatdiff <- newpatch <- distInPatch <- distBwPatch <- dispInPatch <- NULL
+  waterlevel <- NULL
   # check somedata is a data.frame and has a resTime column
   {
     # check if data frame
@@ -44,7 +43,6 @@ wat_make_res_patch <- function(somedata,
   # convert variable units
   {
     tempIndepLim = tempIndepLim*60
-    tideLims = tideLims*60
   }
 
   # get names and numeric variables
@@ -93,148 +91,134 @@ wat_make_res_patch <- function(somedata,
 
         # remove patches with 2 or fewer points
         somedata <- somedata[nfixes >= minFixes, ]
+        somedata[,nfixes:=NULL]
       }
 
       # get time mean and extreme points for spatio-temporal independence calc
       {
-        setDF(somedata)
+        # nest data
+        somedata <- somedata[, .(list(.SD)), by = .(id, tide_number, patch)]
+        setnames(somedata, old = "V1", new = "patchdata")
+        somedata[,nfixes:=lapply(patchdata, nrow)]
 
-        somedata <- dplyr::group_by(somedata, id, tide_number, patch, type)
-        # nest data to keep for some operations
-        somedata <- tidyr::nest(somedata)
-        somedata <- dplyr::mutate(somedata,
-                                  nfixes = purrr::map_int(data, nrow))
         # summarise mean, first and last
-        somedata <- dplyr::mutate(somedata,
-                                  patchSummary = purrr::map(data, function(df){
-                                    dplyr::summarise_at(.tbl = df,
-                                                        .vars = dplyr::vars(time, x, y, resTime),
-                                                        .funs = list(start = dplyr::first,
-                                                                     end = dplyr::last,
-                                                                     mean = mean))
-                                  }))
-        # unnest patch summary
-        somedata <- tidyr::unnest(data = somedata, cols = patchSummary)
-        # ungroup to prevent within group calcs
-        somedata <- dplyr::ungroup(somedata)
+        somedata[,patchSummary:= lapply(patchdata, function(dt){
+          dt <- dt[,.(time, x, y, resTime)]
+          dt <- setDF(dt)
+          dt <- dplyr::summarise_at(.tbl = dt,
+                                    .vars = dplyr::vars(time, x, y, resTime),
+                                    .funs = list(start = dplyr::first,
+                                                 end = dplyr::last,
+                                                 mean = mean))
+          return(setDT(dt))
+        })]
 
-        # arrange by time
-        somedata <- dplyr::arrange(somedata, time_start)
+        # assess independence using summary data
+        {
+          patchsummary <- somedata[,unlist(patchSummary, recursive = FALSE),
+                                   by = .(id, tide_number, patch)]
+          somedata[,patchSummary:=NULL]
+          # get time bewteen start of n+1 and end of n
+          patchsummary[,timediff := c(Inf,
+                                      as.numeric(time_start[2:length(time_start)] -
+                                                   time_end[1:length(time_end)-1]))]
+          # get spatial difference from last to first point
+          patchsummary[,spatdiff := c(watlastools::wat_bw_patch_dist(df = patchsummary,
+                                                                     x1 = "x_end", x2 = "x_start",
+                                                                     y1 = "y_end", y2 = "y_start"))]
+          # set spatdiff 1 to Inf
+          patchsummary[1,"spatdiff"] <- Inf
 
-        # get time bewteen start of n+1 and end of n
-        somedata <- dplyr::mutate(somedata,
-                                  timediff = c(Inf,
-                                               as.numeric(time_start[2:length(time_start)] -
-                                                            time_end[1:length(time_end)-1])))
-        # get spatial difference from last to first point
-        spatdiff <- watlastools::wat_bw_patch_dist(df = somedata,
-                                                 x1 = "x_end", x2 = "x_start",
-                                                 y1 = "y_end", y2 = "y_start")
-        # set spatdiff 1 to Inf
-        spatdiff[1] <- Inf
-        somedata <- dplyr::mutate(somedata, spatdiff = spatdiff)
-        rm(spatdiff)
+          # get differences in mean residence time
+          patchsummary[,resTimeDiff := c(Inf, abs(as.numeric(diff(resTime_mean))))]
 
-        # get differences in mean residence time
-        somedata <- dplyr::mutate(somedata,
-                                  resTimeDiff = c(Inf, abs(as.numeric(diff(resTime_mean)))))
-
-        # assess independence
-        somedata <- dplyr::mutate(somedata,
-                                  patch = cumsum((timediff > tempIndepLim) |
-                                                   (spatdiff > spatIndepLim) |
-                                                   resTimeDiff > restIndepLim))
+          # assess independence and assign new patch
+          patchsummary[,newpatch := cumsum((timediff > tempIndepLim) |
+                                             (spatdiff > spatIndepLim) |
+                                             resTimeDiff > restIndepLim)]
+        }
+          # get cols with old and new patch
+          patchsummary <- patchsummary[,.(patch, newpatch)]
       }
 
       # basic patch metrics for new patches
       {
-        somedata <- dplyr::group_by(somedata, id, tide_number, patch, type)
-        # select main data
-        somedata <- dplyr::select(somedata,
-                                  id, tide_number, patch, type, data) # might have issues
-        # unnest
-        somedata <- tidyr::unnest(somedata, cols = data)
-        # summarise data by new patch, ungrouping type
-        somedata <- dplyr::ungroup(somedata, type)
-        somedata <- dplyr::group_by(somedata, id, tide_number, patch)
-        somedata <- tidyr::nest(somedata)
+        # join patchdata to patch summary by new patch
+        # expand data to prepare for new patches
+        somedata <- somedata[, unlist(patchdata, recursive = FALSE),
+                 by = .(id, tide_number, patch)]
+
+        somedata <- merge(somedata, patchsummary, by = "patch")
+        somedata[,`:=`(patch=newpatch, newpatch=NULL)]
+
+        # nest data again
+        somedata <- somedata[, .(list(.SD)), by = .(id, tide_number, patch)]
+        setnames(somedata, old = "V1", new = "patchdata")
+        somedata[,nfixes:=lapply(patchdata, nrow)]
+
         # basic metrics by new patch
-        somedata <- dplyr::mutate(somedata,
-                                  patchSummary = purrr::map(data, function(df){
-                                    dplyr::summarise_at(.tbl = df,
-                                                        .vars = dplyr::vars(time, x, y, tidaltime, resTime, waterlevel),
-                                                        .funs = list(start = dplyr::first,
-                                                                     end = dplyr::last,
-                                                                     mean = mean))
-                                  }))
+        somedata[,patchSummary:= lapply(patchdata, function(dt){
+          dt <- dt[,.(time, x, y, resTime, tidaltime, waterlevel)]
+          dt <- setDF(dt)
+          dt <- dplyr::summarise_all(.tbl = dt,
+                                    .funs = list(start = dplyr::first,
+                                                 end = dplyr::last,
+                                                 mean = mean))
+          return(setDT(dt))
+        })]
       }
+
       # advanced metrics on ungrouped data
       {
-        somedata <- dplyr::ungroup(somedata)
-        # distance in a patch
-        somedata <- dplyr::mutate(somedata,
-                                  distInPatch = purrr::map_dbl(data, function(df){
+        # distance in a patch in metres
+        somedata[,distInPatch := lapply(patchdata, function(df){
                                     sum(watlastools::wat_simple_dist(df = df), na.rm = TRUE)
-                                  }))
+                                  })]
 
         # distance between patches
-        somedata <- tidyr::unnest(somedata, cols = patchSummary)
-        somedata <- dplyr::mutate(somedata,
-                                  distBwPatch = watlastools::wat_bw_patch_dist(df = somedata,
-                                                                             x1 = "x_end", x2 = "x_start",
-                                                                             y1 = "y_end", y2 = "y_start"))
+        tempdata <- somedata[,unlist(patchSummary, recursive = FALSE),
+                                 by = .(id, tide_number, patch)]
+        somedata[,patchSummary:=NULL]
+        somedata[,distBwPatch := watlastools::wat_bw_patch_dist(df = tempdata,
+                                                                x1 = "x_end", x2 = "x_start",
+                                                                y1 = "y_end", y2 = "y_start")]
         # displacement in a patch
         # apply func bw patch dist reversing usual end and begin
-        somedata <- dplyr::mutate(somedata,
-                                  dispInPatch = sqrt((x_end - x_start)^2 + (y_end - y_start)^2))
+        tempdata[,dispInPatch := sqrt((x_end - x_start)^2 + (y_end - y_start)^2)]
         # type of patch
-        somedata <- dplyr::mutate(somedata,
-                                  type = purrr::map_chr(data, function(df){
+        somedata[, type := lapply(patchdata, function(df){
                                     a <- ifelse(sum(c("real", "inferred") %in% df$type) == 2,
                                                 "mixed", first(df$type))
                                     return(a)
-                                    }))
+                                    })]
 
       }
+
       # even more advanced metrics
       {
-        somedata <- dplyr::mutate(somedata,
-                                  nfixes = purrr::map_int(data, nrow),
-                                  duration = (time_end - time_start),
-                                  propfixes = nfixes/(duration/3))
+        tempdata[, duration := (time_end - time_start)]
       }
 
       # true spatial metrics
       {
-        somedata <- dplyr::mutate(somedata, polygons = purrr::map(data, function(df){
+        somedata[, polygons := lapply(patchdata, function(df){
           p1 <- sf::st_as_sf(df, coords = c("x", "y"))
           p2 <- sf::st_buffer(p1, dist = bufferSize)
           p2 <- sf::st_union(p2)
           return(p2)
-        }))
+        })]
 
         # add area and circularity
-        somedata <- dplyr::mutate(somedata,
-                                  area = purrr::map_dbl(polygons, sf::st_area))
-        somedata <- dplyr::mutate(somedata,
-                                  circularity = (4*pi*area)/purrr::map_dbl(polygons, function(pgon){
-                                    boundary <- sf::st_boundary(pgon)
-                                    perimeter <- sf::st_length(boundary)
-                                    return(as.numeric(perimeter)^2)
-                                  }))
+        somedata[,area := purrr::map_dbl(polygons, sf::st_area)]
+        somedata[,`:=`(circularity = (4*pi*area)/purrr::map_dbl(polygons, function(pgon){
+          boundary <- sf::st_boundary(pgon)
+          perimeter <- sf::st_length(boundary)
+          return(as.numeric(perimeter)^2)
+        }))]
       }
-      # remove old nfixes and type
-      {
-        somedata$data <- purrr::map(somedata$data, function(df){
-          df <- dplyr::select(df, -nfixes, -type)
-        })
-      }
-      # filter for low tide
-      {
-        somedata <- dplyr::filter(somedata, tidaltime_mean %between% tideLims)
-        # rename patches
-        somedata <- dplyr::mutate(somedata, patch = 1:nrow(somedata))
-      }
+
+      # remove patch summary from some data and add temp data, then del tempdata
+      somedata <- merge(somedata, tempdata, by = c("id", "tide_number", "patch"))
 
       # make spatial polygons
       {
@@ -242,6 +226,8 @@ wat_make_res_patch <- function(somedata,
         somedata$polygons <- polygons
         somedata <- sf::st_as_sf(somedata, sf_column_name = "polygons")
       }
+
+      return(somedata)
     },
     # null error function, with option to collect data on errors
     error= function(e)

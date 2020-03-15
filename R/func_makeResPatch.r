@@ -6,7 +6,6 @@
 #' @param restIndepLim A numeric value of time in minutes of the difference in residence times between two patches for them to be considered independent.
 #' @param tempIndepLim A numeric value of distance in metres of the spatial distance between two patches for them to the considered independent.
 #' @param minFixes The minimum number of fixes for a group of spatially-proximate number of ponts to be considered a preliminary residence patch.
-#' @param tideLims A vector of two positions giving the limits of tidal time to consider. Lower first, higher second.
 #'
 #' @return A data.frame extension object. This dataframe has the added column \code{resPatch} based on cumulative patch summing. Depending on whether \code{inferPatches = TRUE}, the dataframe has additional inferred points. An additional column is created in each case, indicating whether the data are empirical fixes ('real') or 'inferred'.
 #' @import data.table

@@ -62,17 +62,17 @@ testthat::test_that("patch data access function works", {
 
   # access testoutput summary
   data_access_summary <- watlastools::wat_get_patch_summary(resPatchData = testoutput,
-                                                       dataColumn = "data",
+                                                       dataColumn = "patchdata",
                                                        whichData = "summary")
 
   # access testoutput spatial
   data_access_sf <- watlastools::wat_get_patch_summary(resPatchData = testoutput,
-                                                  dataColumn = "data",
+                                                  dataColumn = "patchdata",
                                                   whichData = "spatial")
 
   # access testoutput spatial
   data_access_pt <- watlastools::wat_get_patch_summary(resPatchData = testoutput,
-                                                  dataColumn = "data",
+                                                  dataColumn = "patchdata",
                                                   whichData = "points")
 
   # test class summary
@@ -85,7 +85,7 @@ testthat::test_that("patch data access function works", {
   # test that names are present in output cols
   expnames <- c("id", "tide_number", "type", "patch", "time_mean",
                 "tidaltime_mean", "x_mean", "y_mean", "duration", "distInPatch", "waterlevel_mean",
-                "distBwPatch", "propfixes", "polygons")
+                "distBwPatch", "dispInPatch", "polygons")
   # test col names in data access
   for(i in 1:length(expnames)){
     testthat::expect_true(expnames[i] %in% colnames(data_access_sf),
@@ -118,7 +118,7 @@ testthat::test_that("residence patch construction works on artificial data", {
   # test that names are present in output cols
   expnames <- c("id", "tide_number", "type", "patch", "time_mean",
                 "tidaltime_mean", "x_mean", "y_mean", "duration", "distInPatch",
-                "distBwPatch", "propfixes")
+                "distBwPatch", "dispInPatch")
   for(i in 1:length(expnames)){
     testthat::expect_true(expnames[i] %in% colnames(testoutput),
                           info = glue::glue('{expnames[i]} expected in output but not produced'))
@@ -126,12 +126,12 @@ testthat::test_that("residence patch construction works on artificial data", {
 
   # access testoutput summary
   data_access_summary <- watlastools::wat_get_patch_summary(resPatchData = testoutput,
-                                                       dataColumn = "data",
+                                                       dataColumn = "patchdata",
                                                        whichData = "summary")
 
   # access testoutput summary
   data_access_spatial <- watlastools::wat_get_patch_summary(resPatchData = testoutput,
-                                                       dataColumn = "data",
+                                                       dataColumn = "patchdata",
                                                        whichData = "spatial")
 
   # test class summary

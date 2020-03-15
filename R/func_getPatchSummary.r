@@ -8,7 +8,7 @@
 #' @export
 #'
 wat_get_patch_summary = function(resPatchData,
-                            dataColumn = "data",
+                            dataColumn = "patchdata",
                             whichData = "summary")
 {
   data <- NULL
@@ -25,14 +25,15 @@ wat_get_patch_summary = function(resPatchData,
   if(whichData %in% c("summary", "summary"))
   {
     resPatchData <- sf::st_drop_geometry(resPatchData)
-    resPatchData <- dplyr::select(resPatchData, -data)
+    resPatchData[, dataColumn] <- NULL
     return(resPatchData)
   }
 
   # return only spatial summary if requested
   if(whichData %in% c("spatial","Spatial"))
   {
-    thisdata <- dplyr::select(resPatchData, -data)
+    resPatchData[, dataColumn] <- NULL
+    thisdata <- resPatchData
     thisdata <- sf::st_as_sf(thisdata, sf_column_name = "polygons")
     thisdata <- sf::st_cast(thisdata, "MULTIPOLYGON")
     return(thisdata)

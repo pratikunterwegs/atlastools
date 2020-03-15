@@ -24,12 +24,12 @@ testthat::test_that("patch calc on empirical data", {
 
   # do tests
   # test that the sf output class is at least sf
-  testthat::expect_s3_class(object = testoutput, class = c("sf", "data.frame"))
+  testthat::expect_s3_class(object = testoutput, class = c("sf", "data.frame", "data.table"))
 
   # test that names are present in output cols
   expnames <- c("id", "tide_number", "type", "patch", "time_mean",
                 "tidaltime_mean", "x_mean", "y_mean", "duration", "distInPatch",
-                "distBwPatch", "propfixes", "polygons")
+                "distBwPatch",  "dispInPatch", "polygons")
   for(i in 1:length(expnames)){
     testthat::expect_true(expnames[i] %in% colnames(testoutput),
                           info = glue::glue('{expnames[i]} expected in output but not produced'))

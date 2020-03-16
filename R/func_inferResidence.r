@@ -1,4 +1,4 @@
-#' segPath2
+#' Infer residence patches from gaps in the canonical data.
 #'
 #' @param df A dataframe of recurse analysis, or must include, in addition to x, y and time columns, a residence time column named resTime, id, and tide_number, a tidaltime column named tidaltime.
 #' @param infResTime A numeric giving the time limit in minutes against which residence time is compared.

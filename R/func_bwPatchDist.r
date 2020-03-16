@@ -1,4 +1,4 @@
-#' betweenPatchDistance
+#' Get distance between patches, last point of N to first point of N+1.
 #'
 #' @param df A dataframe of or extending the class data.frame. This must contain two pairs of coordinates, the start and end X and Y coordinates of a feature.
 #' @param x1 The first X coordinate or longitude; for inter-patch distances, this is the last coordinate (X_end) of a patch n0.

@@ -2,7 +2,7 @@
 % Please edit documentation in R/func_trajBwPatch.r
 \name{wat_patch_traj}
 \alias{wat_patch_traj}
-\title{patchTraj}
+\title{Get sf-based multiline geometries of movements between patches.}
 \usage{
 wat_patch_traj(df, x1 = "x_end", x2 = "x_start", y1 = "y_end",
   y2 = "y_start")
@@ -22,5 +22,5 @@ wat_patch_traj(df, x1 = "x_end", x2 = "x_start", y1 = "y_end",
 An \code{sf MULTILINESTRING} object representing the linear path between N patches, starting at the end point of the first patch, and ending at the first point of the Nth patch.
 }
 \description{
-patchTraj
+Get sf-based multiline geometries of movements between patches.
 }

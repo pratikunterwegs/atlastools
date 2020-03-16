@@ -2,7 +2,7 @@
 % Please edit documentation in R/func_simpleDist.r
 \name{wat_simple_dist}
 \alias{wat_simple_dist}
-\title{wat_simple_dist}
+\title{A fast way to calculate euclidean distances between successive points.}
 \usage{
 wat_simple_dist(df, x = "x", y = "y")
 }
@@ -17,5 +17,5 @@ wat_simple_dist(df, x = "x", y = "y")
 Returns a vector of distances between consecutive points.
 }
 \description{
-wat_simple_dist
+A fast way to calculate euclidean distances between successive points.
 }

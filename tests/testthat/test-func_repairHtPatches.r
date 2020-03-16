@@ -2,7 +2,7 @@ context("repairing high tide patches")
 testthat::test_that("high tide repair works", {
 
   # read in data
-  files_list <- list.files("tests/testdata/", pattern = "435_", full.names = T)
+  files_list <- list.files("../testdata/", pattern = "435_", full.names = T)
   data_list <- lapply(files_list, fread)
 
   # assume all patches are real

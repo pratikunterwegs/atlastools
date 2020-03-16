@@ -1,4 +1,4 @@
-#' runApp
+#' Run Shiny app to run examples of the patch functions.
 #'
 #' @return Opens a shiny app that allows tweaking of patch construction parameters.
 #' @export

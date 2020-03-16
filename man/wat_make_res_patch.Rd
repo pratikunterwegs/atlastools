@@ -2,7 +2,7 @@
 % Please edit documentation in R/func_makeResPatch.r
 \name{wat_make_res_patch}
 \alias{wat_make_res_patch}
-\title{makeResPatch}
+\title{Construct residence patches from classified residence data.}
 \usage{
 wat_make_res_patch(somedata, bufferSize = 10, spatIndepLim = 100,
   tempIndepLim = 30, restIndepLim = 30, minFixes = 3)
@@ -24,5 +24,5 @@ wat_make_res_patch(somedata, bufferSize = 10, spatIndepLim = 100,
 A data.frame extension object. This dataframe has the added column \code{resPatch} based on cumulative patch summing. Depending on whether \code{inferPatches = TRUE}, the dataframe has additional inferred points. An additional column is created in each case, indicating whether the data are empirical fixes ('real') or 'inferred'.
 }
 \description{
-makeResPatch
+Construct residence patches from classified residence data.
 }

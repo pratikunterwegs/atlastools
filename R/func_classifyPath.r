@@ -1,4 +1,4 @@
-#' classifyPath
+#' Classify points as residence points based on residence time.
 #'
 #' @param somedata A data frame which must have a column for the residence time at each point.
 #' @param resTimeLimit A numeric giving the time limit in minutes against which residence time is compared.

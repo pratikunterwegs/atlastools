@@ -2,7 +2,7 @@
 % Please edit documentation in R/func_getPatchSummary.r
 \name{wat_get_patch_summary}
 \alias{wat_get_patch_summary}
-\title{getPatchData}
+\title{Get derived data from residence patch construction: patch summaries, sf-based patches, or raw points with patch numbers.}
 \usage{
 wat_get_patch_summary(resPatchData, dataColumn = "patchdata",
   whichData = "summary")
@@ -18,5 +18,5 @@ wat_get_patch_summary(resPatchData, dataColumn = "patchdata",
 An object of type \code{sf} or \code{tibble} depending on which data is requested.
 }
 \description{
-getPatchData
+Get derived data from residence patch construction: patch summaries, sf-based patches, or raw points with patch numbers.
 }

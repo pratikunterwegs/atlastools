@@ -2,7 +2,7 @@
 % Please edit documentation in R/func_runApp.r
 \name{wat_run_patch_vis_app}
 \alias{wat_run_patch_vis_app}
-\title{runApp}
+\title{Run Shiny app to run examples of the patch functions.}
 \usage{
 wat_run_patch_vis_app()
 }
@@ -10,5 +10,5 @@ wat_run_patch_vis_app()
 Opens a shiny app that allows tweaking of patch construction parameters.
 }
 \description{
-runApp
+Run Shiny app to run examples of the patch functions.
 }

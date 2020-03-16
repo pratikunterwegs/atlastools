@@ -2,7 +2,7 @@
 % Please edit documentation in R/func_inferResidence.r
 \name{wat_infer_residence}
 \alias{wat_infer_residence}
-\title{segPath2}
+\title{Infer residence patches from gaps in the canonical data.}
 \usage{
 wat_infer_residence(df, infResTime = 2, infPatchTimeDiff = 30,
   infPatchSpatDiff = 100)
@@ -20,5 +20,5 @@ wat_infer_residence(df, infResTime = 2, infPatchTimeDiff = 30,
 A data.frame extension object. This dataframe has additional inferred points, indicated by the additional column for empirical fixes ('real') or 'inferred'.
 }
 \description{
-segPath2
+Infer residence patches from gaps in the canonical data.
 }

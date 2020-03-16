@@ -1,4 +1,4 @@
-#' getPatchData
+#' Get derived data from residence patch construction: patch summaries, sf-based patches, or raw points with patch numbers.
 #'
 #' @param resPatchData A tibble with a nested list column of the raw data underlying each patch. This column is specified in the argument \code{dataColumn}
 #' @param whichData Which data to return, the raw data underlying the patch, or a spatial features object with only the patch summary.

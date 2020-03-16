@@ -2,7 +2,7 @@
 % Please edit documentation in R/func_getData.r
 \name{wat_get_data}
 \alias{wat_get_data}
-\title{getData}
+\title{Get data from the NIOZ servers. Untested, unlikely to work off the NIOZ network.}
 \usage{
 wat_get_data(tag, tracking_time_start, tracking_time_end,
   tag_prefix = "31001000", database = "db", host = "abtdb1.nioz.nl",
@@ -29,5 +29,5 @@ wat_get_data(tag, tracking_time_start, tracking_time_end,
 A dataframe of agent positions, filtered between the required tracking times.
 }
 \description{
-getData
+Get data from the NIOZ servers. Untested, unlikely to work off the NIOZ network.
 }

@@ -2,7 +2,7 @@
 % Please edit documentation in R/func_bwPatchDist.r
 \name{wat_bw_patch_dist}
 \alias{wat_bw_patch_dist}
-\title{betweenPatchDistance}
+\title{Get distance between patches, last point of N to first point of N+1.}
 \usage{
 wat_bw_patch_dist(df, x1 = "x_end", x2 = "x_start", y1 = "y_end",
   y2 = "y_start")
@@ -22,5 +22,5 @@ wat_bw_patch_dist(df, x1 = "x_end", x2 = "x_start", y1 = "y_end",
 A numeric vector of the length of the number of patches, or rows in the input dataframe. If the input dataframe has only a single row, the vector has a length of one, and its only element is 0. In all other cases, the vector has as its elements \code{NA}, followed by n-1 distances, where n is the number of rows.
 }
 \description{
-betweenPatchDistance
+Get distance between patches, last point of N to first point of N+1.
 }

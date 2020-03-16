@@ -1,4 +1,4 @@
-#' patchTraj
+#' Get sf-based multiline geometries of movements between patches.
 #'
 #' @param df A dataframe with at least 2 pairs of coordinate columns, such as X_end Y_end, X_start, Y_start.
 #' @param x1 Coordinate column for the beginning X coordinate of the linestring; this should be the last X coordinate of each patch if inter-patch linestrngs are to be constructed. It is possible to use the X_start coordinate, but this will lead to issues and nonsensical output at this point.

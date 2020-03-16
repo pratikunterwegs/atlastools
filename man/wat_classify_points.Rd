@@ -2,7 +2,7 @@
 % Please edit documentation in R/func_classifyPath.r
 \name{wat_classify_points}
 \alias{wat_classify_points}
-\title{classifyPath}
+\title{Classify points as residence points based on residence time.}
 \usage{
 wat_classify_points(somedata, resTimeLimit = 2)
 }
@@ -15,5 +15,5 @@ wat_classify_points(somedata, resTimeLimit = 2)
 A data.frame extension object, which retains only points classified as residence points if residence time is below \code{resTimeLimit} over \code{travelSeg} points.
 }
 \description{
-classifyPath
+Classify points as residence points based on residence time.
 }

@@ -1,4 +1,4 @@
-#' getData
+#' Get data from the NIOZ servers. Untested, unlikely to work off the NIOZ network.
 #'
 #' @param tag A three digit numeric representing the ToA tag.
 #' @param tracking_time_start Character representation of time (Central European Time, +1 UTC) from which start point data should be retrieved.

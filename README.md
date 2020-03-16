@@ -1,4 +1,4 @@
-# WATLAS Tools
+# [WATLAS Tools](https://pratikunterwegs.github.io/watlastools/)
 
 **Functions to handle data from the Wadden Sea ATLAS project**
 

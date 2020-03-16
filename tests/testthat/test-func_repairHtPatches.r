@@ -12,21 +12,34 @@ testthat::test_that("high tide repair works", {
     df <- wat_make_res_patch(somedata = df)
   })
 
-  repaired_data <- watlastools::wat_re
+  repaired_data <- watlastools::wat_repair_ht_patches(patch_data_list = data_list)
 
   # do tests
   # test that the sf output class is at least sf
-  testthat::expect_s3_class(object = testoutput, class = c("sf", "data.frame", "data.table"))
+  testthat::expect_s3_class(object = repaired_data, class = c("sf", "data.frame", "data.table"))
 
   # test that names are present in output cols
   expnames <- c("id", "tide_number", "type", "patch", "time_mean",
                 "tidaltime_mean", "x_mean", "y_mean", "duration", "distInPatch",
                 "distBwPatch",  "dispInPatch", "polygons")
   for(i in 1:length(expnames)){
-    testthat::expect_true(expnames[i] %in% colnames(testoutput),
+    testthat::expect_true(expnames[i] %in% colnames(repaired_data),
                           info = glue::glue('{expnames[i]} expected in output but not produced'))
   }
 
   # check that data are ordered in time
-  testthat::expect_gt(min(as.numeric(diff(testoutput$time_mean)), na.rm = TRUE), 0)
+  testthat::expect_gt(min(as.numeric(diff(repaired_data$time_mean)), na.rm = TRUE), 0)
+
+  # check that patches across tidal cycles are indpendent
+  data <- rbindlist(data_list)
+  setDF(data)
+  data <- dplyr::group_by(data, tide_number) %>% dplyr::filter(patch == max(patch) | patch == min(patch))
+  time_end <- data$time_end; time_end <- time_end[2:length(time_end)]
+  time_start <- data$time_start; time_start <- time_start[1:length(time_start)-1]
+
+  temp_indep <- c(NA, as.numeric((time_end-time_start)/60)) >= 30
+  spat_indep <- wat_bw_patch_dist(data) >= 100
+
+  testthat::expect_true(all(temp_indep|spat_indep))
+
 })

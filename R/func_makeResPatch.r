@@ -1,4 +1,4 @@
-#' getResPatch
+#' makeResPatch
 #'
 #' @param somedata A dataframe of values of any class that is or extends data.frame. The dataframe must contain at least two spatial coordinates, \code{x} and \code{y}, and a temporal coordinate, \code{time}. The names of columns specifying these can be passed as arguments below.
 #' @param bufferSize A numeric value specifying the radius of the buffer to be considered around each coordinate point. May be thought of as the distance that an individual can access, assess, or otherwise cover when at a discrete point in space.
@@ -25,7 +25,7 @@ wat_make_res_patch <- function(somedata,
   resTime <- resTime_mean <- resTimeDiff <- area <- NULL
   x_end <- y_end <- x_start <- y_start <- tidaltime_mean <- NULL
   spatdiff <- newpatch <- distInPatch <- distBwPatch <- dispInPatch <- NULL
-  waterlevel <- NULL
+  waterlevel <- polygons <- NULL
   # check somedata is a data.frame and has a resTime column
   {
     # check if data frame
@@ -219,13 +219,6 @@ wat_make_res_patch <- function(somedata,
 
       # remove patch summary from some data and add temp data, then del tempdata
       somedata <- merge(somedata, tempdata, by = c("id", "tide_number", "patch"))
-
-      # make spatial polygons
-      {
-        polygons <- purrr::reduce(somedata$polygons, c)
-        somedata$polygons <- polygons
-        somedata <- sf::st_as_sf(somedata, sf_column_name = "polygons")
-      }
 
       return(somedata)
     },

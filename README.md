@@ -1,4 +1,4 @@
-# WATLAS Utilities
+# WATLAS Tools
 
 **Functions to handle data from the Wadden Sea ATLAS project**
 

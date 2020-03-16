@@ -5,17 +5,19 @@
 #' @param dataColumn Which nested list column contains the data.
 #'
 #' @return An object of type \code{sf} or \code{tibble} depending on which data is requested.
+#' @import data.table
 #' @export
 #'
 wat_get_patch_summary = function(resPatchData,
                             dataColumn = "patchdata",
                             whichData = "summary")
 {
-  data <- NULL
+  data <- id <- tide_number <- patch <- patchdata <- NULL
   # check somedata is a data.frame and has a resTime column
   {
     assertthat::assert_that(is.data.frame(resPatchData),
-                            msg = glue::glue('getPatchData: input not a dataframe object, has class {stringr::str_flatten(class(resPatchData), collapse = " ")}!'))
+                msg = glue::glue('getPatchData: input not a dataframe object,
+                has class {stringr::str_flatten(class(resPatchData), collapse = " ")}!'))
     assertthat::assert_that(dataColumn %in% names(resPatchData),
                             msg = "getPatchData: data column not present in input!")
 
@@ -24,7 +26,6 @@ wat_get_patch_summary = function(resPatchData,
   # return only summary if requested
   if(whichData %in% c("summary", "summary"))
   {
-    resPatchData <- sf::st_drop_geometry(resPatchData)
     resPatchData[, dataColumn] <- NULL
     return(resPatchData)
   }
@@ -33,21 +34,24 @@ wat_get_patch_summary = function(resPatchData,
   if(whichData %in% c("spatial","Spatial"))
   {
     resPatchData[, dataColumn] <- NULL
-    thisdata <- resPatchData
-    thisdata <- sf::st_as_sf(thisdata, sf_column_name = "polygons")
-    thisdata <- sf::st_cast(thisdata, "MULTIPOLYGON")
-    return(thisdata)
+    # make spatial polygons
+    {
+      polygons <- purrr::reduce(resPatchData$polygons, c)
+      resPatchData$polygons <- polygons
+      resPatchData <- sf::st_as_sf(resPatchData, sf_column_name = "polygons")
+    }
+    resPatchData <- sf::st_cast(resPatchData, "MULTIPOLYGON")
+    return(resPatchData)
   }
 
   if(whichData %in% c("points"))
   {
-
-    this_data <- sf::st_drop_geometry(resPatchData)
-    rm(resPatchData)
-    # this_data <- dplyr::select(this_data, -polygons)
-    this_data <- tidyr::unnest(this_data, cols = dataColumn,
-                               names_repair = "universal")
-    return(this_data)
+    resPatchData[,'polygons'] <- NULL
+    resPatchData <- resPatchData[, c("id", "tide_number", "patch", dataColumn),
+                                 with=FALSE]
+    resPatchData <- resPatchData[, unlist(patchdata, recursive = FALSE),
+                         by = .(id, tide_number, patch)]
+    return(resPatchData)
 
   }
 

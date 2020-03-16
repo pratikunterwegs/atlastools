@@ -12,7 +12,7 @@ wat_get_patch_summary = function(resPatchData,
                             dataColumn = "patchdata",
                             whichData = "summary")
 {
-  data <- NULL
+  data <- id <- tide_number <- patch <- NULL
   # check somedata is a data.frame and has a resTime column
   {
     assertthat::assert_that(is.data.frame(resPatchData),

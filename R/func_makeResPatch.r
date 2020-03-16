@@ -220,13 +220,6 @@ wat_make_res_patch <- function(somedata,
       # remove patch summary from some data and add temp data, then del tempdata
       somedata <- merge(somedata, tempdata, by = c("id", "tide_number", "patch"))
 
-      # make spatial polygons
-      {
-        polygons <- purrr::reduce(somedata$polygons, c)
-        somedata$polygons <- polygons
-        somedata <- sf::st_as_sf(somedata, sf_column_name = "polygons")
-      }
-
       return(somedata)
     },
     # null error function, with option to collect data on errors

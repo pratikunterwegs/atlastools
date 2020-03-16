@@ -1,4 +1,4 @@
-#' repair high tide patches
+#' A function to repair high tide data.
 #'
 #' @param patch_data_list A list of data.tables, each the output of make_res_patch. Must have an sfc geometry column.
 #' @param spatIndepLim The spatial independence limit.
@@ -9,13 +9,21 @@
 #' @import data.table
 #' @export
 #'
-#'
 wat_repair_ht_patches <- function(patch_data_list,
                                   spatIndepLim = 100,
                                   tempIndepLim = 30,
                                   bufferSize = 10){
 
   # set gloabl variables to NULL
+  patch <- polygons <- tide_number <- NULL
+  time_start <- time_end <- x_start <- NULL
+  x_end <- y_start <- y_end <- newpatch <- NULL
+  timediff <- spatdiff <- new_tide_number <- NULL
+  patchdata <- id <- patchSummary <- x <- NULL
+  y <- resTime <- tidaltime <- waterlevel <- NULL
+  distInPatch <- distBwPatch <- dispInPatch <- NULL
+  type <- duration <- area <- nfixes <- time <- NULL
+
   # check data assumptions
   {
     # check for dataframe and sf object
@@ -74,7 +82,7 @@ wat_repair_ht_patches <- function(patch_data_list,
     # which patches are independent?
     # assign NA as tide number of non-independent patches
     # and to the patch number of non-indep patches
-    edge_data_summary[,newpatch := any(timediff > tempIndepLim,
+    edge_data_summary[,newpatch := (timediff > tempIndepLim |
                                               spatdiff > spatIndepLim)]
     edge_data_summary[newpatch == FALSE, "tide_number"] <- NA
     edge_data_summary[,newpatch := ifelse(newpatch == TRUE, patch, NA)]
@@ -168,6 +176,9 @@ wat_repair_ht_patches <- function(patch_data_list,
   # reattach edge cases to regular patch data and set order by start time
   data <- rbind(data, edge_data)
   setorder(data, time_start)
+
+  # fix distance between patches
+
 
   # fix patch numbers in tides
   data[,patch:=1:length(nfixes), by=.(tide_number)]

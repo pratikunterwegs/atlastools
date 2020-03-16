@@ -31,15 +31,12 @@ testthat::test_that("high tide repair works", {
   testthat::expect_gt(min(as.numeric(diff(repaired_data$time_mean)), na.rm = TRUE), 0)
 
   # check that patches across tidal cycles are indpendent
-  data <- rbindlist(data_list)
-  setDF(data)
-  data <- dplyr::group_by(data, tide_number) %>% dplyr::filter(patch == max(patch) | patch == min(patch))
-  time_end <- data$time_end; time_end <- time_end[2:length(time_end)]
-  time_start <- data$time_start; time_start <- time_start[1:length(time_start)-1]
+  time_end <- repaired_data$time_end; time_end <- time_end[2:length(time_end)]
+  time_start <- repaired_data$time_start; time_start <- time_start[1:length(time_start)-1]
 
   temp_indep <- c(NA, as.numeric((time_end-time_start)/60)) >= 30
-  spat_indep <- wat_bw_patch_dist(data) >= 100
+  spat_indep <- wat_bw_patch_dist(repaired_data) >= 100
 
-  testthat::expect_true(all(temp_indep|spat_indep))
+  testthat::expect_true(all(purrr::map2_int(temp_indep, spat_indep, any)[-1]))
 
 })

@@ -2,7 +2,7 @@
 % Please edit documentation in R/func_repair_ht_patches.r
 \name{wat_repair_ht_patches}
 \alias{wat_repair_ht_patches}
-\title{repair high tide patches}
+\title{A function to repair high tide data.}
 \usage{
 wat_repair_ht_patches(patch_data_list, spatIndepLim = 100,
   tempIndepLim = 30, bufferSize = 10)
@@ -20,5 +20,5 @@ wat_repair_ht_patches(patch_data_list, spatIndepLim = 100,
 A datatable with repaired high tide patches.
 }
 \description{
-repair high tide patches
+A function to repair high tide data.
 }

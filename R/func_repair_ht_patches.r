@@ -27,7 +27,7 @@ wat_repair_ht_patches <- function(patch_data_list,
               collapse = " ")}!'))
 
     assertthat::assert_that(min(c(bufferSize, spatIndepLim,
-                                  tempIndepLim, minFixes)) > 0,
+                                  tempIndepLim)) > 0,
                 msg = "wat_repair_ht: function needs positive arguments")
   }
 

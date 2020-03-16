@@ -25,7 +25,7 @@ wat_make_res_patch <- function(somedata,
   resTime <- resTime_mean <- resTimeDiff <- area <- NULL
   x_end <- y_end <- x_start <- y_start <- tidaltime_mean <- NULL
   spatdiff <- newpatch <- distInPatch <- distBwPatch <- dispInPatch <- NULL
-  waterlevel <- NULL
+  waterlevel <- polygons <- NULL
   # check somedata is a data.frame and has a resTime column
   {
     # check if data frame

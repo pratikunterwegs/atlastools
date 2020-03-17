@@ -1,1 +1,8 @@
 destination: docs
+pandoc: '2.5'
+pkgdown: 1.4.1
+pkgdown_sha: ~
+articles: []
+template:
+  params:
+    bootswatch: darkly

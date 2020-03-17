@@ -5,4 +5,4 @@ pkgdown_sha: ~
 articles: []
 template:
   params:
-    bootswatch: darkly
+    bootswatch: sandstone

@@ -3,3 +3,7 @@
 pre, code {
   font-family: "Fira Code", Consolas, Inconsolata, monospace;
 }
+
+a {
+  color: steelblue;
+}

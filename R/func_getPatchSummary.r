@@ -27,6 +27,8 @@ wat_get_patch_summary = function(resPatchData,
   if(whichData %in% c("summary", "summary"))
   {
     resPatchData[, dataColumn] <- NULL
+    resPatchData[, polygons:= NULL]
+    resPatchData <- resPatchData[,lapply(.SD, unlist)]
     return(resPatchData)
   }
 

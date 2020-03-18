@@ -1,16 +1,15 @@
 #' Infer residence patches from gaps in the canonical data.
 #'
 #' @param df A dataframe of recurse analysis, or must include, in addition to x, y and time columns, a residence time column named resTime, id, and tide_number, a tidaltime column named tidaltime.
-#' @param infResTime A numeric giving the time limit in minutes against which residence time is compared.
 #' @param infPatchTimeDiff A numeric duration in minutes, of the minimum time difference between two points, above which, it is assumed worthwhile to examine whether there is a missing residence patch to be inferred.
 #' @param infPatchSpatDiff A numeric distance in metres, of the maximum spatial distance between two points, below which it may be assumed few extreme movements took place between them.
+#'
 #' @return A data.frame extension object. This dataframe has additional inferred points, indicated by the additional column for empirical fixes ('real') or 'inferred'.
 #' @import data.table
 #' @export
 #'
 
 wat_infer_residence <- function(df,
-                               infResTime = 2,
                                infPatchTimeDiff = 30,
                                infPatchSpatDiff = 100){
 
@@ -24,7 +23,8 @@ wat_infer_residence <- function(df,
 
   # check if data frame
   assertthat::assert_that(is.data.frame(df),
-                          msg = glue::glue('inferResidence: input not a dataframe object, has class {stringr::str_flatten(class(df), collapse = " ")}!'))
+        msg = glue::glue('inferResidence: input not a dataframe object,
+        has class {stringr::str_flatten(class(df), collapse = " ")}!'))
 
   # read the file in
   {
@@ -75,12 +75,12 @@ wat_infer_residence <- function(df,
 
   # subset the data to collect only the first two points of an inferred patch
   # these are the first and last points of a travel trajectory
-  tempdf[,posId := 1:(.N), by = "infPatch"]
+  tempdf[,posId := seq(1, .N), by = "infPatch"]
   # remove NA patches
   tempdf <- tempdf[posId <= 2 & !is.na(infPatch),]
   # now count the max posId per patch, if less than 2, merge with next patch
-  tempdf[,npoints:=max(posId), by="infPatch"]
-  tempdf[,infPatch:=ifelse(npoints == 2, yes = infPatch, no = infPatch+1)]
+  tempdf[,npoints := max(posId), by="infPatch"]
+  tempdf[,infPatch := ifelse(npoints == 2, yes = infPatch, no = infPatch+1)]
   tempdf <- tempdf[npoints >= 2,]
   # recount the number of positions, each inferred patch must have minimum 2 pos
   {
@@ -89,9 +89,6 @@ wat_infer_residence <- function(df,
   }
   # remove unn columns
   set(tempdf, ,c("posId","npoints"), NULL)
-
-  # handle cases where there are inferred patches
-
 
   # add type to real data
   df[,type:="real"]
@@ -104,12 +101,14 @@ wat_infer_residence <- function(df,
     infPatchDf <- tempdf[,nfixes:=length(seq(from = min(time, na.rm = T),
                                              to = max(time, na.rm = T), by = 3)),
                          by = c("id", "tide_number", "infPatch")]
+
     # an expectation of integer type is created in time
     infPatchDf <- infPatchDf[,.(time = mean(time),
                                 x = mean(x),
                                 y = mean(y),
-                                resTime = infResTime),
+                                resTime = mean(timediff)),
                              by = c("id", "tide_number", "infPatch","nfixes")]
+
     infPatchDf <- infPatchDf[infPatch > 0,]
     infPatchDf <- infPatchDf[,type:="inferred"]
 
@@ -122,9 +121,16 @@ wat_infer_residence <- function(df,
     df <- base::merge(df, infPatchDf, by = intersect(names(df), names(infPatchDf)), all = T)
   }
 
-
   # sort by time
   data.table::setorder(df, time)
+  # remove coordidx
+  df[,`:=`(coordIdx = NULL, posID = NULL,
+           fpt = NULL, revisits = NULL,
+           temp_time = NULL)]
+
+  # fill tidal time and waterlevel
+  df[,`:=`(tidaltime = nafill(tidaltime, "locf"),
+           waterlevel = nafill(waterlevel, "locf"))]
 
   # check this has worked
   {

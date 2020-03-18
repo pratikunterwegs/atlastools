@@ -7,21 +7,29 @@ testthat::test_that("high tide repair works", {
 
   # assume all patches are real
   data_list <- lapply(data_list, function(df){
-    df[,type:='real']
-    df <- wat_classify_points(somedata = df)
-    df <- wat_make_res_patch(somedata = df)
+    df <- wat_infer_residence(df)
+    df <- wat_classify_points(somedata = df, resTimeLimit = 2)
+    df <- wat_make_res_patch(somedata = df,
+                             bufferSize = 10,
+                             spatIndepLim = 100,
+                             tempIndepLim = 30,
+                             restIndepLim = 30,
+                             minFixes = 3)
   })
 
-  repaired_data <- wat_repair_ht_patches(patch_data_list = data_list)
+  repaired_data <- wat_repair_ht_patches(patch_data_list = data_list,
+                                         spatIndepLim = 100,
+                                         tempIndepLim = 30,
+                                         bufferSize = 10)
 
   # do tests
   # test that the sf output class is at least sf
-  testthat::expect_s3_class(object = repaired_data, class = c("sf", "data.frame", "data.table"))
+  testthat::expect_s3_class(object = repaired_data, class = c("data.frame", "data.table"))
 
   # test that names are present in output cols
   expnames <- c("id", "tide_number", "type", "patch", "time_mean",
                 "tidaltime_mean", "x_mean", "y_mean", "duration", "distInPatch",
-                "distBwPatch",  "dispInPatch", "polygons")
+                "distBwPatch",  "dispInPatch")
   for(i in 1:length(expnames)){
     testthat::expect_true(expnames[i] %in% colnames(repaired_data),
                           info = glue::glue('{expnames[i]} expected in output but not produced'))

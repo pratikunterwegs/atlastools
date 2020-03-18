@@ -6,7 +6,6 @@ testthat::test_that("residence inference works", {
 
   # run function
   testoutput <- wat_infer_residence(df = somedata,
-                                         infResTime = 2,
                                          infPatchTimeDiff = 1800,
                                          infPatchSpatDiff = 100)
   # do tests

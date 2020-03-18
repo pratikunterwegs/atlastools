@@ -30,7 +30,8 @@ wat_make_res_patch <- function(somedata,
   {
     # check if data frame
     assertthat::assert_that(is.data.frame(somedata),
-                            msg = glue::glue('getResPatch: input not a dataframe object, has class {stringr::str_flatten(class(somedata), collapse = " ")}!'))
+          msg = glue::glue('getResPatch: input not a dataframe object,
+          has class {stringr::str_flatten(class(somedata), collapse = " ")}!'))
 
     assertthat::assert_that(min(as.numeric(diff(somedata$time))) >= 0,
                             msg = "wat_make_res_patch: not ordered in time!")
@@ -90,7 +91,7 @@ wat_make_res_patch <- function(somedata,
         somedata <- somedata[,nfixes := .N, by = c("id", "tide_number", "patch")]
 
         # remove patches with 2 or fewer points
-        somedata <- somedata[nfixes >= minFixes, ]
+        somedata <- somedata[nfixes >= minFixes | type == "inferred", ]
         somedata[,nfixes:=NULL]
       }
 
@@ -215,6 +216,9 @@ wat_make_res_patch <- function(somedata,
           perimeter <- sf::st_length(boundary)
           return(as.numeric(perimeter)^2)
         }))]
+
+        # remove polygons
+        somedata[,polygons := NULL]
       }
 
       # remove patch summary from some data and add temp data, then del tempdata

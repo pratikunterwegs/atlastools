@@ -43,7 +43,7 @@ wat_repair_ht_patches <- function(patch_data_list,
     namesReq <- c("id", "tide_number", "patch",
                   "x_start", "y_start", "x_end", "y_end",
                   "time_start", "time_mean", "time_end",
-                  "type", "polygons")
+                  "type")
 
   # convert variable units
   tempIndepLim <- tempIndepLim*60
@@ -61,6 +61,7 @@ wat_repair_ht_patches <- function(patch_data_list,
     # subset edge cases from main data
     edge_data <- data[data[,.I[patch == min(patch) | patch == max(patch)],
                            by = .(tide_number)]$V1]
+
     data <- data[data[,.I[patch != min(patch) & patch != max(patch)],
                  by = .(tide_number)]$V1]
 
@@ -91,8 +92,11 @@ wat_repair_ht_patches <- function(patch_data_list,
                                               new_tide_number, newpatch)]
 
     # merge summary with data
-    edge_data <- edge_data[, unlist(patchdata, recursive = FALSE),
-                           by = .(id, tide_number, patch)]
+    # make a temporary reeating seq of id, tide and patch
+    temp_ed <- edge_data[,.(id, tide_number, patch)]
+    temp_ed <- temp_ed[rep(seq_len(nrow(temp_ed)), purrr::map_int(edge_data$patchdata, nrow)),]
+    edge_data <- cbind(temp_ed, rbindlist(edge_data$patchdata))
+    rm(temp_ed)
 
     edge_data <- merge(edge_data, edge_data_summary,
                        by = c("tide_number", "patch"))
@@ -103,6 +107,7 @@ wat_repair_ht_patches <- function(patch_data_list,
   {
     edge_data[,`:=`(tide_number = new_tide_number, new_tide_number=NULL,
                     patch = newpatch, newpatch=NULL)]
+
     edge_data <- edge_data[,.(list(.SD)), by=.(id, tide_number, patch)]
     setnames(edge_data, old = "V1", new = "patchdata")
 
@@ -128,6 +133,7 @@ wat_repair_ht_patches <- function(patch_data_list,
     # distance between patches
     tempdata <- edge_data[,unlist(patchSummary, recursive = FALSE),
                          by = .(id, tide_number, patch)]
+
     edge_data[,patchSummary:=NULL]
     edge_data[,distBwPatch := watlastools::wat_bw_patch_dist(df = tempdata,
                                                             x1 = "x_end", x2 = "x_start",
@@ -166,16 +172,19 @@ wat_repair_ht_patches <- function(patch_data_list,
     }))]
   }
 
+  # remove polygons here too
+  edge_data[, polygons := NULL]
+
   # remove patch summary from some data and add temp data, then del tempdata
   edge_data <- merge(edge_data, tempdata, by = c("id", "tide_number", "patch"))
-  edge_data[,nfixes:=unlist(lapply(patchdata, nrow))]
+  edge_data[,nfixes := unlist(lapply(patchdata, nrow))]
 
   # reattach edge cases to regular patch data and set order by start time
   data <- rbind(data, edge_data)
   setorder(data, time_start)
 
   # fix distance between patches
-
+  data[, distBwPatch := wat_bw_patch_dist(data)]
 
   # fix patch numbers in tides
   data[,patch:=1:length(nfixes), by=.(tide_number)]

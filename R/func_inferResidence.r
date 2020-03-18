@@ -24,7 +24,8 @@ wat_infer_residence <- function(df,
 
   # check if data frame
   assertthat::assert_that(is.data.frame(df),
-                          msg = glue::glue('inferResidence: input not a dataframe object, has class {stringr::str_flatten(class(df), collapse = " ")}!'))
+        msg = glue::glue('inferResidence: input not a dataframe object,
+        has class {stringr::str_flatten(class(df), collapse = " ")}!'))
 
   # read the file in
   {

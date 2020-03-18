@@ -3,7 +3,7 @@ testthat::test_that("high tide repair works", {
 
   # read in data
   files_list <- list.files("../testdata/", pattern = "413_", full.names = T)
-  data_list <- lapply(files_list[1:5], fread)
+  data_list <- lapply(files_list[1:10], fread)
 
   # assume all patches are real
   data_list <- lapply(data_list, function(df){

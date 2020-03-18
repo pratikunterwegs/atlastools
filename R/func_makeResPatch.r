@@ -216,6 +216,9 @@ wat_make_res_patch <- function(somedata,
           perimeter <- sf::st_length(boundary)
           return(as.numeric(perimeter)^2)
         }))]
+
+        # remove polygons
+        somedata[,polygons := NULL]
       }
 
       # remove patch summary from some data and add temp data, then del tempdata

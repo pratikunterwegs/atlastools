@@ -1,16 +1,15 @@
 #' Infer residence patches from gaps in the canonical data.
 #'
 #' @param df A dataframe of recurse analysis, or must include, in addition to x, y and time columns, a residence time column named resTime, id, and tide_number, a tidaltime column named tidaltime.
-#' @param infResTime A numeric giving the time limit in minutes against which residence time is compared.
 #' @param infPatchTimeDiff A numeric duration in minutes, of the minimum time difference between two points, above which, it is assumed worthwhile to examine whether there is a missing residence patch to be inferred.
 #' @param infPatchSpatDiff A numeric distance in metres, of the maximum spatial distance between two points, below which it may be assumed few extreme movements took place between them.
+#'
 #' @return A data.frame extension object. This dataframe has additional inferred points, indicated by the additional column for empirical fixes ('real') or 'inferred'.
 #' @import data.table
 #' @export
 #'
 
 wat_infer_residence <- function(df,
-                               infResTime = 2,
                                infPatchTimeDiff = 30,
                                infPatchSpatDiff = 100){
 
@@ -102,12 +101,14 @@ wat_infer_residence <- function(df,
     infPatchDf <- tempdf[,nfixes:=length(seq(from = min(time, na.rm = T),
                                              to = max(time, na.rm = T), by = 3)),
                          by = c("id", "tide_number", "infPatch")]
+
     # an expectation of integer type is created in time
     infPatchDf <- infPatchDf[,.(time = mean(time),
                                 x = mean(x),
                                 y = mean(y),
-                                resTime = infResTime*nfixes),
+                                resTime = mean(timediff)),
                              by = c("id", "tide_number", "infPatch","nfixes")]
+
     infPatchDf <- infPatchDf[infPatch > 0,]
     infPatchDf <- infPatchDf[,type:="inferred"]
 

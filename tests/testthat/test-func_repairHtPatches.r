@@ -7,12 +7,20 @@ testthat::test_that("high tide repair works", {
 
   # assume all patches are real
   data_list <- lapply(data_list, function(df){
-    df[,type:='real']
-    df <- wat_classify_points(somedata = df)
-    df <- wat_make_res_patch(somedata = df)
+    df <- wat_infer_residence(df)
+    df <- wat_classify_points(somedata = df, resTimeLimit = 2)
+    df <- wat_make_res_patch(somedata = df,
+                             bufferSize = 10,
+                             spatIndepLim = 100,
+                             tempIndepLim = 30,
+                             restIndepLim = 30,
+                             minFixes = 3)
   })
 
-  repaired_data <- wat_repair_ht_patches(patch_data_list = data_list)
+  repaired_data <- wat_repair_ht_patches(patch_data_list = data_list,
+                                         spatIndepLim = 100,
+                                         tempIndepLim = 30,
+                                         bufferSize = 10)
 
   # do tests
   # test that the sf output class is at least sf

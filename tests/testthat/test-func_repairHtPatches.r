@@ -29,7 +29,7 @@ testthat::test_that("high tide repair works", {
   # test that names are present in output cols
   expnames <- c("id", "tide_number", "type", "patch", "time_mean",
                 "tidaltime_mean", "x_mean", "y_mean", "duration", "distInPatch",
-                "distBwPatch",  "dispInPatch", "polygons")
+                "distBwPatch",  "dispInPatch")
   for(i in 1:length(expnames)){
     testthat::expect_true(expnames[i] %in% colnames(repaired_data),
                           info = glue::glue('{expnames[i]} expected in output but not produced'))

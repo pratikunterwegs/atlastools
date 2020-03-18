@@ -54,8 +54,11 @@ wat_repair_ht_patches <- function(patch_data_list,
   tempIndepLim <- tempIndepLim*60
 
   tryCatch({
+  
   # bind all datatable into a single datatable
+  data <- purrr::keep(patch_data_list, function(l) nrow(l) > 0)
   data <- rbindlist(patch_data_list)
+
 
 
   # select first and last rows from each tide_number

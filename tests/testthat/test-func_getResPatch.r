@@ -6,7 +6,6 @@ testthat::test_that("patch calc on empirical data", {
 
   # run function for patch inference
   inference_output <- watlastools::wat_infer_residence(somedata,
-                                                      infResTime = 2,
                                                       infPatchTimeDiff = 30,
                                                       infPatchSpatDiff = 100)
 
@@ -46,7 +45,6 @@ testthat::test_that("patch data access function works", {
 
   # run function for patch inference
   inference_output <- watlastools::wat_infer_residence(df = somedata,
-                                                      infResTime = 2,
                                                       infPatchTimeDiff = 30,
                                                       infPatchSpatDiff = 100)
 
@@ -61,18 +59,16 @@ testthat::test_that("patch data access function works", {
                                              tempIndepLim = 30)
 
   # access testoutput summary
-  data_access_summary <- watlastools::wat_get_patch_summary(resPatchData = testoutput,
-                                                       dataColumn = "patchdata",
-                                                       whichData = "summary")
+  copy1 <- copy2 <- copy3 <- testoutput
+  data_access_summary <- watlastools::wat_get_patch_summary(resPatchData = copy1,
+                                                      whichData = "summary")
 
   # access testoutput spatial
-  data_access_sf <- watlastools::wat_get_patch_summary(resPatchData = testoutput,
-                                                  dataColumn = "patchdata",
+  data_access_sf <- watlastools::wat_get_patch_summary(resPatchData = copy2,
                                                   whichData = "spatial")
 
   # access testoutput spatial
-  data_access_pt <- watlastools::wat_get_patch_summary(resPatchData = testoutput,
-                                                  dataColumn = "patchdata",
+  data_access_pt <- watlastools::wat_get_patch_summary(resPatchData = copy3,
                                                   whichData = "points")
 
   # test class summary

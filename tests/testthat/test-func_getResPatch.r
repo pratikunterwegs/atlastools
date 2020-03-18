@@ -97,48 +97,4 @@ testthat::test_that("patch data access function works", {
 
 })
 
-testthat::test_that("residence patch construction works on artificial data", {
-  # read in data and segment it
-  testdata <- data.table::fread("../testdata/test_revdata.csv")
-  # run function for patch inference
-  inference_output <- watlastools::wat_infer_residence(df = testdata,
-                                                      infResTime = 2,
-                                                      infPatchTimeDiff = 30,
-                                                      infPatchSpatDiff = 100)
-  # run function for classification
-  classified_output <- watlastools::wat_classify_points(somedata = inference_output)
-
-  # run function for patch construction
-  testoutput <- watlastools::wat_make_res_patch(somedata = classified_output,
-                                             bufferSize = 10,
-                                             spatIndepLim = 50,
-                                             tempIndepLim = 30)
-  # test that element one is a data.frame
-  testthat::expect_s3_class(object = testoutput, class = c("data.frame", "tbl", "sf"))
-  # test that names are present in output cols
-  expnames <- c("id", "tide_number", "type", "patch", "time_mean",
-                "tidaltime_mean", "x_mean", "y_mean", "duration", "distInPatch",
-                "distBwPatch", "dispInPatch")
-  for(i in 1:length(expnames)){
-    testthat::expect_true(expnames[i] %in% colnames(testoutput),
-                          info = glue::glue('{expnames[i]} expected in output but not produced'))
-  }
-
-  # access testoutput summary
-  data_access_summary <- watlastools::wat_get_patch_summary(resPatchData = testoutput,
-                                                       dataColumn = "patchdata",
-                                                       whichData = "summary")
-
-  # access testoutput summary
-  data_access_spatial <- watlastools::wat_get_patch_summary(resPatchData = testoutput,
-                                                       dataColumn = "patchdata",
-                                                       whichData = "spatial")
-
-  # test class summary
-  testthat::expect_s3_class(object = data_access_summary, class = c("data.frame", "tbl"))
-  # test class spatial
-  testthat::expect_s3_class(object = data_access_spatial, class = c("data.frame", "tbl", "sf"))
-
-})
-
 # ends here

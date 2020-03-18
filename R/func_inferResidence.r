@@ -120,9 +120,16 @@ wat_infer_residence <- function(df,
     df <- base::merge(df, infPatchDf, by = intersect(names(df), names(infPatchDf)), all = T)
   }
 
-
   # sort by time
   data.table::setorder(df, time)
+  # remove coordidx
+  df[,`:=`(coordIdx = NULL, posID = NULL,
+           fpt = NULL, revisits = NULL,
+           temp_time = NULL)]
+
+  # fill tidal time and waterlevel
+  df[,`:=`(tidaltime = nafill(tidaltime, "locf"),
+           waterlevel = nafill(waterlevel, "locf"))]
 
   # check this has worked
   {

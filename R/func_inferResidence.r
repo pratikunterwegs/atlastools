@@ -76,12 +76,12 @@ wat_infer_residence <- function(df,
 
   # subset the data to collect only the first two points of an inferred patch
   # these are the first and last points of a travel trajectory
-  tempdf[,posId := 1:(.N), by = "infPatch"]
+  tempdf[,posId := seq(1, .N), by = "infPatch"]
   # remove NA patches
   tempdf <- tempdf[posId <= 2 & !is.na(infPatch),]
   # now count the max posId per patch, if less than 2, merge with next patch
-  tempdf[,npoints:=max(posId), by="infPatch"]
-  tempdf[,infPatch:=ifelse(npoints == 2, yes = infPatch, no = infPatch+1)]
+  tempdf[,npoints := max(posId), by="infPatch"]
+  tempdf[,infPatch := ifelse(npoints == 2, yes = infPatch, no = infPatch+1)]
   tempdf <- tempdf[npoints >= 2,]
   # recount the number of positions, each inferred patch must have minimum 2 pos
   {

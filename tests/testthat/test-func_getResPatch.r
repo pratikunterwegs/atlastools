@@ -29,7 +29,7 @@ testthat::test_that("patch calc on empirical data", {
   # test that names are present in output cols
   expnames <- c("id", "tide_number", "type", "patch", "time_mean",
                 "tidaltime_mean", "x_mean", "y_mean", "duration", "distInPatch",
-                "distBwPatch",  "dispInPatch", "polygons")
+                "distBwPatch",  "dispInPatch")
   for(i in 1:length(expnames)){
     testthat::expect_true(expnames[i] %in% colnames(testoutput),
                           info = glue::glue('{expnames[i]} expected in output but not produced'))
@@ -85,7 +85,7 @@ testthat::test_that("patch data access function works", {
   # test that names are present in output cols
   expnames <- c("id", "tide_number", "type", "patch", "time_mean",
                 "tidaltime_mean", "x_mean", "y_mean", "duration", "distInPatch", "waterlevel_mean",
-                "distBwPatch", "dispInPatch", "polygons")
+                "distBwPatch", "dispInPatch")
   # test col names in data access
   for(i in 1:length(expnames)){
     testthat::expect_true(expnames[i] %in% colnames(data_access_sf),

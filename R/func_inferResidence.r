@@ -108,7 +108,7 @@ wat_infer_residence <- function(df,
                                 y = mean(y),
                                 resTime = infResTime*nfixes),
                              by = c("id", "tide_number", "infPatch","nfixes")]
-    # infPatchDf <- infPatchDf[infPatch > 0,]
+    infPatchDf <- infPatchDf[infPatch > 0,]
     infPatchDf <- infPatchDf[,type:="inferred"]
 
     rm(tempdf); gc()

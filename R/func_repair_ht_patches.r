@@ -43,7 +43,7 @@ wat_repair_ht_patches <- function(patch_data_list,
     namesReq <- c("id", "tide_number", "patch",
                   "x_start", "y_start", "x_end", "y_end",
                   "time_start", "time_mean", "time_end",
-                  "type", "polygons")
+                  "type")
 
   # convert variable units
   tempIndepLim <- tempIndepLim*60
@@ -61,6 +61,7 @@ wat_repair_ht_patches <- function(patch_data_list,
     # subset edge cases from main data
     edge_data <- data[data[,.I[patch == min(patch) | patch == max(patch)],
                            by = .(tide_number)]$V1]
+    
     data <- data[data[,.I[patch != min(patch) & patch != max(patch)],
                  by = .(tide_number)]$V1]
 
@@ -166,9 +167,12 @@ wat_repair_ht_patches <- function(patch_data_list,
     }))]
   }
 
+  # remove polygons here too
+  edge_data[, polygons := NULL]
+  
   # remove patch summary from some data and add temp data, then del tempdata
   edge_data <- merge(edge_data, tempdata, by = c("id", "tide_number", "patch"))
-  edge_data[,nfixes:=unlist(lapply(patchdata, nrow))]
+  edge_data[,nfixes := unlist(lapply(patchdata, nrow))]
 
   # reattach edge cases to regular patch data and set order by start time
   data <- rbind(data, edge_data)

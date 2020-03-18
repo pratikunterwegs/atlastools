@@ -2,8 +2,8 @@ context("repairing high tide patches")
 testthat::test_that("high tide repair works", {
 
   # read in data
-  files_list <- list.files("../testdata/", pattern = "435_", full.names = T)
-  data_list <- lapply(files_list, fread)
+  files_list <- list.files("../testdata/", pattern = "413_", full.names = T)
+  data_list <- lapply(files_list[1:10], fread)
 
   # assume all patches are real
   data_list <- lapply(data_list, function(df){
@@ -12,7 +12,7 @@ testthat::test_that("high tide repair works", {
     df <- wat_make_res_patch(somedata = df)
   })
 
-  repaired_data <- watlastools::wat_repair_ht_patches(patch_data_list = data_list)
+  repaired_data <- wat_repair_ht_patches(patch_data_list = data_list)
 
   # do tests
   # test that the sf output class is at least sf
@@ -36,7 +36,9 @@ testthat::test_that("high tide repair works", {
 
   temp_indep <- c(NA, as.numeric((time_end-time_start)/60)) >= 30
   spat_indep <- wat_bw_patch_dist(repaired_data) >= 100
+  rest_indep <- TRUE # for patches separated by residence time
 
-  testthat::expect_true(all(purrr::map2_int(temp_indep, spat_indep, any)[-1]))
+  testthat::expect_true(all(purrr::pmap_int(list(temp_indep, spat_indep, rest_indep),
+                                        any)[-1]))
 
 })

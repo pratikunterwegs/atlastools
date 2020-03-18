@@ -40,23 +40,20 @@ wat_repair_ht_patches <- function(patch_data_list,
   }
 
   # check that list elements are data tables with correct names
-  {
     namesReq <- c("id", "tide_number", "patch",
                   "x_start", "y_start", "x_end", "y_end",
                   "time_start", "time_mean", "time_end",
                   "type", "polygons")
-    patch_data_list <- purrr::keep(patch_data_list, function(element){
-      is.data.table(element) & all(namesReq %in% colnames(element))
-    })
-  }
 
   # convert variable units
   tempIndepLim <- tempIndepLim*60
 
   tryCatch({
-  # bind all datatable into a single datatable
-  data <- rbindlist(patch_data_list)
 
+  # bind all datatable into a single datatable
+  patch_data_list <- patch_data_list[unlist(purrr::map(patch_data_list,
+      function(l) {is.data.table(l) & nrow(l) > 0 & all(namesReq %in% colnames(l))}))]
+  data <- rbindlist(patch_data_list)
 
   # select first and last rows from each tide_number
   # and assess independence

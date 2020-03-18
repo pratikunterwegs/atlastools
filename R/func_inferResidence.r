@@ -91,9 +91,6 @@ wat_infer_residence <- function(df,
   # remove unn columns
   set(tempdf, ,c("posId","npoints"), NULL)
 
-  # handle cases where there are inferred patches
-
-
   # add type to real data
   df[,type:="real"]
 
@@ -109,9 +106,9 @@ wat_infer_residence <- function(df,
     infPatchDf <- infPatchDf[,.(time = mean(time),
                                 x = mean(x),
                                 y = mean(y),
-                                resTime = infResTime),
+                                resTime = infResTime*nfixes),
                              by = c("id", "tide_number", "infPatch","nfixes")]
-    infPatchDf <- infPatchDf[infPatch > 0,]
+    # infPatchDf <- infPatchDf[infPatch > 0,]
     infPatchDf <- infPatchDf[,type:="inferred"]
 
     rm(tempdf); gc()

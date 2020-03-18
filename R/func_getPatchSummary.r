@@ -27,7 +27,6 @@ wat_get_patch_summary = function(resPatchData,
   if(whichData %in% c("summary", "summary"))
   {
     resPatchData[, dataColumn] <- NULL
-    resPatchData[, polygons:= NULL]
     resPatchData <- resPatchData[,lapply(.SD, unlist)]
     return(resPatchData)
   }
@@ -36,6 +35,12 @@ wat_get_patch_summary = function(resPatchData,
   if(whichData %in% c("spatial","Spatial"))
   {
     resPatchData[, dataColumn] <- NULL
+    resPatchData[, polygons := lapply(resPatch[, dataColumn], function(df){
+          p1 <- sf::st_as_sf(df, coords = c("x", "y"))
+          p2 <- sf::st_buffer(p1, dist = bufferSize)
+          p2 <- sf::st_union(p2)
+          return(p2)
+        })]
     # make spatial polygons
     {
       polygons <- purrr::reduce(resPatchData$polygons, c)

@@ -24,7 +24,7 @@ testthat::test_that("high tide repair works", {
 
   # do tests
   # test that the sf output class is at least sf
-  testthat::expect_s3_class(object = repaired_data, class = c("sf", "data.frame", "data.table"))
+  testthat::expect_s3_class(object = repaired_data, class = c("data.frame", "data.table"))
 
   # test that names are present in output cols
   expnames <- c("id", "tide_number", "type", "patch", "time_mean",

@@ -4,8 +4,13 @@
 \alias{wat_rm_attractor}
 \title{A function to remove so-called attractor points which have an unknown source. To be run before cleaning the data.}
 \usage{
-wat_rm_attractor(df, atp_xmin = 639470, atp_xmax = 639472,
-  atp_ymin = 5887143, atp_ymax = 5887145)
+wat_rm_attractor(
+  df,
+  atp_xmin = 639470,
+  atp_xmax = 639472,
+  atp_ymin = 5887143,
+  atp_ymax = 5887145
+)
 }
 \arguments{
 \item{df}{A dataframe or extension which contains capitalised X and Y coordinates.}

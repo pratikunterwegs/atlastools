@@ -53,7 +53,7 @@ wat_repair_ht_patches <- function(patch_data_list,
   # bind all datatable into a single datatable
   patch_data_list <- patch_data_list[unlist(purrr::map(patch_data_list,
       function(l) {is.data.table(l) & nrow(l) > 0 & all(namesReq %in% colnames(l))}))]
-  data <- rbindlist(patch_data_list)
+  data <- rbindlist(patch_data_list, use.names = TRUE)
 
   # select first and last rows from each tide_number
   # and assess independence
@@ -95,7 +95,7 @@ wat_repair_ht_patches <- function(patch_data_list,
     # make a temporary reeating seq of id, tide and patch
     temp_ed <- edge_data[,.(id, tide_number, patch)]
     temp_ed <- temp_ed[rep(seq_len(nrow(temp_ed)), purrr::map_int(edge_data$patchdata, nrow)),]
-    edge_data <- cbind(temp_ed, rbindlist(edge_data$patchdata))
+    edge_data <- cbind(temp_ed, rbindlist(edge_data$patchdata, use.names = TRUE))
     rm(temp_ed)
 
     edge_data <- merge(edge_data, edge_data_summary,

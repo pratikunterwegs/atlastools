@@ -4,8 +4,14 @@
 \alias{wat_clean_data}
 \title{A function to clean data accessed from the NIOZ WATLAS server. Allows filtering on standard deviation, and the number of receivers that detected the tag. Applies a moving-window median filter, whose size can be specified.}
 \usage{
-wat_clean_data(somedata, moving_window = 3, nbs_min = 0,
-  sd_threshold = 5e+05, filter_speed = TRUE, speed_cutoff = 150)
+wat_clean_data(
+  somedata,
+  moving_window = 3,
+  nbs_min = 0,
+  sd_threshold = 5e+05,
+  filter_speed = TRUE,
+  speed_cutoff = 150
+)
 }
 \arguments{
 \item{somedata}{A dataframe object returned by getData. Must contain the columns "X", "Y", "SD", "NBS", "TAG", "TIME"; these are the X coordinate, Y coordinate, standard deviation in measurement, number of ATLAS towers that received the signal, the tag number, and the numeric time, in milliseconds from 1970-01-01.}

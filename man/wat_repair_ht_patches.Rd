@@ -4,8 +4,12 @@
 \alias{wat_repair_ht_patches}
 \title{A function to repair high tide data.}
 \usage{
-wat_repair_ht_patches(patch_data_list, spatIndepLim = 100,
-  tempIndepLim = 30, bufferSize = 10)
+wat_repair_ht_patches(
+  patch_data_list,
+  spatIndepLim = 100,
+  tempIndepLim = 30,
+  bufferSize = 10
+)
 }
 \arguments{
 \item{patch_data_list}{A list of data.tables, each the output of make_res_patch. Must have an sfc geometry column.}

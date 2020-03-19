@@ -4,9 +4,16 @@
 \alias{wat_get_data}
 \title{Get data from the NIOZ servers. Untested, unlikely to work off the NIOZ network.}
 \usage{
-wat_get_data(tag, tracking_time_start, tracking_time_end,
-  tag_prefix = "31001000", database = "db", host = "abtdb1.nioz.nl",
-  username = "someuser", password = "somepassword")
+wat_get_data(
+  tag,
+  tracking_time_start,
+  tracking_time_end,
+  tag_prefix = "31001000",
+  database = "db",
+  host = "abtdb1.nioz.nl",
+  username = "someuser",
+  password = "somepassword"
+)
 }
 \arguments{
 \item{tag}{A three digit numeric representing the ToA tag.}

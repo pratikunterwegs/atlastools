@@ -49,8 +49,8 @@ server <- function(input, output) {
   ### patch summary ####
   output$patchSummary <- renderTable(
     {
-      patchSummary <- sf::st_drop_geometry(wat_get_patch_summary(resPatchData = dataOut(),
-                                                                  whichData = "spatial"))
+      patchSummary <- wat_get_patch_summary(resPatchData = dataOut(),
+                                            whichData = "spatial")
 
       patchSummary <- dplyr::mutate(patchSummary, duration = duration/60)
 
@@ -80,23 +80,7 @@ server <- function(input, output) {
                                                             whichData = "spatial")
       patchSummary <- dplyr::mutate(patchSummary, duration = duration/60)
       sf::st_crs(patchSummary) <- 32631
-      # get trajectories
-      {
-        patchtraj <- wat_patch_traj(df = dataOut())
-        patchtraj <- tibble::tibble(traj="this_traj", geometry=sf::st_combine(patchtraj))
-        patchtraj <- sf::st_as_sf(patchtraj, sf_column_name="geometry")
-        sf::st_crs(patchtraj) <- 32631
-      }
-      # get points
-      {
-        raw_pts <- dplyr::arrange((dataRaw()[,c("x","y","time","resTime")]), time)
-        raw_pts <- sf::st_as_sf(raw_pts[,c("x","y","time","resTime")], coords=c("x","y"))
-        sf::st_crs(raw_pts) <- 32631
 
-        raw_pts <- dplyr::arrange(raw_pts, time)
-        raw_lines <- sf::st_cast(sf::st_combine(raw_pts), "LINESTRING")
-        sf::st_crs(raw_lines) <- 32631
-      }
       # make plot
       {
         labels <- sprintf(

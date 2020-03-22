@@ -14,21 +14,21 @@ server <- function(input, output) {
 
     # run the inference func
     inference_output <-
-      wat_infer_residence(
+      watlastools::wat_infer_residence(
         df = somedata,
         infPatchTimeDiff = input$infPatchTimeDiff,
         infPatchSpatDiff = input$infPatchSpatDiff)
 
     # run the classification func
     classified_output <-
-      wat_classify_points(
+      watlastools::wat_classify_points(
         somedata = inference_output,
         resTimeLimit = input$resTimeLimit
       )
 
     # run patch construction
     patch_output <-
-      wat_make_res_patch(
+      watlastools::wat_make_res_patch(
         somedata = classified_output,
         bufferSize = input$bufferSize,
         spatIndepLim = input$spatIndepLimit,
@@ -49,8 +49,8 @@ server <- function(input, output) {
   ### patch summary ####
   output$patchSummary <- renderTable(
     {
-      patchSummary <- wat_get_patch_summary(resPatchData = dataOut(),
-                                            whichData = "spatial")
+      patchSummary <- watlastools::wat_get_patch_summary(resPatchData = dataOut(),
+                                            whichData = "summary")
 
       patchSummary <- dplyr::mutate(patchSummary, duration = duration/60)
 
@@ -95,7 +95,7 @@ server <- function(input, output) {
                       border.col = "black",
                       alpha = 0.6, style = "cont",
                       popup.vars = c("patch","duration","area","tidaltime_mean"))+
-          tm_shape(raw_pts)+
+          # tm_shape(raw_pts)+
           # tm_symbols(size=0.005, col = "resTime", alpha = 0.3, border.col = NULL,
           #            style = "cont", palette = viridis::plasma(10))+
 
@@ -124,7 +124,7 @@ server <- function(input, output) {
       # get patch summary for vert lines
       {
         # get patch outlines
-        patchSummary <- wat_get_patch_summary(resPatchData = dataOut(),
+        patchSummary <- watlastools::wat_get_patch_summary(resPatchData = dataOut(),
                                          whichData = "summary")
       }
 

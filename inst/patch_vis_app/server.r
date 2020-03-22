@@ -16,7 +16,6 @@ server <- function(input, output) {
     inference_output <-
       wat_infer_residence(
         df = somedata,
-        infResTime = input$restIndepLimit,
         infPatchTimeDiff = input$infPatchTimeDiff,
         infPatchSpatDiff = input$infPatchSpatDiff)
 

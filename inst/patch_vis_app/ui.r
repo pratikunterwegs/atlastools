@@ -9,7 +9,7 @@ ui <- fluidPage(
   fluidRow(
     column(5,
            h4("Residence patches"),
-           # textOutput("this_map_label"),
+           textOutput("this_map_label"),
            leafletOutput("patch_map", height = "600px")
     ),
 

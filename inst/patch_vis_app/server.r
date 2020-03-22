@@ -47,7 +47,8 @@ server <- function(input, output) {
   })
 
   ### patch summary ####
-  output$patchSummary <- renderTable(
+  output$patchSummary <- renderTable(striped=TRUE, digits=2,
+    expr=
     {
       patchSummary <- watlastools::wat_get_patch_summary(resPatchData = dataOut(),
                                             whichData = "summary")
@@ -55,7 +56,7 @@ server <- function(input, output) {
       patchSummary <- dplyr::mutate(patchSummary, duration = duration/60)
 
       patchSummary <- dplyr::select(patchSummary,
-                                    id, tide_number, patch,
+                                    patch,
                                     type,
                                     tidaltime_mean,
                                     duration,
@@ -77,9 +78,15 @@ server <- function(input, output) {
   output$patch_map <- renderLeaflet(
     {
       patchSummary <- wat_get_patch_summary(resPatchData = dataOut(),
-                                                            whichData = "spatial")
+                                                            whichData = "summary")
       patchSummary <- dplyr::mutate(patchSummary, duration = duration/60)
+      patchSummary <- st_as_sf(patchSummary, coords = c("x_mean", "y_mean"))
       sf::st_crs(patchSummary) <- 32631
+
+      patchtraj <- wat_patch_traj(df = dataOut())
+        patchtraj <- tibble::tibble(traj="this_traj", geometry=sf::st_combine(patchtraj))
+        patchtraj <- sf::st_as_sf(patchtraj, sf_column_name="geometry")
+        sf::st_crs(patchtraj) <- 32631
 
       # make plot
       {
@@ -89,19 +96,18 @@ server <- function(input, output) {
         ) %>% lapply(htmltools::HTML)
 
         main_map <- tm_basemap(leaflet::providers$Esri.WorldImagery)+
+        tm_shape(patchtraj)+
+        tm_lines(lwd = 1, col = "red")+
 
+        tm_shape(raw_pts)+
+        tm_symbols(alpha = 0.3)+
           tm_shape(patchSummary)+
-          tm_polygons(col="patch", palette = "Blues",
+          tm_symbols(col="patch", palette = "Paired",
+                      size = "duration",
+                      scale = 3,
                       border.col = "black",
-                      alpha = 0.6, style = "cont",
+                      alpha = 0.3, style = "cont",
                       popup.vars = c("patch","duration","area","tidaltime_mean"))+
-          # tm_shape(raw_pts)+
-          # tm_symbols(size=0.005, col = "resTime", alpha = 0.3, border.col = NULL,
-          #            style = "cont", palette = viridis::plasma(10))+
-
-          # tm_shape(patchtraj)+
-          # tm_lines(lwd = 1, col = "red")+
-
           tm_scale_bar()
       }
 
@@ -119,7 +125,7 @@ server <- function(input, output) {
 
         # patch_point_data <- dplyr::filter(patch_point_data, type != "inferred")
 
-        # patch_point_data <- dplyr::arrange(patch_point_data, time)
+        patch_point_data <- dplyr::arrange(patch_point_data, time)
       }
       # get patch summary for vert lines
       {
@@ -148,7 +154,7 @@ server <- function(input, output) {
                      col = "blue", lty = 3, size = 0.2)+
 
           # scale_color_manual(values = somecolours, na.value = "grey")+
-          scale_fill_distiller(palette = "Blues",na.value = "red", direction = 1)+
+          scale_fill_distiller(palette = "Paired",na.value = "red", direction = 1)+
           theme_bw()+
           ylim(0, max(patch_point_data$resTime))+
           theme(legend.position = 'none',

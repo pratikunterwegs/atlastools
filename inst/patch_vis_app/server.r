@@ -35,8 +35,7 @@ server <- function(input, output) {
         spatIndepLim = input$spatIndepLimit,
         tempIndepLim = input$tempIndepLimit,
         restIndepLim = input$restIndepLimit,
-        minFixes = input$minfixes,
-        tideLims = c(input$lim1, input$lim2)
+        minFixes = input$minfixes
       )
 
     return(patch_output)
@@ -52,8 +51,7 @@ server <- function(input, output) {
   output$patchSummary <- renderTable(
     {
       patchSummary <- sf::st_drop_geometry(wat_get_patch_summary(resPatchData = dataOut(),
-                                                            dataColumn = "data",
-                                                            whichData = "spatial"))
+                                                                  whichData = "spatial"))
 
       patchSummary <- dplyr::mutate(patchSummary, duration = duration/60)
 
@@ -80,7 +78,6 @@ server <- function(input, output) {
   output$patch_map <- renderLeaflet(
     {
       patchSummary <- wat_get_patch_summary(resPatchData = dataOut(),
-                                                            dataColumn = "data",
                                                             whichData = "spatial")
       patchSummary <- dplyr::mutate(patchSummary, duration = duration/60)
       sf::st_crs(patchSummary) <- 32631
@@ -145,10 +142,7 @@ server <- function(input, output) {
       {
         # get patch outlines
         patchSummary <- wat_get_patch_summary(resPatchData = dataOut(),
-                                         dataColumn = "data",
-                                         whichData = "spatial")
-
-        patchSummary <- sf::st_drop_geometry(patchSummary)
+                                         whichData = "summary")
       }
 
       # make plot

@@ -100,7 +100,7 @@ wat_make_res_patch <- function(somedata,
         # nest data
         somedata <- somedata[, .(list(.SD)), by = .(id, tide_number, patch)]
         setnames(somedata, old = "V1", new = "patchdata")
-        somedata[,nfixes:=lapply(patchdata, nrow)]
+        somedata[,nfixes:=purrr::map_int(patchdata, nrow)]
 
         # summarise mean, first and last
         somedata[,patchSummary:= lapply(patchdata, function(dt){
@@ -172,7 +172,7 @@ wat_make_res_patch <- function(somedata,
       # advanced metrics on ungrouped data
       {
         # distance in a patch in metres
-        somedata[,distInPatch := lapply(patchdata, function(df){
+        somedata[,distInPatch := purrr::map_dbl(patchdata, function(df){
                                     sum(watlastools::wat_simple_dist(df = df), na.rm = TRUE)
                                   })]
 
@@ -187,7 +187,7 @@ wat_make_res_patch <- function(somedata,
         # apply func bw patch dist reversing usual end and begin
         tempdata[,dispInPatch := sqrt((x_end - x_start)^2 + (y_end - y_start)^2)]
         # type of patch
-        somedata[, type := lapply(patchdata, function(df){
+        somedata[, type := purrr::map_chr(patchdata, function(df){
                                     a <- ifelse(sum(c("real", "inferred") %in% df$type) == 2,
                                                 "mixed", first(df$type))
                                     return(a)

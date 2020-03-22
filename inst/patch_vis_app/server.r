@@ -96,11 +96,11 @@ server <- function(input, output) {
                       alpha = 0.6, style = "cont",
                       popup.vars = c("patch","duration","area","tidaltime_mean"))+
           tm_shape(raw_pts)+
-          tm_symbols(size=0.005, col = "resTime", alpha = 0.3, border.col = NULL,
-                     style = "cont", palette = viridis::plasma(10))+
+          # tm_symbols(size=0.005, col = "resTime", alpha = 0.3, border.col = NULL,
+          #            style = "cont", palette = viridis::plasma(10))+
 
-          tm_shape(patchtraj)+
-          tm_lines(lwd = 1, col = "red")+
+          # tm_shape(patchtraj)+
+          # tm_lines(lwd = 1, col = "red")+
 
           tm_scale_bar()
       }

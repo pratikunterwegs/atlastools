@@ -54,13 +54,7 @@ ui <- fluidPage(
                         value = 10.0),
            numericInput("minfixes",
                         p("min. fixes in patch (#)"),
-                        value = 3),
-           numericInput("lim1",
-                        p("tide limit 1 (hrs)"),
-                        value = 4),
-           numericInput("lim2",
-                        p("tide limit 2 (hrs)"),
-                        value = 10)
+                        value = 3)
     ),
     column(2,
            h4("getPatches: patch independence"),

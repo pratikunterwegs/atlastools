@@ -9,3 +9,6 @@
 
 # ignore all in private
 private/*
+inst/doc
+doc
+Meta

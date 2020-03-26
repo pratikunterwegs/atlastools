@@ -86,6 +86,18 @@
 <li>
   <a href="../reference/index.html">Reference</a>
 </li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Articles
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="../articles/watlas_vignette.html">Using `watlastools`</a>
+    </li>
+  </ul>
+</li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
         <li>
@@ -116,8 +128,14 @@
     <p>A function to clean data accessed from the NIOZ WATLAS server. Allows filtering on standard deviation, and the number of receivers that detected the tag. Applies a moving-window median filter, whose size can be specified.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>wat_clean_data</span>(<span class='no'>somedata</span>, <span class='kw'>moving_window</span> <span class='kw'>=</span> <span class='fl'>3</span>, <span class='kw'>nbs_min</span> <span class='kw'>=</span> <span class='fl'>0</span>,
-  <span class='kw'>sd_threshold</span> <span class='kw'>=</span> <span class='fl'>5e+05</span>, <span class='kw'>filter_speed</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>speed_cutoff</span> <span class='kw'>=</span> <span class='fl'>150</span>)</pre>
+    <pre class="usage"><span class='fu'>wat_clean_data</span>(
+  <span class='no'>somedata</span>,
+  <span class='kw'>moving_window</span> <span class='kw'>=</span> <span class='fl'>3</span>,
+  <span class='kw'>nbs_min</span> <span class='kw'>=</span> <span class='fl'>0</span>,
+  <span class='kw'>sd_threshold</span> <span class='kw'>=</span> <span class='fl'>5e+05</span>,
+  <span class='kw'>filter_speed</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
+  <span class='kw'>speed_cutoff</span> <span class='kw'>=</span> <span class='fl'>150</span>
+)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">

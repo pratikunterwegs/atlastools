@@ -1,6 +1,7 @@
 context("aggregate cleaned data\n")
 testthat::test_that("aggregated cleaned data", {
 
+  interval = 60
   # make testdata
   testdata <- data.table::data.table(x = as.double(1:1e3),
                                      y = as.double(1:1e3),
@@ -16,5 +17,10 @@ testthat::test_that("aggregated cleaned data", {
 
   # check that some rows are removed or that none are added
   testthat::expect_gte(nrow(testdata), nrow(testoutput))
+
+  # check that the correct interval is achieved
+  lag <- diff(testoutput$time)
+  message(glue::glue('min lag = {min(lag)}'))
+  testthat::expect_gte(min(lag), interval)
 
 })

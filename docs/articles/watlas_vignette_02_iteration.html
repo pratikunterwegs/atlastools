@@ -93,7 +93,7 @@
 
     
     
-<p>watlastools was built to handle large tracking datasets from the <a href="">WATLAS system</a>. These datasets are – currently – split into subsets and saved locally, typically in a folder called <em>revisitData, revisit_data</em> or similar <a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a>. In general, watlastools packages would work on the whole dataset as well, but this functionality has not been tested.</p>
+<p>watlastools was built to handle large tracking datasets from the <a href="https://www.nioz.nl/en/about/cos/coastal-movement-ecology/shorebird-tracking/watlas-tracking-regional-movements">WATLAS system</a>. These datasets are – currently – split into subsets and saved locally, typically in a folder called <em>revisitData, revisit_data</em> or similar <a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a>. In general, watlastools packages would work on the whole dataset as well, but this functionality has not been tested.</p>
 <p>Here, we cover iterating watlastools functions over multiple data files, and introduce the <code>wat_repair_ht_patches</code> function.</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" title="1"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(watlastools)</a>
 <a class="sourceLine" id="cb1-2" title="2"></a>
@@ -130,7 +130,7 @@
 <a href="#repairing-high-tide-patches" class="anchor"></a>Repairing high tide patches</h1>
 <p>High tide presents an issue for watlastools, since it was originally written with low tide data in mind. The issue is that residence patches at the beginning of a tidal cycle (high tide) are essentially continuations of residence patches at the end of the previous tidal cycle.</p>
 <p>The <code>wat_repair_ht_patches</code> function was written to fix this issue. It is a reworking of the original <code>wat_make_res_patch</code> function, except that it operates on a list of residence patches, as we made above, and looks only at the first and last patches of each tidal cycle.</p>
-<p>If the first patch (P_a) of tidal cycle (called <code>tidenumber</code> in the data) is not spatio-temporally distinct from the last patch of the previous tidal cycle (P_b), P_a_ is merged into P_b.</p>
+<p>If the first patch (<em>Pa</em>) of tidal cycle (called <code>tidenumber</code> in the data) is not spatio-temporally distinct from the last patch of the previous tidal cycle (<em>Pb</em>), <em>Pa</em> is merged into <em>Pb</em>.</p>
 <div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" title="1"><span class="co"># count patches in unrepaired data</span></a>
 <a class="sourceLine" id="cb4-2" title="2"><span class="kw"><a href="https://purrr.tidyverse.org/reference/map.html">map_int</a></span>(patch_data, nrow) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/sum.html">sum</a></span>()</a></code></pre></div>
 <pre><code>## [1] 157</code></pre>

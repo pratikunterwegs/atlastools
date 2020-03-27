@@ -1,5 +1,5 @@
 ---
-title: "Using `watlastools`"
+title: "Using watlastools"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{watlas_vignette}
@@ -9,11 +9,15 @@ editor_options:
   chunk_output_type: console
 ---
 
+This vignette shows the basics of using watlastools. It is a work in progress.
+watlastools has two main purposes: accessing and cleaning data, and identifying residence patches from the data.
+Only the latter is covered here.
+
 ```{r, include = FALSE}
-# knitr::opts_chunk$set(
-#   collapse = TRUE,
-#   comment = "#>"
-# )
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
 ```
 
 ```{r setup}
@@ -101,6 +105,7 @@ class(patch_polygons)
 ## Plot data types
 
 Look at patch points and summary. Polygons are constructed as `x` metre buffers around patch points, and are not covered here.
+The code to make this plot is in the watlas_vignette.Rmd fine in the package's vignettes folder (the source for this document).
 
 ```{r see_patch_summary, echo=FALSE}
 # plotting libraries

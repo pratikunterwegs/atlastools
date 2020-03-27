@@ -2,5 +2,6 @@ pandoc: '2.5'
 pkgdown: 1.4.1
 pkgdown_sha: ~
 articles:
-  watlas_vignette: watlas_vignette.html
+  01_watlas_vignette: 01_watlas_vignette.html
+  02_watlas_iteration: 02_watlas_iteration.html
 

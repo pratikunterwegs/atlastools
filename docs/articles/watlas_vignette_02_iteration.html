@@ -104,11 +104,11 @@
 <a class="sourceLine" id="cb1-7" title="7"><span class="co"># read data and see leading lines</span></a>
 <a class="sourceLine" id="cb1-8" title="8"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(data.table)</a>
 <a class="sourceLine" id="cb1-9" title="9"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(purrr)</a>
-<a class="sourceLine" id="cb1-10" title="10"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(magrittr) <span class="co"># pipe operator %&gt;%</span></a></code></pre></div>
+<a class="sourceLine" id="cb1-10" title="10"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(dplyr) <span class="co"># pipe operator %&gt;%</span></a></code></pre></div>
 <div id="iterating-over-tidal-cycles" class="section level1">
 <h1 class="hasAnchor">
 <a href="#iterating-over-tidal-cycles" class="anchor"></a>Iterating over tidal cycles</h1>
-<p>Begin by reading in the data files from ~10 tidal cycles for one individual.</p>
+<p>Begin by reading in the data files from 10 tidal cycles for one individual.</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" title="1"><span class="co"># list the data files available and read them in</span></a>
 <a class="sourceLine" id="cb2-2" title="2">data_files &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/list.files.html">list.files</a></span>(<span class="st">"vignette_data/"</span>, <span class="dt">pattern =</span> <span class="st">"413"</span>, </a>
 <a class="sourceLine" id="cb2-3" title="3">                         <span class="dt">full.names =</span> <span class="ot">TRUE</span>)</a>

@@ -23,15 +23,20 @@ Here, we cover iterating watlastools functions over multiple data files, and int
 
 ```{r setup, message=FALSE}
 library(watlastools)
+
+if(!"ggspatial" %in% installed.packages()){
+  install.packages("ggspatial")
+}
+
 # read data and see leading lines
 library(data.table)
 library(purrr)
-library(magrittr) # pipe operator %>%
+library(dplyr) # pipe operator %>%
 ```
 
 # Iterating over tidal cycles
 
-Begin by reading in the data files from ~10 tidal cycles for one individual.
+Begin by reading in the data files from 10 tidal cycles for one individual.
 
 ```{r read_data, message=FALSE}
 # list the data files available and read them in

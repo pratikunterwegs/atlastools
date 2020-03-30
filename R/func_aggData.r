@@ -33,7 +33,7 @@ wat_agg_data <- function(df,
 
   # aggregate over tracking interval
   {
-    df[,time:= round(time/interval) * interval]
+    df[, time := floor(time/interval) * interval]
     df <- df[,lapply(.SD, mean, na.rm=TRUE), by = .(time, id)]
   }
 

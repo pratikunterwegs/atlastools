@@ -23,4 +23,18 @@ testthat::test_that("aggregated cleaned data", {
   message(glue::glue('min lag = {min(lag)}'))
   testthat::expect_gte(min(lag), interval)
 
+  # make more test data for expected points calculation
+  testdata <- data.table::data.table(x = 1, y = 1,
+                                     time = seq(30, 200, 10),
+    ts = as.POSIXct(seq(30, 200, 10), origin = "2018-08-08"),
+    id = as.factor("abc"))
+  # how many multiples of the interval?
+  n_30 <- sum(testdata$time %% 30 == 0)
+  # aggregate data
+  testoutput <- wat_agg_data(testdata, interval = 30)
+
+  # test data rows -- must be one
+  testthat::expect_equal(nrow(testoutput),
+                         n_30);
+
 })

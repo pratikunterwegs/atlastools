@@ -29,7 +29,7 @@ devtools::install_github("pratikunterwegs/watlastools")
 
 Package functionality is demonstrated by the inbuilt `shiny` application.
 
-![](https://github.com/pratikunterwegs/watlastools/raw/master/inst/screenshot_app.png)
+![](https://github.com/pratikunterwegs/watlastools/raw/master/inst/screenshot_app.png) ![](https://github.com/pratikunterwegs/watlastools/raw/master/inst/schematic.png)
 
 ```r
 # run the app from the package

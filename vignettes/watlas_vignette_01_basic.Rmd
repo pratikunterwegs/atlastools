@@ -26,6 +26,11 @@ if(!"ggspatial" %in% installed.packages()){
   install.packages("ggspatial")
 }
 ```
+# Concept: Patches
+
+Patches are identified as shown in the schematic. More to be added in time.
+
+<img src="https://github.com/pratikunterwegs/watlastools/raw/master/inst/schematic.png" width="500">
 
 # Making patches
 
@@ -173,4 +178,3 @@ library(patchwork)
 
 fig_patch_points / fig_patch_summary
 ```
-

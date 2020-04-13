@@ -2,6 +2,7 @@ warnings_are_errors: false
 language: r
 r:
   - release
+cache: packages
 r_packages:
   - covr
 
@@ -17,6 +18,8 @@ addons:
       - libgdal-dev
       - libgeos-dev
       - libproj-dev
+      - libfontconfig1-dev
+      - r-cran-lwgeom
 
 # safelist
 branches:

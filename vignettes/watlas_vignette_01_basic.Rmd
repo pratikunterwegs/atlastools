@@ -30,7 +30,10 @@ if(!"ggspatial" %in% installed.packages()){
 
 Patches are identified as shown in the schematic. More to be added in time.
 
-<img src="https://github.com/pratikunterwegs/watlastools/raw/master/inst/schematic.png" width="500">
+```{r show_patch_schematic, eval=TRUE,echo = FALSE}
+knitr::include_graphics("../inst/schematic.png")
+
+```
 
 # Making patches
 

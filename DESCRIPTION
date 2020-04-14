@@ -1,6 +1,6 @@
 Package: watlastools
 Title: Tools for High Resolution Tracking Data from WATLAS
-Version: 0.0.0.9000
+Version: 0.9.9000
 Authors@R:
     c(person(given = "Pratik",
            family = "Gupte",
@@ -18,7 +18,6 @@ LazyData: true
 URL: https://github.com/pratikunterwegs/watlastools
 BugReports: https://github.com/pratikunterwegs/watlastools/issues
 Imports:
-    tidyr,
     dplyr,
     purrr,
     tibble,
@@ -29,16 +28,9 @@ Imports:
     stats,
     zoo,
     assertthat,
-    shiny,
-    shinytest,
     stringr,
-    plotly,
-    RColorBrewer,
-    RMySQL,
-    DBI,
-    tmap,
-    leaflet,
-    fasttime
+    fasttime,
+    RMySQL
 RoxygenNote: 7.1.0
 Suggests:
     testthat (>= 2.1.0),
@@ -46,5 +38,11 @@ Suggests:
     rmarkdown,
     ggplot2,
     ggspatial,
-    patchwork
+    patchwork,
+    tmap,
+    leaflet,
+    shiny,
+    shinytest,
+    RColorBrewer,
+    DBI
 VignetteBuilder: knitr

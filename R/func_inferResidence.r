@@ -18,6 +18,7 @@ wat_infer_residence <- function(df,
   spatdiff <- time <- timediff <- type <- x <- y <- npoints <- NULL
   data <- duration <- id <- nfixes <- patch <- patchSummary <- NULL
   tide_number <- tidaltime <- time_end <- time_start <- NULL
+  waterlevel <- NULL
   # adding the inferPatches argument to prep for inferring
   # residence patches from missing data between travel segments
 

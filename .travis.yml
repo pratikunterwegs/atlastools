@@ -1,3 +1,4 @@
+dist: eoan
 warnings_are_errors: false
 language: r
 r:
@@ -18,8 +19,9 @@ addons:
       - libgdal-dev
       - libgeos-dev
       - libproj-dev
-      - libfontconfig1-dev
-      - r-cran-lwgeom
+
+before_install:
+  - R -q -e 'install.packages("devtools"); devtools::install_github("rspatial/lwgeom")'
 
 # safelist
 branches:

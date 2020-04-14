@@ -3,7 +3,10 @@ warnings_are_errors: false
 language: r
 r:
   - release
-cache: packages
+  - devel
+cache:
+  - packages
+  - ccache
 r_packages:
   - covr
 

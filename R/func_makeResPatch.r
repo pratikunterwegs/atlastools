@@ -55,7 +55,7 @@ wat_make_res_patch <- function(somedata,
     purrr::walk (namesReq, function(nr) {
       assertthat::assert_that(nr %in% dfnames,
             msg = glue::glue('{nr} is required but missing from data!'))
-    }
+    })
   }
 
   # make datatable to use functions

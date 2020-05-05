@@ -27,7 +27,7 @@ wat_rm_attractor <- function(df,
       assertthat::assert_that(nr %in% dfnames,
                               msg = glue::glue('rmAttractor: {nr} is
                          required but missing from data!'))
-    }
+    })
   }
 
   # check input length of attractors
@@ -52,7 +52,7 @@ wat_rm_attractor <- function(df,
 
       df <- df[!((X > axmin) & (X < axmax) &
                  (Y > aymin) & (Y < aymax)),]
-    }
+    })
   }
 
   assertthat::assert_that("data.frame" %in% class(df),

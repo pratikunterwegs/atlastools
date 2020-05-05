@@ -29,7 +29,7 @@ testthat::test_that("adding tide data works", {
   purrr::walk(expnames, function(ename){
     testthat::expect_true(ename %in% colnames(testoutput),
       info = glue::glue('{ename} expected in output but not produced'))
-  }
+  })
 })
 
 # ends here

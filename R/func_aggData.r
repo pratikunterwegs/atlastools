@@ -20,7 +20,7 @@ wat_agg_data <- function(df,
   {
     dfnames <- colnames(df)
     namesReq <- c("x", "y", "time")
-    walk (namesReq, function(nr) {
+    purrr::walk (namesReq, function(nr) {
       assertthat::assert_that(nr %in% dfnames,
                               msg = glue::glue('wat_agg_data: {nr} is
                          required but missing from data!'))

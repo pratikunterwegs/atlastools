@@ -26,10 +26,10 @@ testthat::test_that("adding tide data works", {
   # test that names are present in output cols
   expnames <- c("tide_number", "tidaltime")
   # test col names in data access
-  for(i in 1:length(expnames)){
-    testthat::expect_true(expnames[i] %in% colnames(testoutput),
-                          info = glue::glue('{expnames[i]} expected in output but not produced'))
-  }
+  purrr::walk(expnames, function(ename){
+    testthat::expect_true(ename %in% colnames(testoutput),
+      info = glue::glue('{ename} expected in output but not produced'))
+  })
 })
 
 # ends here

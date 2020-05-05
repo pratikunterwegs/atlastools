@@ -30,11 +30,11 @@ wat_clean_data <- function(somedata,
     {
       dfnames <- colnames(somedata)
       namesReq <- c("X", "Y", "SD", "NBS", "TAG", "TIME", "VARX", "VARY", "COVXY")
-      for (i in 1:length(namesReq)) {
-        assertthat::assert_that(namesReq[i] %in% dfnames,
-                                msg = glue::glue('cleanData: {namesReq[i]} is
+      purrr::walk (namesReq, function(nr) {
+        assertthat::assert_that(nr %in% dfnames,
+                                msg = glue::glue('cleanData: {nr} is
                          required but missing from data!'))
-      }
+      })
     }
 
     # check args positive

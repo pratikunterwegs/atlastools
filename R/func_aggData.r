@@ -20,11 +20,11 @@ wat_agg_data <- function(df,
   {
     dfnames <- colnames(df)
     namesReq <- c("x", "y", "time")
-    for (i in 1:length(namesReq)) {
-      assertthat::assert_that(namesReq[i] %in% dfnames,
-                              msg = glue::glue('wat_agg_data: {namesReq[i]} is
+    purrr::walk (namesReq, function(nr) {
+      assertthat::assert_that(nr %in% dfnames,
+                              msg = glue::glue('wat_agg_data: {nr} is
                          required but missing from data!'))
-    }
+    })
 
     # check aggregation interval is greater than min time difference
     assertthat::assert_that(interval > min(diff(df$time)),

@@ -46,10 +46,10 @@ wat_infer_residence <- function(df,
 
   # include asserts checking for required columns
   {
-    for (i in 1:length(namesReq)) {
-      assertthat::assert_that(namesReq[i] %in% dfnames,
-                              msg = glue::glue('{namesReq[i]} is required but missing from data!'))
-    }
+    purrr::walk (namesReq, function(nr) {
+      assertthat::assert_that(nr %in% dfnames,
+          msg = glue::glue('{nr} is required but missing from data!'))
+    })
   }
 
   ## SET THE DF IN ORDER OF TIME ##

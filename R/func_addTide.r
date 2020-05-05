@@ -27,11 +27,11 @@ wat_add_tide <- function(df,
 	  # check position data frame
 	  dfnames <- colnames(df)
       namesReq <- c("time", "ts")
-      for (i in 1:length(namesReq)) {
-        assertthat::assert_that(namesReq[i] %in% dfnames,
-          msg = glue::glue('wat_add_tide: {namesReq[i]} is
+      purrr::walk (namesReq, function(fr) {
+        assertthat::assert_that(fr %in% dfnames,
+          msg = glue::glue('wat_add_tide: {fr} is
                          required but missing from data!'))
-      }
+      })
 
       # check for time in order
       min_time_diff <- min(as.numeric(diff(df$time)))
@@ -47,11 +47,11 @@ wat_add_tide <- function(df,
       # read in tide data
       tide_data <- fread(tide_data)[,time:=fasttime::fastPOSIXct(time)]
 
-      for (i in 1:length(namesReq)) {
-        assertthat::assert_that(namesReq[i] %in% colnames(tide_data),
-          msg = glue::glue('wat_add_tide: {namesReq[i]} is
+      purrr::walk (namesReq, function(nr) {
+        assertthat::assert_that(nr %in% colnames(tide_data),
+          msg = glue::glue('wat_add_tide: {nr} is
                          required but missing from tide data!'))
-      }
+      })
 	}
 
 	# merge with tide data and order on high tide

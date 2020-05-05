@@ -30,11 +30,11 @@ wat_get_data <- function(tag,
     assertthat::assert_that(as.character(tag_prefix) == "31001000", msg = "tag prefix is not 31001000")
 
     db_params = c(host, username, password)
-    for(i in 1:length(db_params))
+    purrr::walk(db_params, function(this_param)
     {
-      assertthat::assert_that(is.character(db_params[i]),
-                              msg = glue::glue('{db_params[i]} is not a character'))
-    }
+      assertthat::assert_that(is.character(this_param),
+                              msg = glue::glue('{this_param} is not a character'))
+    })
   }
 
   # process function arguments for sql database

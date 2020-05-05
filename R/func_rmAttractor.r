@@ -23,9 +23,9 @@ wat_rm_attractor <- function(df,
   {
     dfnames <- colnames(df)
     namesReq <- c("X", "Y")
-    for (i in 1:length(namesReq)) {
-      assertthat::assert_that(namesReq[i] %in% dfnames,
-                              msg = glue::glue('rmAttractor: {namesReq[i]} is
+    purrr::walk (namesReq, function(nr) {
+      assertthat::assert_that(nr %in% dfnames,
+                              msg = glue::glue('rmAttractor: {nr} is
                          required but missing from data!'))
     }
   }
@@ -47,10 +47,11 @@ wat_rm_attractor <- function(df,
 
   # remove attractors
   {
-    for(i in 1:length(atp_xmin)){
+    purrr::pwalk(list(atp_xmin, atp_xmax, atp_ymin, atp_ymax),
+                function(axmin, axmax, aymin, aymax){
 
-      df <- df[!((X > atp_xmin[i]) & (X < atp_xmax[i]) &
-                 (Y > atp_ymin[i]) & (Y < atp_ymax[i])),]
+      df <- df[!((X > axmin) & (X < axmax) &
+                 (Y > aymin) & (Y < aymax)),]
     }
   }
 

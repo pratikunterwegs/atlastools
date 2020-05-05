@@ -30,7 +30,7 @@ wat_get_data <- function(tag,
     assertthat::assert_that(as.character(tag_prefix) == "31001000", msg = "tag prefix is not 31001000")
 
     db_params = c(host, username, password)
-    walk(db_params, function(this_param)
+    purrr::walk(db_params, function(this_param)
     {
       assertthat::assert_that(is.character(this_param),
                               msg = glue::glue('{this_param} is not a character'))

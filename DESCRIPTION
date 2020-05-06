@@ -30,7 +30,8 @@ Imports:
     assertthat,
     stringr,
     fasttime,
-    RMySQL
+    RMySQL,
+    bit64
 RoxygenNote: 7.1.0
 Suggests:
     testthat (>= 2.1.0),

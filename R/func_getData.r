@@ -17,7 +17,7 @@ wat_get_data <- function(tag,
                       tracking_time_start,
                       tracking_time_end,
                       tag_prefix="31001000",
-                      database = "db",
+                      database = "some_database",
                       host = "abtdb1.nioz.nl",
                       username = "someuser",
                       password = "somepassword"){
@@ -53,7 +53,7 @@ wat_get_data <- function(tag,
 
   # connect to the ATLAS server
   {
-    mydb = dbConnect(MySQL(), user=username, password=password, dbname=database, host=host)
+    mydb = RMySQL::dbConnect(RMySQL::MySQL(), user=username, password=password, dbname=database, host=host)
   }
 
   # SQL code to retrive data
@@ -62,7 +62,7 @@ wat_get_data <- function(tag,
   }
 
   # getdata
-  d <- DBI::dbGetQuery()(mydb, sql)
+  d <- DBI::dbGetQuery(mydb, sql)
 
   # add aproximate SD of localization
   # d$SD<-maxSD(d)

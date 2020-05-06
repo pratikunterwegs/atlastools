@@ -29,10 +29,10 @@ testthat::test_that("patch calc on empirical data", {
   expnames <- c("id", "tide_number", "type", "patch", "time_mean",
                 "tidaltime_mean", "x_mean", "y_mean", "duration", "distInPatch",
                 "distBwPatch",  "dispInPatch")
-  for(i in 1:length(expnames)){
-    testthat::expect_true(expnames[i] %in% colnames(testoutput),
-                          info = glue::glue('{expnames[i]} expected in output but not produced'))
-  }
+  purrr::walk(expnames, function(expname){
+    testthat::expect_true(expname %in% colnames(testoutput),
+                          info = glue::glue('{expname} expected in output but not produced'))
+  })
 
   # check that data are ordered in time
   testthat::expect_gt(min(as.numeric(diff(testoutput$time_mean)), na.rm = TRUE), 0)
@@ -83,10 +83,10 @@ testthat::test_that("patch data access function works", {
                 "tidaltime_mean", "x_mean", "y_mean", "duration", "distInPatch", "waterlevel_mean",
                 "distBwPatch", "dispInPatch")
   # test col names in data access
-  for(i in 1:length(expnames)){
-    testthat::expect_true(expnames[i] %in% colnames(data_access_sf),
-                          info = glue::glue('{expnames[i]} expected in output but not produced'))
-  }
+  purrr::walk(expnames, function(expname){
+    testthat::expect_true(expname %in% colnames(data_access_sf),
+                          info = glue::glue('{expname} expected in output but not produced'))
+  })
 
   # check that data are ordered in time
   testthat::expect_gt(min(as.numeric(diff(testoutput$time_mean)), na.rm = TRUE), 0)

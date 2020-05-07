@@ -58,9 +58,12 @@ wat_get_data <- function(tag,
 
   # SQL code to retrive data
   {
-    sql_query <- glue::glue("select TAG, TIME, X, Y, NBS, VARX, VARY, COVXY from LOCALIZATIONS where TAG = {tag} AND TIME > '{tracking_time_start}' AND TIME < '{tracking_time_end}' ORDER BY TIME ASC")
-
-    sql_query <- as.character(sql_query)
+    sql_query <- glue::glue_sql("select TAG, TIME, X, Y, NBS, VARX, VARY, COVXY 
+    FROM LOCALIZATIONS 
+    WHERE TAG = {`tag`} 
+      AND TIME > {`tracking_time_start`} 
+      AND TIME < {`tracking_time_end`} 
+    ORDER BY TIME ASC")
   }
 
   # getdata

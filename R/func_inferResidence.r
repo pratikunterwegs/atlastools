@@ -5,7 +5,6 @@
 #' @param infPatchSpatDiff A numeric distance in metres, of the maximum spatial distance between two points, below which it may be assumed few extreme movements took place between them.
 #'
 #' @return A data.frame extension object. This dataframe has additional inferred points, indicated by the additional column for empirical fixes ('real') or 'inferred'.
-#' @import data.table
 #' @export
 #'
 
@@ -24,13 +23,13 @@ wat_infer_residence <- function(df,
 
   # check if data frame
   assertthat::assert_that(is.data.frame(df),
-        msg = glue::glue('inferResidence: input not a dataframe object,
+        msg = glue::glue('inferResidence: input not a dataframe object,\\
         has class {stringr::str_flatten(class(df), collapse = " ")}!'))
 
   # read the file in
   {
     # convert both to DT if not
-    if(is.data.table(df) != TRUE) {setDT(df)}
+    if(is.data.table(df) != TRUE) {data.table::setDT(df)}
 
   }
 
@@ -40,7 +39,7 @@ wat_infer_residence <- function(df,
   }
 
   # get names and numeric variables
-  dfnames <- names(df)
+  dfnames <- colnames(df)
   namesReq <- c("id", "tide_number", "x", "y", "time", "resTime")
   numvars <- c("x","y","TIME","resTime")
 
@@ -68,7 +67,7 @@ wat_infer_residence <- function(df,
   tempdf <- df[!is.na(time),]
   # get difference in time and space
   tempdf <- tempdf[,`:=`(timediff = c(diff(time), NA),
-                         spatdiff = wat_simple_dist(df = tempdf, x = "x", y = "y"))]
+                         spatdiff = watlastools::wat_simple_dist(df = tempdf, x = "x", y = "y"))]
 
   # find missing patches if timediff is greater than specified (default 30 mins)
   # AND spatdiff is less than specified (100 m)
@@ -89,7 +88,7 @@ wat_infer_residence <- function(df,
                             msg = "some inferred patches with only 1 position")
   }
   # remove unn columns
-  set(tempdf, ,c("posId","npoints"), NULL)
+  data.table::set(tempdf, ,c("posId","npoints"), NULL)
 
   # add type to real data
   df[,type:="real"]
@@ -116,10 +115,11 @@ wat_infer_residence <- function(df,
     rm(tempdf); gc()
 
     # remove infPatch and nfixes
-    set(infPatchDf, ,c("infPatch", "nfixes"), NULL)
+    data.table::set(infPatchDf, ,c("infPatch", "nfixes"), NULL)
 
     # merge inferred data to empirical data
-    df <- base::merge(df, infPatchDf, by = intersect(names(df), names(infPatchDf)), all = T)
+    df <- data.table::merge.data.table(df, infPatchDf, by = intersect(names(df), 
+                                        names(infPatchDf)), all = TRUE)
   }
 
   # sort by time

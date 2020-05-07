@@ -17,16 +17,21 @@ wat_get_patch_summary = function(resPatchData,
   # check somedata is a data.frame and has a resTime column
   {
     assertthat::assert_that(is.data.frame(res_patch_data),
-                msg = glue::glue('getPatchData: input not a dataframe object,
+                msg = glue::glue('getPatchData: input not a dataframe object, \\
                 has class {stringr::str_flatten(class(res_patch_data), collapse = " ")}!'))
   }
 
+  # convert to data.table
+  {
+    # convert both to DT if not
+    if(data.table::is.data.table(somedata) != TRUE) {data.table::setDT(somedata)}
+  }
+
   # return only summary if requested
-  if(whichData %in% c("summary", "summary"))
+  if(whichData == "summary")
   {
     res_patch_data$patchdata <- NULL
     res_patch_data <- res_patch_data[,lapply(.SD, unlist)]
-
   }
 
   # return only spatial summary if requested
@@ -51,11 +56,9 @@ wat_get_patch_summary = function(resPatchData,
 
   if(whichData %in% c("points"))
   {
-    res_patch_data$polygons <- NULL
     res_patch_data <- res_patch_data[, .(id, tide_number, patch, patchdata)]
     res_patch_data <- res_patch_data[, unlist(patchdata, recursive = FALSE),
                          by = .(id, tide_number, patch)]
-
   }
   return(res_patch_data)
 }

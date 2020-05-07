@@ -77,7 +77,7 @@ The patches can be visualised using ggplot (or anything else).
 
 ```{r get_patch_summary}
 # get patch summary
-patch_summary <- wat_get_patch_summary(resPatchData = patches,
+patch_summary <- wat_get_patch_summary(res_patch_data = patches,
                                        whichData = "summary")
 
 # get the class of the full object and the column types
@@ -90,7 +90,7 @@ The patch points are the raw points that make up the residence patches.
 
 ```{r get_patch_points}
 # get patch points
-patch_points <- wat_get_patch_summary(resPatchData = patches,
+patch_points <- wat_get_patch_summary(res_patch_data = patches,
                                       whichData = "points")
 
 # get class and column type
@@ -103,7 +103,7 @@ This should have the added class `sf`, and the polygons column should have the t
 
 ```{r get_patch_polygons}
 # get patch points
-patch_polygons <- wat_get_patch_summary(resPatchData = patches,
+patch_polygons <- wat_get_patch_summary(res_patch_data = patches,
                                       whichData = "spatial")
 
 # get class and column type

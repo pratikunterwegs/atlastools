@@ -60,15 +60,15 @@ testthat::test_that("patch data access function works", {
 
   # access testoutput summary
   copy1 <- copy2 <- copy3 <- testoutput
-  data_access_summary <- watlastools::wat_get_patch_summary(resPatchData = copy1,
+  data_access_summary <- watlastools::wat_get_patch_summary(res_patch_data = copy1,
                                                       whichData = "summary")
 
   # access testoutput spatial
-  data_access_sf <- watlastools::wat_get_patch_summary(resPatchData = copy2,
+  data_access_sf <- watlastools::wat_get_patch_summary(res_patch_data = copy2,
                                                   whichData = "spatial")
 
   # access testoutput spatial
-  data_access_pt <- watlastools::wat_get_patch_summary(resPatchData = copy3,
+  data_access_pt <- watlastools::wat_get_patch_summary(res_patch_data = copy3,
                                                   whichData = "points")
 
   # test class summary

@@ -4,7 +4,6 @@
 #' @param resTimeLimit A numeric giving the time limit in minutes against which residence time is compared.
 #'
 #' @return A data.frame extension object, which retains only points classified as residence points if residence time is below \code{resTimeLimit} over \code{travelSeg} points.
-#' @import data.table
 #' @export
 #'
 
@@ -14,17 +13,17 @@ wat_classify_points <- function(somedata,
   {
     # check if data frame
     assertthat::assert_that(is.data.frame(somedata),
-                            msg = glue::glue('classifyPath: input not a dataframe object, has class {stringr::str_flatten(class(somedata), collapse = " ")}!'))
+                            msg = glue::glue('wat_classify_points: input not a dataframe object, has class {stringr::str_flatten(class(somedata), collapse = " ")}!'))
 
     assertthat::assert_that("resTime" %in% names(somedata),
-                            msg = "classifypath: data has no residence time column")
+                            msg = "wat_classify_points: data has no residence time column")
     assertthat::assert_that(min(c(resTimeLimit)) > 1,
                             msg = "wat_classify_points: function arguments are not positive")
   }
 
   # make datatable to use functions
-  if (is.data.table(somedata) != TRUE) {
-    setDT(somedata)
+  if (!data.table::is.data.table(somedata)) {
+    data.table::setDT(somedata)
   }
 
   # handle global variable issues

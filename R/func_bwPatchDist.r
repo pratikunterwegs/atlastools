@@ -15,8 +15,9 @@ wat_bw_patch_dist = function(df, x1 = "x_end", x2 = "x_start",
   assertthat::assert_that(is.data.frame(df),
                           is.character(x1),
                           is.character(y1),
-                          msg = "bwPatchDist: some df assumptions are not met")
-  # get distance
+                          msg = "bw_patch_dist: some df assumptions are not met")
+                          
+  # get distance returning zero if single point or NA by default
   dist <- dplyr::case_when(nrow(df) > 1 ~
                              # get x and y
                              {

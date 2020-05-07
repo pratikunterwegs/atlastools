@@ -16,6 +16,11 @@ wat_agg_data <- function(df,
   assertthat::assert_that("data.frame" %in% class(df),
                           msg = "wat_agg_data: input not a dataframe object!")
 
+  # id input is not a data.table set it so
+  if(!data.table::is.data.table(df)){
+    setDT(df)
+  }
+
   # include asserts checking for required columns
   {
     dfnames <- colnames(df)

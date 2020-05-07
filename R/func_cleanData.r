@@ -49,7 +49,7 @@ wat_clean_data <- function(somedata,
   # convert to data.table
   {
     # convert both to DT if not
-    if(is.data.table(somedata) != TRUE) {setDT(somedata)}
+    if(data.table::is.data.table(somedata) != TRUE) {data.table::setDT(somedata)}
   }
 
   # delete positions with approximated standard deviations above SD_threshold,
@@ -98,9 +98,9 @@ wat_clean_data <- function(somedata,
 
   }else{
 
-    somedata <- data.frame(matrix(NA, nrow = 0, ncol = 12))
-    colnames(somedata) <- c("id", "posID", "time", "ts", "X_raw",
-                            "Y_raw", "NBS", "VARX", "VARY", "COVXY", "x", "y")
+    somedata <- data.table::data.table(matrix(NA, nrow = 0, ncol = 12))
+    setnames(somedata, c("id", "posID", "time", "ts", "X_raw",
+                            "Y_raw", "NBS", "VARX", "VARY", "COVXY", "x", "y"))
   }
 
   assertthat::assert_that("data.frame" %in% class(somedata),

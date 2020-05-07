@@ -42,7 +42,7 @@ wat_rm_attractor <- function(df,
   # convert to data.table
   {
     # convert both to DT if not
-    if(is.data.table(df) != TRUE) {setDT(df)}
+    if(is.data.table(df) != TRUE) {data.table::setDT(df)}
   }
 
   # remove attractors

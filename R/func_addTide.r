@@ -61,7 +61,7 @@ wat_add_tide <- function(df,
 
 	# merge with tide data and order on high tide
 	{
-		temp_data <- data.table::merge(df, tide_data, by.x = "ts", by.y = "time",
+		temp_data <- data.table::merge.data.table(df, tide_data, by.x = "ts", by.y = "time",
                      all = TRUE)
     data.table::setorder(temp_data, ts)
 

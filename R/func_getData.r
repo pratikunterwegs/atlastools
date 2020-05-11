@@ -74,6 +74,7 @@ wat_get_data <- function(tag,
   # a bit indirect, but there were some strange warnings with NaN produced.
   if(nrow(tmp_data)>0)
   {
+    # could be clearer
     tmp_SD <- tmp_data$VARX + tmp_data$VARY + 2*tmp_data$COVXY
     tmp_data$SD <- 0
     tmp_data$SD[tmp_SD > 0] <- sqrt(tmp_SD[tmp_SD > 0])

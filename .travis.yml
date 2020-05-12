@@ -31,4 +31,4 @@ before_install:
 branches:
   only:
   - master
-  - devbranch
+  - develop

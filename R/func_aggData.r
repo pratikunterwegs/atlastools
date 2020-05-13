@@ -16,10 +16,15 @@ wat_agg_data <- function(df,
   assertthat::assert_that("data.frame" %in% class(df),
                           msg = "wat_agg_data: input not a dataframe object!")
 
+  # id input is not a data.table set it so
+  if(!data.table::is.data.table(df)){
+    setDT(df)
+  }
+
   # include asserts checking for required columns
   {
     dfnames <- colnames(df)
-    namesReq <- c("x", "y", "time")
+    namesReq <- c("x", "y", "time", "VARX", "VARY", "COVXY")
     purrr::walk (namesReq, function(nr) {
       assertthat::assert_that(nr %in% dfnames,
                               msg = glue::glue('wat_agg_data: {nr} is
@@ -34,7 +39,16 @@ wat_agg_data <- function(df,
   # aggregate over tracking interval
   {
     df[, time := floor(time/interval) * interval]
+    # set SD (standard deviation to NULL, ie remove)
+    # in any case it's never used again
+    # df[,SD := NULL]
     df <- df[,lapply(.SD, mean, na.rm=TRUE), by = list(time, id)]
+
+    # now recalculate the SD as sqrt(varx + vary + 2*covxy)
+    # or zero, whichever is greater
+    df[, SD := ifelse((VARX + VARY + 2*COVXY) > 0,
+                      sqrt(VARX + VARY + 2*COVXY), 
+                      0)]
   }
 
   # check output class of ts

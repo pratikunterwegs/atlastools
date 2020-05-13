@@ -44,7 +44,7 @@ server <- function(input, output) {
     output$patchSummary <- renderTable(striped=TRUE, digits=2,
       expr=
       {
-        patchSummary <- watlastools::wat_get_patch_summary(resPatchData = dataOut(),
+        patchSummary <- watlastools::wat_get_patch_summary(res_patch_data = dataOut(),
         whichData = "summary")
 
         patchSummary <- dplyr::mutate(patchSummary, duration = duration/60)
@@ -71,7 +71,7 @@ server <- function(input, output) {
 
         output$patch_map <- renderLeaflet(
           {
-            patchSummary <- wat_get_patch_summary(resPatchData = dataOut(),
+            patchSummary <- wat_get_patch_summary(res_patch_data = dataOut(),
             whichData = "spatial")
             patchSummary <- dplyr::mutate(patchSummary, duration = duration/60)
             sf::st_crs(patchSummary) <- 32631
@@ -121,7 +121,7 @@ server <- function(input, output) {
             # get patch summary for vert lines
             {
               # get patch outlines
-              patchSummary <- watlastools::wat_get_patch_summary(resPatchData = dataOut(),
+              patchSummary <- watlastools::wat_get_patch_summary(res_patch_data = dataOut(),
               whichData = "summary")
             }
 

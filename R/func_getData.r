@@ -17,7 +17,7 @@ wat_get_data <- function(tag,
                       tracking_time_start,
                       tracking_time_end,
                       tag_prefix="31001000",
-                      database = "db",
+                      database = "some_database",
                       host = "abtdb1.nioz.nl",
                       username = "someuser",
                       password = "somepassword"){
@@ -39,7 +39,7 @@ wat_get_data <- function(tag,
 
   # process function arguments for sql database
   {
-    tag <- paste(tag_prefix,tag,sep="")
+    tag <- glue::glue('{tag_prefix}{tag}')
     # convert to POSIXct format
     tracking_time_start <- as.POSIXct(tracking_time_start, tz="CET")
     tracking_time_end <- as.POSIXct(tracking_time_end, tz="CET")
@@ -53,35 +53,41 @@ wat_get_data <- function(tag,
 
   # connect to the ATLAS server
   {
-    mydb = dbConnect(MySQL(), user=username, password=password, dbname=database, host=host)
+    mydb = RMySQL::dbConnect(RMySQL::MySQL(), user=username, password=password, dbname=database, host=host)
   }
 
   # SQL code to retrive data
   {
-    sql <- paste("select TAG, TIME, X, Y, NBS, VARX, VARY, COVXY  from LOCALIZATIONS where TAG = ", tag, " AND ","TIME > '",tracking_time_start,"' AND ","TIME < '",tracking_time_end,"' ","ORDER BY TIME ASC",sep="")
+    sql_query <- glue::glue_sql("select TAG, TIME, X, Y, NBS, VARX, VARY, COVXY 
+    FROM LOCALIZATIONS 
+    WHERE TAG = {`tag`} 
+      AND TIME > {`tracking_time_start`} 
+      AND TIME < {`tracking_time_end`} 
+    ORDER BY TIME ASC")
   }
 
   # getdata
-  d <- DBI::dbGetQuery()(mydb, sql)
+  tmp_data <- DBI::dbGetQuery(mydb, sql_query)
 
   # add aproximate SD of localization
   # d$SD<-maxSD(d)
   # a bit indirect, but there were some strange warnings with NaN produced.
-  if(nrow(d)>0)
+  if(nrow(tmp_data)>0)
   {
-    tmp <- d$VARX + d$VARY + 2*d$COVXY
-    d$SD <- 0
-    d$SD[tmp>0] <- sqrt(tmp[tmp>0])
+    # could be clearer
+    tmp_SD <- tmp_data$VARX + tmp_data$VARY + 2*tmp_data$COVXY
+    tmp_data$SD <- 0
+    tmp_data$SD[tmp_SD > 0] <- sqrt(tmp_SD[tmp_SD > 0])
   }else{
-    d$SD <- numeric(0)
+    tmp_data$SD <- numeric(0)
   }
 
   # close connection
-  dbDisconnect(mydb)
+  RMySQL::dbDisconnect(mydb)
 
   # or close all connections
   # lapply( dbListConnections(MySQL()), function(x) dbDisconnect(x)
 
   # return a dataframe of values
-  return(d)
+  return(tmp_data)
 }

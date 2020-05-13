@@ -22,6 +22,11 @@ wat_add_tide <- function(df,
 			msg = "wat_add_tide: tide_data not found")
 	}
 
+  # id input is not a data.table set it so
+  if(!data.table::is.data.table(df)){
+    setDT(df)
+  }
+
 	# include asserts checking for correct columns and data type
 	{
 	  # check position data frame
@@ -38,14 +43,14 @@ wat_add_tide <- function(df,
       if(min_time_diff < 0){
       	warning("wat_add_tide: time not ordered, re-ordering")
       }
-      setorder(df, time)
+      data.table::setorder(df, time)
       assertthat::assert_that("POSIXct" %in% class(df$ts))
 
       # check tide data
       # tide_df_names <- colnames(tide_data)
       namesReq <- c("time", "tide", "tide_number")
       # read in tide data
-      tide_data <- fread(tide_data)[,time:=fasttime::fastPOSIXct(time)]
+      tide_data <- data.table::fread(tide_data)[,time:=fasttime::fastPOSIXct(time)]
 
       purrr::walk (namesReq, function(nr) {
         assertthat::assert_that(nr %in% colnames(tide_data),
@@ -56,12 +61,12 @@ wat_add_tide <- function(df,
 
 	# merge with tide data and order on high tide
 	{
-		temp_data <- merge(df, tide_data, by.x = "ts", by.y = "time",
+		temp_data <- data.table::merge.data.table(df, tide_data, by.x = "ts", by.y = "time",
                      all = TRUE)
-    setorder(temp_data, ts)
+    data.table::setorder(temp_data, ts)
 
     # get tide_number and time since high tide
-    temp_data[, tide_number := nafill(tide_number, "locf")]
+    temp_data[, tide_number := data.table::nafill(tide_number, "locf")]
     temp_data[, tidaltime := as.numeric(difftime(ts, ts[1], units = "mins")),
              by = tide_number]
 

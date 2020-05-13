@@ -4,7 +4,6 @@
 #' @param spatIndepLim The spatial independence limit.
 #' @param tempIndepLim The temporal independence limit.
 #' @param bufferSize The buffer size for spatial polygons.
-#'
 #' @return A datatable with repaired high tide patches.
 #' @import data.table
 #' @export
@@ -29,8 +28,8 @@ wat_repair_ht_patches <- function(patch_data_list,
     # check for dataframe and sf object
     # check if data frame
     assertthat::assert_that(is.list(patch_data_list),
-       msg = glue::glue('wat_repair_ht: input not a
-              list, has class
+       msg = glue::glue('wat_repair_ht: input not a \\
+              list, has class \\
               {stringr::str_flatten(class(patch_data_list),
               collapse = " ")}!'))
 
@@ -51,6 +50,7 @@ wat_repair_ht_patches <- function(patch_data_list,
   tryCatch({
 
   # bind all datatable into a single datatable
+  # this needs to change
   patch_data_list <- patch_data_list[unlist(purrr::map(patch_data_list,
       function(l) {is.data.table(l) & nrow(l) > 0 & all(namesReq %in% colnames(l))}))]
   data <- rbindlist(patch_data_list, use.names = TRUE)
@@ -98,7 +98,7 @@ wat_repair_ht_patches <- function(patch_data_list,
     edge_data <- cbind(temp_ed, rbindlist(edge_data$patchdata, use.names = TRUE))
     rm(temp_ed)
 
-    edge_data <- merge(edge_data, edge_data_summary,
+    edge_data <- data.table::merge.data.table(edge_data, edge_data_summary,
                        by = c("tide_number", "patch"))
 
   }
@@ -114,12 +114,12 @@ wat_repair_ht_patches <- function(patch_data_list,
     # get basic data summaries
     edge_data[,patchSummary:= lapply(patchdata, function(dt){
       dt <- dt[,.(time, x, y, resTime, tidaltime, waterlevel)]
-      dt <- setDF(dt)
+      dt <- data.table::setDF(dt)
       dt <- dplyr::summarise_all(.tbl = dt,
                                  .funs = list(start = dplyr::first,
                                               end = dplyr::last,
                                               mean = mean))
-      return(setDT(dt))
+      return(data.table::setDT(dt))
     })]
   }
 
@@ -176,7 +176,7 @@ wat_repair_ht_patches <- function(patch_data_list,
   edge_data[, polygons := NULL]
 
   # remove patch summary from some data and add temp data, then del tempdata
-  edge_data <- merge(edge_data, tempdata, by = c("id", "tide_number", "patch"))
+  edge_data <- data.table::merge.data.table(edge_data, tempdata, by = c("id", "tide_number", "patch"))
   edge_data[,nfixes := unlist(lapply(patchdata, nrow))]
 
   # reattach edge cases to regular patch data and set order by start time

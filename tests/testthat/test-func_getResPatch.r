@@ -29,10 +29,10 @@ testthat::test_that("patch calc on empirical data", {
   expnames <- c("id", "tide_number", "type", "patch", "time_mean",
                 "tidaltime_mean", "x_mean", "y_mean", "duration", "distInPatch",
                 "distBwPatch",  "dispInPatch")
-  for(i in 1:length(expnames)){
-    testthat::expect_true(expnames[i] %in% colnames(testoutput),
-                          info = glue::glue('{expnames[i]} expected in output but not produced'))
-  }
+  purrr::walk(expnames, function(expname){
+    testthat::expect_true(expname %in% colnames(testoutput),
+                          info = glue::glue('{expname} expected in output but not produced'))
+  })
 
   # check that data are ordered in time
   testthat::expect_gt(min(as.numeric(diff(testoutput$time_mean)), na.rm = TRUE), 0)
@@ -60,15 +60,15 @@ testthat::test_that("patch data access function works", {
 
   # access testoutput summary
   copy1 <- copy2 <- copy3 <- testoutput
-  data_access_summary <- watlastools::wat_get_patch_summary(resPatchData = copy1,
+  data_access_summary <- watlastools::wat_get_patch_summary(res_patch_data = copy1,
                                                       whichData = "summary")
 
   # access testoutput spatial
-  data_access_sf <- watlastools::wat_get_patch_summary(resPatchData = copy2,
+  data_access_sf <- watlastools::wat_get_patch_summary(res_patch_data = copy2,
                                                   whichData = "spatial")
 
   # access testoutput spatial
-  data_access_pt <- watlastools::wat_get_patch_summary(resPatchData = copy3,
+  data_access_pt <- watlastools::wat_get_patch_summary(res_patch_data = copy3,
                                                   whichData = "points")
 
   # test class summary
@@ -83,10 +83,10 @@ testthat::test_that("patch data access function works", {
                 "tidaltime_mean", "x_mean", "y_mean", "duration", "distInPatch", "waterlevel_mean",
                 "distBwPatch", "dispInPatch")
   # test col names in data access
-  for(i in 1:length(expnames)){
-    testthat::expect_true(expnames[i] %in% colnames(data_access_sf),
-                          info = glue::glue('{expnames[i]} expected in output but not produced'))
-  }
+  purrr::walk(expnames, function(expname){
+    testthat::expect_true(expname %in% colnames(data_access_sf),
+                          info = glue::glue('{expname} expected in output but not produced'))
+  })
 
   # check that data are ordered in time
   testthat::expect_gt(min(as.numeric(diff(testoutput$time_mean)), na.rm = TRUE), 0)

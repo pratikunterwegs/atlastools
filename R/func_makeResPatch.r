@@ -47,7 +47,7 @@ wat_make_res_patch <- function(somedata,
   }
 
   # get names and numeric variables
-  dfnames <- names(somedata)
+  dfnames <- colnames(somedata)
   namesReq <- c("id", "tide_number", "x", "y", "time", "type", "resTime", "tidaltime")
 
   # include asserts checking for required columns
@@ -59,7 +59,7 @@ wat_make_res_patch <- function(somedata,
   }
 
   # make datatable to use functions
-  if(is.data.table(somedata) != TRUE) {setDT(somedata)}
+  if(is.data.table(somedata) != TRUE) {data.table::setDT(somedata)}
   # sort by time
   data.table::setorder(somedata, time)
 
@@ -100,10 +100,10 @@ wat_make_res_patch <- function(somedata,
         # nest data
         somedata <- somedata[, .(list(.SD)), by = .(id, tide_number, patch)]
         setnames(somedata, old = "V1", new = "patchdata")
-        somedata[,nfixes:=purrr::map_int(patchdata, nrow)]
+        somedata[,nfixes := purrr::map_int(patchdata, nrow)]
 
         # summarise mean, first and last
-        somedata[,patchSummary:= lapply(patchdata, function(dt){
+        somedata[,patchSummary := lapply(patchdata, function(dt){
           dt <- dt[,.(time, x, y, resTime)]
           dt <- setDF(dt)
           dt <- dplyr::summarise_at(.tbl = dt,
@@ -118,7 +118,7 @@ wat_make_res_patch <- function(somedata,
         {
           patchsummary <- somedata[,unlist(patchSummary, recursive = FALSE),
                                    by = .(id, tide_number, patch)]
-          somedata[,patchSummary:=NULL]
+          somedata[,patchSummary := NULL]
           # get time bewteen start of n+1 and end of n
           patchsummary[,timediff := c(Inf,
                                       as.numeric(time_start[2:length(time_start)] -
@@ -149,7 +149,7 @@ wat_make_res_patch <- function(somedata,
         somedata <- somedata[, unlist(patchdata, recursive = FALSE),
                  by = .(id, tide_number, patch)]
 
-        somedata <- merge(somedata, patchsummary, by = "patch")
+        somedata <- data.table::merge.data.table(somedata, patchsummary, by = "patch")
         somedata[,`:=`(patch=newpatch, newpatch=NULL)]
 
         # nest data again
@@ -222,15 +222,14 @@ wat_make_res_patch <- function(somedata,
       }
 
       # remove patch summary from some data and add temp data, then del tempdata
-      somedata <- merge(somedata, tempdata, by = c("id", "tide_number", "patch"))
+      somedata <- data.table::merge.data.table(somedata, tempdata, by = c("id", "tide_number", "patch"))
 
       return(somedata)
     },
     # null error function, with option to collect data on errors
     error= function(e)
     {
-      message(glue::glue('\nthere was an error in id_tide combination...
-                                  {unique(somedata$id)} {unique(somedata$tide_number)}\n'))
+      message(glue::glue('\nthere was an error in {unique(somedata$id)} {unique(somedata$tide_number)}\n'))
       # dfErrors <- append(dfErrors, glue(z$id, "_", z$tidalCycle))
     }
   )

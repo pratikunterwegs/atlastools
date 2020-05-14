@@ -80,7 +80,7 @@ wat_clean_data <- function(somedata,
     somedata[,ts := as.POSIXct(TIME, tz = "CET", origin = "1970-01-01")]
 
     # median filter
-    #includes reversed smoothing to get rid of a possible phase shift
+    # includes reversed smoothing to get rid of a possible phase shift
     somedata[,lapply(.SD,
                      function(z){
                        stats::runmed(rev(stats::runmed(z, moving_window)),
@@ -93,8 +93,6 @@ wat_clean_data <- function(somedata,
     # rename x,y,time to lower case
     setnames(somedata, old = c("X","Y","TAG","TIME"),
              new = c("x","y","id","time"))
-
-    somedata <- somedata
 
   }else{
 

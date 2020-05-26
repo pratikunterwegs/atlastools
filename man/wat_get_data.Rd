@@ -9,7 +9,7 @@ wat_get_data(
   tracking_time_start,
   tracking_time_end,
   tag_prefix = "31001000",
-  database = "db",
+  database = "some_database",
   host = "abtdb1.nioz.nl",
   username = "someuser",
   password = "somepassword"

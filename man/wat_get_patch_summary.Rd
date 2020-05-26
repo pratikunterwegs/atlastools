@@ -4,10 +4,10 @@
 \alias{wat_get_patch_summary}
 \title{Get derived data from residence patch construction: patch summaries, sf-based patches, or raw points with patch numbers.}
 \usage{
-wat_get_patch_summary(resPatchData, whichData = "summary", bufferSize = 10)
+wat_get_patch_summary(res_patch_data, whichData = "summary", bufferSize = 10)
 }
 \arguments{
-\item{resPatchData}{A tibble with a nested list column of the raw data underlying each patch. This column is specified in the argument \code{dataColumn}}
+\item{res_patch_data}{A tibble with a nested list column of the raw data underlying each patch. This column is specified in the argument \code{dataColumn}}
 
 \item{whichData}{Which data to return, the raw data underlying the patch, or a spatial features object with only the patch summary.}
 

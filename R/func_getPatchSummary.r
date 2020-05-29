@@ -22,7 +22,7 @@ wat_get_patch_summary = function(res_patch_data,
   # convert to data.table
   {
     # convert both to DT if not
-    if(data.table::is.data.table(res_patch_data) != TRUE) 
+    if(data.table::is.data.table(res_patch_data) != TRUE)
     {data.table::setDT(res_patch_data)}
   }
 
@@ -30,6 +30,7 @@ wat_get_patch_summary = function(res_patch_data,
   if(whichData == "summary")
   {
     res_patch_data$patchdata <- NULL
+    # get rid of nested list columns
     res_patch_data <- res_patch_data[,lapply(.SD, unlist)]
   }
 
@@ -47,12 +48,18 @@ wat_get_patch_summary = function(res_patch_data,
     # make spatial polygons
     {
       polygons <- purrr::reduce(res_patch_data$polygons, c)
+      # temp remove
+      res_patch_data[,polygons:=NULL]
+      # unlist all the list columns
+      res_patch_data <- res_patch_data[,lapply(.SD, unlist)]
+      # reassign
       res_patch_data$polygons <- polygons
       res_patch_data <- sf::st_as_sf(res_patch_data, sf_column_name = "polygons")
     }
     res_patch_data <- sf::st_cast(res_patch_data, "MULTIPOLYGON")
   }
 
+  # THIS IS UNRELIABLE FOR NOW
   if(whichData %in% c("points"))
   {
     res_patch_data <- res_patch_data[, .(id, tide_number, patch, patchdata)]

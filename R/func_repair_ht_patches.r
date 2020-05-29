@@ -189,6 +189,9 @@ wat_repair_ht_patches <- function(patch_data_list,
   # fix patch numbers in tides
   data[,patch:=1:length(nfixes), by=.(tide_number)]
 
+  # unlist all list columns
+  data[,lapply(.SD, unlist), .SDcols = setdiff(colnames(data), "patchdata")]
+
   return(data)
   },
   error= function(e)

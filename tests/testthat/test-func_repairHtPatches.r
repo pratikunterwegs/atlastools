@@ -3,13 +3,13 @@ testthat::test_that("high tide repair works", {
 
   # read in data
   files_list <- list.files("../testdata/", pattern = "413_", full.names = T)
-  data_list <- lapply(files_list[1:10], fread)
+  data_list <- lapply(files_list[1:10], data.table::fread)
 
   # assume all patches are real
   data_list <- lapply(data_list, function(df){
-    df <- wat_infer_residence(df)
-    df <- wat_classify_points(somedata = df, resTimeLimit = 2)
-    df <- wat_make_res_patch(somedata = df,
+    df <- watlastools::wat_infer_residence(df)
+    df <- watlastools::wat_classify_points(somedata = df, resTimeLimit = 2)
+    df <- watlastools::wat_make_res_patch(somedata = df,
                              bufferSize = 10,
                              spatIndepLim = 100,
                              tempIndepLim = 30,
@@ -30,10 +30,18 @@ testthat::test_that("high tide repair works", {
   expnames <- c("id", "tide_number", "type", "patch", "time_mean",
                 "tidaltime_mean", "x_mean", "y_mean", "duration", "distInPatch",
                 "distBwPatch",  "dispInPatch")
-  for(i in 1:length(expnames)){
-    testthat::expect_true(expnames[i] %in% colnames(repaired_data),
+
+  # check that the data columns are not list
+  testthat::expect_true(!"list" %in%
+                          purrr::map_chr(repaired_data[,.(setdiff(colnames(repaired_data),
+                                                                   "patchdata"))],
+                                         class))
+
+  # check that expected column names are present
+  purrr::walk(expnames, function(en){
+    testthat::expect_true(en %in% colnames(repaired_data),
                           info = glue::glue('{expnames[i]} expected in output but not produced'))
-  }
+  })
 
   # check that data are ordered in time
   testthat::expect_gt(min(as.numeric(diff(repaired_data$time_mean)), na.rm = TRUE), 0)

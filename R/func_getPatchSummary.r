@@ -59,6 +59,7 @@ wat_get_patch_summary = function(res_patch_data,
     res_patch_data <- sf::st_cast(res_patch_data, "MULTIPOLYGON")
   }
 
+  # THIS IS UNRELIABLE FOR NOW
   if(whichData %in% c("points"))
   {
     res_patch_data <- res_patch_data[, .(id, tide_number, patch, patchdata)]

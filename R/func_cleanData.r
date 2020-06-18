@@ -1,6 +1,6 @@
 #' A function to clean data accessed from the NIOZ WATLAS server. Allows filtering on standard deviation, and the number of receivers that detected the tag. Applies a moving-window median filter, whose size can be specified.
 #'
-#' @param somedata A dataframe object returned by getData. Must contain the columns "X", "Y", "SD", "NBS", "TAG", "TIME"; these are the X coordinate, Y coordinate, standard deviation in measurement, number of ATLAS towers that received the signal, the tag number, and the numeric time, in milliseconds from 1970-01-01.
+#' @param data A dataframe object returned by getData. Must contain the columns "X", "Y", "SD", "NBS", "TAG", "TIME"; these are the X coordinate, Y coordinate, standard deviation in measurement, number of ATLAS towers that received the signal, the tag number, and the numeric time, in milliseconds from 1970-01-01.
 #' @param sd_threshold A threshold value above which rows are removed.
 #' @param nbs_min The minimum number of base stations (ATLAS towers) that received tag signal.
 #' @param moving_window The size of the moving window for the running median calculation.
@@ -10,7 +10,7 @@
 #' @return A datatable class object (extends data.frame) which has the additional columns posID and ts, which is TIME converted to human readable POSIXct format.
 #' @export
 #'
-wat_clean_data <- function(somedata,
+wat_clean_data <- function(data,
                            moving_window=3,
                            nbs_min=0,
                            sd_threshold=500000,
@@ -23,15 +23,15 @@ wat_clean_data <- function(somedata,
 
   # check parameter types and assumptions
   {
-    assertthat::assert_that("data.frame" %in% class(somedata),
+    assertthat::assert_that("data.frame" %in% class(data),
                             msg = "cleanData: not a dataframe object!")
 
     # include asserts checking for required columns
     {
-      dfnames <- colnames(somedata)
-      namesReq <- c("X", "Y", "SD", "NBS", "TAG", "TIME", "VARX", "VARY", "COVXY")
-      purrr::walk (namesReq, function(nr) {
-        assertthat::assert_that(nr %in% dfnames,
+      data_names <- colnames(data)
+      names_req <- c("X", "Y", "SD", "NBS", "TAG", "TIME", "VARX", "VARY", "COVXY")
+      purrr::walk (names_req, function(nr) {
+        assertthat::assert_that(nr %in% data_names,
                                 msg = glue::glue('cleanData: {nr} is
                          required but missing from data!'))
       })
@@ -49,20 +49,20 @@ wat_clean_data <- function(somedata,
   # convert to data.table
   {
     # convert both to DT if not
-    if(data.table::is.data.table(somedata) != TRUE) {data.table::setDT(somedata)}
+    if(data.table::is.data.table(data) != TRUE) {data.table::setDT(data)}
   }
 
   # delete positions with approximated standard deviations above SD_threshold,
   # and below minimum number of base stations (NBS_min)
-  somedata <- somedata[SD < sd_threshold & NBS >= nbs_min,]
+  data <- data[SD < sd_threshold & NBS >= nbs_min,]
 
   prefix_num <- 31001000000
 
   # begin processing if there is data
-  if(nrow(somedata) > 1)
+  if(nrow(data) > 1)
   {
     # add position id and change time to seconds
-    somedata[,`:=`(posID = 1:nrow(somedata),
+    data[,`:=`(posID = 1:nrow(data),
                    TIME = as.numeric(TIME)/1e3,
                    TAG = as.numeric(TAG) - prefix_num,
                    X_raw = X,
@@ -70,41 +70,41 @@ wat_clean_data <- function(somedata,
 
     if(filter_speed == TRUE){
       # filter for insane speeds if asked
-      somedata[,sld := wat_simple_dist(somedata, "X", "Y")]
-      somedata[,sld_speed := sld/c(NA, as.numeric(diff(TIME)))]
-      somedata <- somedata[sld_speed <= (speed_cutoff / 3.6), ]
-      somedata[ ,`:=`(sld = NULL, sld_speed = NULL)]
+      data[,sld := watlastools::wat_simple_dist(data, "X", "Y")]
+      data[,sld_speed := sld/c(NA, as.numeric(diff(TIME)))]
+      data <- data[sld_speed <= (speed_cutoff / 3.6), ]
+      data[ ,`:=`(sld = NULL, sld_speed = NULL)]
     }
 
     # make separate timestamp col
-    somedata[,ts := as.POSIXct(TIME, tz = "CET", origin = "1970-01-01")]
+    data[,ts := as.POSIXct(TIME, tz = "CET", origin = "1970-01-01")]
 
     # median filter
     # includes reversed smoothing to get rid of a possible phase shift
-    somedata[,lapply(.SD,
+    data[,lapply(.SD,
                      function(z){
                        stats::runmed(rev(stats::runmed(z, moving_window)),
                                      moving_window)}),
              .SDcols = c("X", "Y")]
 
     ## postprocess (clean) data
-    somedata <- somedata[,.(TAG, posID, TIME, ts, X_raw, Y_raw, NBS, VARX, VARY, COVXY, X, Y, SD)]
+    data <- data[,.(TAG, posID, TIME, ts, X_raw, Y_raw, NBS, VARX, VARY, COVXY, X, Y, SD)]
 
     # rename x,y,time to lower case
-    setnames(somedata, old = c("X","Y","TAG","TIME"),
+    setnames(data, old = c("X","Y","TAG","TIME"),
              new = c("x","y","id","time"))
 
   }else{
 
-    somedata <- data.table::data.table(matrix(NA, nrow = 0, ncol = 12))
-    setnames(somedata, c("id", "posID", "time", "ts", "X_raw",
+    data <- data.table::data.table(matrix(NA, nrow = 0, ncol = 12))
+    setnames(data, c("id", "posID", "time", "ts", "X_raw",
                             "Y_raw", "NBS", "VARX", "VARY", "COVXY", "x", "y"))
   }
 
-  assertthat::assert_that("data.frame" %in% class(somedata),
+  assertthat::assert_that("data.frame" %in% class(data),
                           msg = "cleanData: cleanded data is not a dataframe object!")
 
-  return(somedata)
+  return(data)
 }
 
 # ends here

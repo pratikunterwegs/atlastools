@@ -2,7 +2,7 @@
 title: "Using watlastools"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{watlas_vignette}
+  %\VignetteIndexEntry{Using watlastools}
   %\VignetteEncoding{UTF-8}
   %\VignetteEngine{knitr::rmarkdown}
 editor_options: 

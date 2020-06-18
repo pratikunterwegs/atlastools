@@ -4,10 +4,10 @@
 \alias{wat_classify_points}
 \title{Classify points as residence points based on residence time.}
 \usage{
-wat_classify_points(somedata, resTimeLimit = 2)
+wat_classify_points(data, resTimeLimit = 2)
 }
 \arguments{
-\item{somedata}{A data frame which must have a column for the residence time at each point.}
+\item{data}{A data frame which must have a column for the residence time at each point.}
 
 \item{resTimeLimit}{A numeric giving the time limit in minutes against which residence time is compared.}
 }

@@ -6,19 +6,19 @@
 \usage{
 wat_repair_ht_patches(
   patch_data_list,
-  spatIndepLim = 100,
-  tempIndepLim = 30,
-  bufferSize = 10
+  lim_spat_indep = 100,
+  lim_time_indep = 30,
+  buffer_radius = 10
 )
 }
 \arguments{
 \item{patch_data_list}{A list of data.tables, each the output of make_res_patch. Must have an sfc geometry column.}
 
-\item{spatIndepLim}{The spatial independence limit.}
+\item{lim_spat_indep}{The spatial independence limit.}
 
-\item{tempIndepLim}{The temporal independence limit.}
+\item{lim_time_indep}{The temporal independence limit.}
 
-\item{bufferSize}{The buffer size for spatial polygons.}
+\item{buffer_radius}{The buffer size for spatial polygons.}
 }
 \value{
 A datatable with repaired high tide patches.

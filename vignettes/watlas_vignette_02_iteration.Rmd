@@ -2,7 +2,7 @@
 title: "Iterating patch construction"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{watlas_iteration}
+  %\VignetteIndexEntry{Iterating patch construction}
   %\VignetteEncoding{UTF-8}
   %\VignetteEngine{knitr::rmarkdown}
 editor_options: 

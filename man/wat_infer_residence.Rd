@@ -4,14 +4,14 @@
 \alias{wat_infer_residence}
 \title{Infer residence patches from gaps in the canonical data.}
 \usage{
-wat_infer_residence(df, infPatchTimeDiff = 30, infPatchSpatDiff = 100)
+wat_infer_residence(data, inf_patch_time_diff = 30, inf_patch_spat_diff = 100)
 }
 \arguments{
-\item{df}{A dataframe of recurse analysis, or must include, in addition to x, y and time columns, a residence time column named resTime, id, and tide_number, a tidaltime column named tidaltime.}
+\item{data}{A dataframe of recurse analysis, or must include, in addition to x, y and time columns, a residence time column named resTime, id, and tide_number, a tidaltime column named tidaltime.}
 
-\item{infPatchTimeDiff}{A numeric duration in minutes, of the minimum time difference between two points, above which, it is assumed worthwhile to examine whether there is a missing residence patch to be inferred.}
+\item{inf_patch_time_diff}{A numeric duration in minutes, of the minimum time difference between two points, above which, it is assumed worthwhile to examine whether there is a missing residence patch to be inferred.}
 
-\item{infPatchSpatDiff}{A numeric distance in metres, of the maximum spatial distance between two points, below which it may be assumed few extreme movements took place between them.}
+\item{inf_patch_spat_diff}{A numeric distance in metres, of the maximum spatial distance between two points, below which it may be assumed few extreme movements took place between them.}
 }
 \value{
 A data.frame extension object. This dataframe has additional inferred points, indicated by the additional column for empirical fixes ('real') or 'inferred'.

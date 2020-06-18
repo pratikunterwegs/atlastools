@@ -5,20 +5,20 @@ testthat::test_that("patch calc on empirical data", {
   somedata = data.table::fread("../testdata/435_025_revisit.csv")
 
   # run function for patch inference
-  inference_output <- watlastools::wat_infer_residence(somedata,
-                                                      infPatchTimeDiff = 30,
-                                                      infPatchSpatDiff = 100)
+  inference_output <- watlastools::wat_infer_residence(data = somedata,
+                                                      inf_patch_time_diff = 30,
+                                                      inf_patch_spat_diff = 100)
 
 
   # run function for classification
-  classified_output <- watlastools::wat_classify_points(somedata = inference_output)
+  classified_output <- watlastools::wat_classify_points(data = inference_output)
 
   # run function for patch construction
-  testoutput <- watlastools::wat_make_res_patch(somedata = classified_output,
-                                             bufferSize = 10,
-                                             spatIndepLim = 100,
-                                             tempIndepLim = 30,
-                                             restIndepLim = 10,
+  testoutput <- watlastools::wat_make_res_patch(data = classified_output,
+                                             buffer_radius = 10,
+                                             lim_spat_indep = 100,
+                                             lim_time_indep = 30,
+                                             lim_rest_indep = 10,
                                              minFixes = 3)
 
   # do tests
@@ -44,19 +44,19 @@ testthat::test_that("patch data access function works", {
   somedata = data.table::fread("../testdata/435_025_revisit.csv")
 
   # run function for patch inference
-  inference_output <- watlastools::wat_infer_residence(df = somedata,
-                                                      infPatchTimeDiff = 30,
-                                                      infPatchSpatDiff = 100)
+  inference_output <- watlastools::wat_infer_residence(data = somedata,
+                                                      inf_patch_time_diff = 30,
+                                                      inf_patch_spat_diff = 100)
 
 
   # run function for classification
-  classified_output <- watlastools::wat_classify_points(somedata = inference_output)
+  classified_output <- watlastools::wat_classify_points(data = inference_output)
 
   # run function for patch construction
-  testoutput <- watlastools::wat_make_res_patch(somedata = classified_output,
-                                             bufferSize = 10,
-                                             spatIndepLim = 50,
-                                             tempIndepLim = 30)
+  testoutput <- watlastools::wat_make_res_patch(data = classified_output,
+                                             buffer_radius = 10,
+                                             lim_spat_indep = 50,
+                                             lim_time_indep = 30)
 
   # access testoutput summary
   copy1 <- copy2 <- copy3 <- testoutput

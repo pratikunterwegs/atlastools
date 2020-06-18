@@ -6,12 +6,12 @@ testthat::test_that("adding tide data works", {
 
   # process with rm attractor, clean data, and add tide
   {
-    testoutput <- wat_clean_data(somedata = testdata,
-                                           moving_window=5,
-                                           nbs_min=3,
-                                           sd_threshold=5e5)
+    testoutput <- wat_clean_data(data = testdata,
+                                 moving_window=5,
+                                 nbs_min=3,
+                                 sd_threshold=5e5)
 
-    testoutput <- wat_add_tide(df = testoutput,
+    testoutput <- wat_add_tide(data = testoutput,
                                tide_data = "../testdata/tidesSummer2018.csv")
   }
 

@@ -5,7 +5,7 @@ testthat::test_that("residence classification works", {
   revdata = data.table::fread("../testdata/435_025_revisit.csv")
 
   # run function
-  testoutput <- watlastools::wat_classify_points(somedata = revdata, resTimeLimit = 2)
+  testoutput <- watlastools::wat_classify_points(data = revdata, resTimeLimit = 2)
 
   # do tests
   # test that the vector class is data.table and data.frame

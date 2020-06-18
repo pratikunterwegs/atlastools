@@ -86,7 +86,6 @@ Here, we will visualise the repaired data as in the previous vignette.
 ```{r vis_rep_data}
 # plotting libraries
 library(ggplot2)
-library(ggspatial)
 
 fig_patch_repair <- ggplot(repaired_data, aes(x_mean, y_mean))+
   geom_path(aes(group = tide_number),

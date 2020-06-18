@@ -23,13 +23,13 @@ knitr::opts_chunk$set(
 ```{r setup}
 library(watlastools)
 ```
+
 # Concept: Patches
 
 Patches are identified as shown in the schematic. More to be added in time.
 
 ```{r show_patch_schematic, eval=TRUE,echo = FALSE}
 knitr::include_graphics("../inst/schematic.png")
-
 ```
 
 # Making patches
@@ -49,21 +49,21 @@ Now make residence patches after inferring residence from gaps in the data.
 ```{r process_data}
 # run the three main functions on the data
 # first infer residence
-temp_data <- wat_infer_residence(df = data,
-                                 infPatchTimeDiff = 30,
-                                 infPatchSpatDiff = 100)
+temp_data <- wat_infer_residence(data = data,
+                                 inf_patch_time_diff = 30,
+                                 inf_patch_spat_diff = 100)
 
 # classify residence points
-temp_data <- wat_classify_points(somedata = temp_data,
+temp_data <- wat_classify_points(data = temp_data,
                                  resTimeLimit = 2)
 
 # make residence patches with sensible parameters
-patches <- wat_make_res_patch(somedata = temp_data,
-                               bufferSize = 10,
-                               spatIndepLim = 100,
-                               tempIndepLim = 30,
-                               restIndepLim = 30,
-                               minFixes = 3)
+patches <- wat_make_res_patch(data = temp_data,
+                              buffer_radius = 10,
+                              lim_spat_indep = 100,
+                              lim_time_indep = 30,
+                              lim_rest_indep = 30,
+                              minFixes = 3)
 ```
 
 # Getting data from patches
@@ -118,7 +118,6 @@ The code to make this plot is in the watlas_vignette.Rmd fine in the package's v
 ```{r see_patch_summary, echo=FALSE}
 # plotting libraries
 library(ggplot2)
-library(ggspatial)
 library(patchwork)
 
 # plot patch summary

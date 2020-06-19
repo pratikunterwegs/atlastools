@@ -126,7 +126,7 @@ wat_make_res_patch <- function(data,
                                       as.numeric(time_start[2:length(time_start)] -
                                                    time_end[1:length(time_end)-1]))]
           # get spatial difference from last to first point
-          patch_summary[,spat_diff := c(watlastools::wat_bw_patch_dist(df = patch_summary,
+          patch_summary[,spat_diff := c(watlastools::wat_bw_patch_dist(data = patch_summary,
                                                                      x1 = "x_end", x2 = "x_start",
                                                                      y1 = "y_end", y2 = "y_start"))]
           # set spat_diff 1 to Inf
@@ -182,7 +182,7 @@ wat_make_res_patch <- function(data,
         tempdata <- data[,unlist(patch_summary, recursive = FALSE),
                                  by = .(id, tide_number, patch)]
         data[,patch_summary:=NULL]
-        data[,distBwPatch := watlastools::wat_bw_patch_dist(df = tempdata,
+        data[,distBwPatch := watlastools::wat_bw_patch_dist(data = tempdata,
                                                             x1 = "x_end", x2 = "x_start",
                                                             y1 = "y_end", y2 = "y_start")]
         # displacement in a patch

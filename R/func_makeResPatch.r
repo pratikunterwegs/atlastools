@@ -5,7 +5,8 @@
 #' @param lim_spat_indep A numeric value of time in minutes of the time difference between two patches for them to be considered independent.
 #' @param lim_rest_indep A numeric value of time in minutes of the difference in residence times between two patches for them to be considered independent.
 #' @param lim_time_indep A numeric value of distance in metres of the spatial distance between two patches for them to the considered independent.
-#' @param minFixes The minimum number of fixes for a group of spatially-proximate number of ponts to be considered a preliminary residence patch.
+#' @param min_fixes The minimum number of fixes for a group of spatially-proximate number of ponts to be considered a preliminary residence patch.
+#' @param attributes_to_get Which point attributes should be summarised for the residence patch?
 #'
 #' @return A data.frame extension object. This dataframe has the added column \code{resPatch} based on cumulative patch summing. Depending on whether \code{inferPatches = TRUE}, the dataframe has additional inferred points. An additional column is created in each case, indicating whether the data are empirical fixes ('real') or 'inferred'.
 #' @import data.table
@@ -17,7 +18,8 @@ wat_make_res_patch <- function(data,
                             lim_spat_indep = 100,
                             lim_time_indep = 30,
                             lim_rest_indep = 30,
-                            minFixes = 3){
+                            min_fixes = 3,
+                            attributes_to_get = c("waterlevel", "tidaltime")){
   # handle global variable issues
   time <- time_diff <- type <- x <- y <- npoints <- NULL
   patch <- nfixes <- id <- tide_number <- patchdata <- tidaltime <- NULL
@@ -37,7 +39,7 @@ wat_make_res_patch <- function(data,
     assertthat::assert_that(min(as.numeric(diff(data$time))) >= 0,
                             msg = "wat_make_res_patch: not ordered in time!")
 
-    assertthat::assert_that(min(c(buffer_radius, lim_spat_indep, lim_time_indep, minFixes)) > 0,
+    assertthat::assert_that(min(c(buffer_radius, lim_spat_indep, lim_time_indep, min_fixes)) > 0,
                             msg = "wat_make_res_patch: function needs positive arguments")
 
   }
@@ -49,7 +51,9 @@ wat_make_res_patch <- function(data,
 
   # get names and numeric variables
   data_names <- colnames(data)
-  names_req <- c("id", "tide_number", "x", "y", "time", "type", "resTime", "tidaltime")
+  names_req <- c("id", "tide_number", "x", "y",
+                 "time", "type", "resTime", "tidaltime",
+                 attributes_to_get)
 
   # include asserts checking for required columns
   {
@@ -93,7 +97,7 @@ wat_make_res_patch <- function(data,
         data <- data[,nfixes := .N, by = c("id", "tide_number", "patch")]
 
         # remove patches with 2 or fewer points
-        data <- data[nfixes >= minFixes | type == "inferred", ]
+        data <- data[nfixes >= min_fixes | type == "inferred", ]
         data[,nfixes:=NULL]
       }
 
@@ -106,14 +110,16 @@ wat_make_res_patch <- function(data,
 
         # summarise mean, first and last
         data[,patch_summary := lapply(patchdata, function(dt){
-          dt <- dt[,.(time, x, y, resTime)]
-          dt <- setDF(dt)
-          dt <- dplyr::summarise_at(.tbl = dt,
-                                    .vars = dplyr::vars(time, x, y, resTime),
-                                    .funs = list(start = dplyr::first,
-                                                 end = dplyr::last,
-                                                 mean = mean))
-          return(setDT(dt))
+          dt2 <- dt[,unlist(lapply(.SD, function(d){
+            list(mean = mean(d),
+                 start = first(d),
+                 end = last(d))
+          }), recursive = FALSE), .SDcols = c("x","y","time","resTime")]
+
+          setnames(dt2,
+                   str_replace(colnames(dt2), "\\.", "_"))
+
+          return(dt2)
         })]
 
         # assess independence using summary data

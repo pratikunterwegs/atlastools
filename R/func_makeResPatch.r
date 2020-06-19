@@ -6,7 +6,6 @@
 #' @param lim_rest_indep A numeric value of time in minutes of the difference in residence times between two patches for them to be considered independent.
 #' @param lim_time_indep A numeric value of distance in metres of the spatial distance between two patches for them to the considered independent.
 #' @param min_fixes The minimum number of fixes for a group of spatially-proximate number of ponts to be considered a preliminary residence patch.
-#' @param attributes_to_get Which point attributes should be summarised for the residence patch?
 #'
 #' @return A data.frame extension object. This dataframe has the added column \code{resPatch} based on cumulative patch summing. Depending on whether \code{inferPatches = TRUE}, the dataframe has additional inferred points. An additional column is created in each case, indicating whether the data are empirical fixes ('real') or 'inferred'.
 #' @import data.table
@@ -18,8 +17,7 @@ wat_make_res_patch <- function(data,
                             lim_spat_indep = 100,
                             lim_time_indep = 30,
                             lim_rest_indep = 30,
-                            min_fixes = 3,
-                            attributes_to_get = c("waterlevel", "tidaltime")){
+                            min_fixes = 3){
   # handle global variable issues
   time <- time_diff <- type <- x <- y <- npoints <- NULL
   patch <- nfixes <- id <- tide_number <- patchdata <- tidaltime <- NULL

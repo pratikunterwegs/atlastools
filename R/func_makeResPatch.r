@@ -42,9 +42,9 @@ wat_make_res_patch <- function(data,
 
   }
 
-  # convert variable units
+  # convert variable units from minutes to seconds
   {
-    lim_time_indep = lim_time_indep*60
+    lim_time_indep = lim_time_indep * 60
   }
 
   # get names and numeric variables
@@ -164,13 +164,17 @@ wat_make_res_patch <- function(data,
 
         # basic metrics by new patch
         data[,patch_summary:= lapply(patchdata, function(dt){
-          dt <- dt[,.(time, x, y, resTime, tidaltime, waterlevel)]
-          dt <- setDF(dt)
-          dt <- dplyr::summarise_all(.tbl = dt,
-                                    .funs = list(start = dplyr::first,
-                                                 end = dplyr::last,
-                                                 mean = mean))
-          return(setDT(dt))
+          dt2 <- dt[,unlist(lapply(.SD, function(d){
+            list(mean = mean(d),
+                 start = first(d),
+                 end = last(d))
+          }), recursive = FALSE), .SDcols = c("x","y","time",
+                                              "resTime", "tidaltime", "waterlevel")]
+
+          setnames(dt2,
+                   stringr::str_replace(colnames(dt2), "\\.", "_"))
+
+          return(dt2)
         })]
       }
 

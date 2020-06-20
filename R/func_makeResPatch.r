@@ -50,8 +50,7 @@ wat_make_res_patch <- function(data,
   # get names and numeric variables
   data_names <- colnames(data)
   names_req <- c("id", "tide_number", "x", "y",
-                 "time", "type", "resTime", "tidaltime",
-                 attributes_to_get)
+                 "time", "type", "resTime", "tidaltime")
 
   # include asserts checking for required columns
   {
@@ -115,7 +114,7 @@ wat_make_res_patch <- function(data,
           }), recursive = FALSE), .SDcols = c("x","y","time","resTime")]
 
           setnames(dt2,
-                   str_replace(colnames(dt2), "\\.", "_"))
+                   stringr::str_replace(colnames(dt2), "\\.", "_"))
 
           return(dt2)
         })]
@@ -235,7 +234,8 @@ wat_make_res_patch <- function(data,
     # null error function, with option to collect data on errors
     error= function(e)
     {
-      message(glue::glue('\nthere was an error in {unique(data$id)} {unique(data$tide_number)}\n'))
+      message(glue::glue('there was an error in {unique(data$id)} {unique(data$tide_number)}:
+                          {as.character(e)}'))
       # dfErrors <- append(dfErrors, glue(z$id, "_", z$tidalCycle))
     }
   )

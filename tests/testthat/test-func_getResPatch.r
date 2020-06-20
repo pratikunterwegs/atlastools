@@ -19,7 +19,7 @@ testthat::test_that("patch calc on empirical data", {
                                              lim_spat_indep = 100,
                                              lim_time_indep = 30,
                                              lim_rest_indep = 10,
-                                             minFixes = 3)
+                                             min_fixes = 3)
 
   # do tests
   # test that the sf output class is at least sf

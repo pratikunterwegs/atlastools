@@ -5,7 +5,7 @@
 \title{Get distance between patches, last point of N to first point of N+1.}
 \usage{
 wat_bw_patch_dist(
-  df,
+  data,
   x1 = "x_end",
   x2 = "x_start",
   y1 = "y_end",
@@ -13,7 +13,7 @@ wat_bw_patch_dist(
 )
 }
 \arguments{
-\item{df}{A dataframe of or extending the class data.frame. This must contain two pairs of coordinates, the start and end X and Y coordinates of a feature.}
+\item{data}{A dataframe of or extending the class data.frame. This must contain two pairs of coordinates, the start and end X and Y coordinates of a feature.}
 
 \item{x1}{The first X coordinate or longitude; for inter-patch distances, this is the last coordinate (X_end) of a patch n0.}
 

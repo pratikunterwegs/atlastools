@@ -64,15 +64,15 @@ testthat::test_that("patch data access function works", {
   # access testoutput summary
   copy1 <- copy2 <- copy3 <- testoutput
   data_access_smry <- watlastools::wat_get_patch_summary(res_patch_data = copy1,
-                                                      whichData = "summary")
+                                                      which_data = "summary")
 
   # access testoutput spatial
   data_access_sf <- watlastools::wat_get_patch_summary(res_patch_data = copy2,
-                                                  whichData = "spatial")
+                                                  which_data = "spatial")
 
   # access testoutput spatial
   data_access_pt <- watlastools::wat_get_patch_summary(res_patch_data = copy3,
-                                                  whichData = "points")
+                                                  which_data = "points")
 
   # test class summary
   testthat::expect_s3_class(object = data_access_smry,

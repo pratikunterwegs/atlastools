@@ -23,10 +23,10 @@ wat_agg_data <- function(data,
   # include asserts checking for required columns
   data_names <- colnames(data)
   names_req <- c("x", "y", "time", "VARX", "VARY", "COVXY")
-  purrr::walk (names_req, function(nr) {
+  purrr::walk(names_req, function(nr) {
     assertthat::assert_that(nr %in% data_names,
-                            msg = glue::glue('wat_agg_data: {nr} is
-                         required but missing from data!'))
+                            msg = glue::glue("wat_agg_data: {nr} is
+                         required but missing from data!"))
   })
 
   # check aggregation interval is greater than min time difference
@@ -35,7 +35,7 @@ wat_agg_data <- function(data,
 
 
   # aggregate over tracking interval
-  data[, time := floor(time/interval) * interval]
+  data[, time := floor(time / interval) * interval]
   data <- data[, lapply(.SD, mean, na.rm = TRUE), by = list(time, id)]
 
   # now recalculate the SD as "square root of varx + vary + 2 covxy"

@@ -31,7 +31,7 @@ wat_add_tide <- function(data,
 	# check position data frame
 	data_names <- colnames(data)
 	names_req <- c("time", "ts")
-	purrr::walk (names_req, function(fr) {
+	purrr::walk(names_req, function(fr) {
 	  assertthat::assert_that(fr %in% data_names,
 	                          msg = glue::glue("wat_add_tide: {fr} is
                          required but missing from data!"))
@@ -51,7 +51,7 @@ wat_add_tide <- function(data,
 	tide_data <- data.table::fread(tide_data)[, time :=
 	                                            fasttime::fastPOSIXct(time)]
 
-	purrr::walk (names_req, function(nr) {
+	purrr::walk(names_req, function(nr) {
 	  assertthat::assert_that(nr %in% colnames(tide_data),
 	                          msg = glue::glue("wat_add_tide: {nr} is \\
                             required but missing from tide data!"))
@@ -71,9 +71,9 @@ wat_add_tide <- function(data,
 
 	# remove bad rows and columns
 	temp_data <- temp_data[stats::complete.cases(x), ]
-	temp_data[,`:=`(tide = NULL, level = NULL)]
+	temp_data[, `:=`(tide = NULL, level = NULL)]
 
-	message(glue::glue('tag {unique(temp_data$id)} added time since high tide'))
+	message(glue::glue("tag {unique(temp_data$id)} added time since high tide"))
 
   return(temp_data)
 }

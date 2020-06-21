@@ -16,26 +16,26 @@ wat_classify_points <- function(data,
                              lim_res_time = 2,
                              min_fix_warning = 5) {
   # check data is a data.frame and has a resTime column
-  {
-    # check if data frame
-    assertthat::assert_that(is.data.frame(data),
-                            msg = glue::glue('wat_classify_points: input not a dataframe object, has class {stringr::str_flatten(class(data), collapse = " ")}!'))
-
-    assertthat::assert_that("resTime" %in% names(data),
-                            msg = "wat_classify_points: data has no residence time column")
-    assertthat::assert_that(min(c(lim_res_time)) > 1,
-                            msg = "wat_classify_points: function arguments are not positive")
-  }
-
+  # check if data frame
+  assertthat::assert_that(is.data.frame(data),
+              msg = glue::glue("wat_classify_points: \\
+                                input not a dataframe object, \\
+                                has class \\
+                                {stringr::str_flatten(class(data),
+                                 collapse = ' ')}!"))
+  assertthat::assert_that("resTime" %in% names(data),
+                          msg = "wat_classify_points: data has no \\
+                          residence time column")
+  assertthat::assert_that(min(c(lim_res_time)) > 1,
+                          msg = "wat_classify_points: function arguments \\
+                          are not positive")
   # make datatable to use functions
   if (!data.table::is.data.table(data)) {
     data.table::setDT(data)
   }
 
   # handle global variable issues
-  resTime <- NULL
-  time <- timediff <- type <- x <- y <- npoints <- NULL
-
+  time <- resTime <- NULL
   # sort by time
   data.table::setorder(data, time)
 
@@ -45,7 +45,7 @@ wat_classify_points <- function(data,
   # prep to assign sequence to res patches
   # to each id.tide combination
   # remove NA vals in resTime
-  data <- data[!is.na(resTime),]
+  data <- data[!is.na(resTime), ]
 
   # drop NAs in rolling residence time evaluation
   # essentially the first and last elements will be dropped

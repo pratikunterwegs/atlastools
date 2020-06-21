@@ -8,7 +8,8 @@ testthat::test_that("simple distance works", {
   # do tests
   # should return as many elements as nrows in df
   testthat::expect_equal(length(testoutput), nrow(testdf),
-                         info = "distances returned are not same length as data provided")
+                         info = "distances returned are not same length
+                                 as data provided")
   # test that the first element is NA
   testthat::expect_identical(testoutput[1], as.double(NA),
                              info = "first distance is not NA")

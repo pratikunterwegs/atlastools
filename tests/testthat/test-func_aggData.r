@@ -1,7 +1,7 @@
 context("aggregate cleaned data\n")
 testthat::test_that("aggregated cleaned data", {
 
-  interval = 60
+  interval <- 60
   # make testdata
   testdata <- data.table::data.table(x = as.double(1:1e3),
                                      y = as.double(1:1e3),
@@ -16,14 +16,15 @@ testthat::test_that("aggregated cleaned data", {
 
   # do tests
   # test that the vector class is data.table and data.frame
-  testthat::expect_s3_class(object = testoutput, class = c("data.table", "data.frame"))
+  testthat::expect_s3_class(object = testoutput,
+                            class = c("data.table", "data.frame"))
 
   # check that some rows are removed or that none are added
   testthat::expect_gte(nrow(testdata), nrow(testoutput))
 
   # check that the correct interval is achieved
   lag <- diff(testoutput$time)
-  message(glue::glue('min lag = {min(lag)}'))
+  message(glue::glue("min lag = {min(lag)}"))
   testthat::expect_gte(min(lag), interval)
 
   # make more test data for expected points calculation
@@ -31,8 +32,8 @@ testthat::test_that("aggregated cleaned data", {
                                      time = seq(30, 200, 10),
     ts = as.POSIXct(seq(30, 200, 10), origin = "2018-08-08"),
     id = as.factor("abc"),
-    VARX = runif(18) + 30,    
-    VARY = runif(18) + 30,    
+    VARX = runif(18) + 30,
+    VARY = runif(18) + 30,
     COVXY = runif(18) + 200)
   # how many multiples of the interval?
   n_30 <- sum(testdata$time %% 30 == 0)

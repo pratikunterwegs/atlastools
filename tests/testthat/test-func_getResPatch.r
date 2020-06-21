@@ -23,7 +23,8 @@ testthat::test_that("patch calc on empirical data", {
 
   # do tests
   # test that the sf output class is at least sf
-  testthat::expect_s3_class(object = testoutput, class = c("sf", "data.frame", "data.table"))
+  testthat::expect_s3_class(object = testoutput,
+                            class = c("sf", "data.frame", "data.table"))
 
   # test that names are present in output cols
   expnames <- c("id", "tide_number", "type", "patch", "time_mean",
@@ -31,11 +32,13 @@ testthat::test_that("patch calc on empirical data", {
                 "distBwPatch",  "dispInPatch")
   purrr::walk(expnames, function(expname){
     testthat::expect_true(expname %in% colnames(testoutput),
-                          info = glue::glue('{expname} expected in output but not produced'))
+                          info = glue::glue('{expname} expected in output \\
+                                            but not produced'))
   })
 
   # check that data are ordered in time
-  testthat::expect_gt(min(as.numeric(diff(testoutput$time_mean)), na.rm = TRUE), 0)
+  testthat::expect_gt(min(as.numeric(diff(testoutput$time_mean)),
+                          na.rm = TRUE), 0)
 })
 
 testthat::test_that("patch data access function works", {
@@ -60,7 +63,7 @@ testthat::test_that("patch data access function works", {
 
   # access testoutput summary
   copy1 <- copy2 <- copy3 <- testoutput
-  data_access_summary <- watlastools::wat_get_patch_summary(res_patch_data = copy1,
+  data_access_smry <- watlastools::wat_get_patch_summary(res_patch_data = copy1,
                                                       whichData = "summary")
 
   # access testoutput spatial
@@ -72,24 +75,28 @@ testthat::test_that("patch data access function works", {
                                                   whichData = "points")
 
   # test class summary
-  testthat::expect_s3_class(object = data_access_summary, class = c("data.frame", "tbl"))
+  testthat::expect_s3_class(object = data_access_smry,
+                            class = c("data.frame", "tbl"))
   # test class pts
-  testthat::expect_s3_class(object = data_access_pt, class = c("data.frame", "tbl"))
+  testthat::expect_s3_class(object = data_access_pt,
+                            class = c("data.frame", "tbl"))
   # test class sf
   testthat::expect_s3_class(object = data_access_sf, class = c("sf"))
 
   # test that names are present in output cols
   expnames <- c("id", "tide_number", "type", "patch", "time_mean",
-                "tidaltime_mean", "x_mean", "y_mean", "duration", "distInPatch", "waterlevel_mean",
-                "distBwPatch", "dispInPatch")
+                "tidaltime_mean", "x_mean", "y_mean", "duration", "distInPatch",
+                "waterlevel_mean","distBwPatch", "dispInPatch")
   # test col names in data access
   purrr::walk(expnames, function(expname){
     testthat::expect_true(expname %in% colnames(data_access_sf),
-                          info = glue::glue('{expname} expected in output but not produced'))
+                          info = glue::glue("{expname} expected in output \\
+                                            but not produced"))
   })
 
   # check that data are ordered in time
-  testthat::expect_gt(min(as.numeric(diff(testoutput$time_mean)), na.rm = TRUE), 0)
+  testthat::expect_gt(min(as.numeric(diff(testoutput$time_mean)),
+                          na.rm = TRUE), 0)
 
 })
 

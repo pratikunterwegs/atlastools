@@ -10,7 +10,7 @@ wat_agg_data <- function(data,
                          interval = 60) {
 
   id <- time <- NULL
-
+  SD <- VARX <- VARY <- COVXY <- NULL
   # check input type
   assertthat::assert_that("data.frame" %in% class(data),
                           msg = "wat_agg_data: input not a dataframe object!")

@@ -9,36 +9,40 @@
 #' @return An \code{sf MULTILINESTRING} object representing the linear path between N patches, starting at the end point of the first patch, and ending at the first point of the Nth patch.
 #' @export
 #'
-wat_patch_traj <- function(df, x1 = "x_end", x2 = "x_start",
-                          y1 = "y_end", y2 = "y_start"){
+wat_patch_traj <- function(df,
+                           x1 = "x_end",
+                           x2 = "x_start",
+                           y1 = "y_end",
+                           y2 = "y_start") {
   # must assert df has correct columns
   # check if data frame
   assertthat::assert_that(is.data.frame(df),
-                          msg = glue::glue('trajPatch: input not a dataframe object, has class {stringr::str_flatten(class(df), collapse = " ")}!'))
+    msg = glue::glue('trajPatch: input not a \\
+                     dataframe object, has class \\
+                     {stringr::str_flatten(class(df), collapse = " ")}!'))
 
   # convert df to data_frame
   # df <- sf::st_drop_geometry(df)
   data.table::setDT(df)
 
   # select cols from dfs
-  {
-    x1 <- df[[x1]]
+  { x1 <- df[[x1]]
     x2 <- df[[x2]]
-    x1 <- x1[1:length(x1)-1];
+    x1 <- x1[seq_len(length(x1) - 1)];
     x2 <- x2[2:length(x2)]
   }
-  {
-    y1 <- df[[y1]]
+  { y1 <- df[[y1]]
     y2 <- df[[y2]]
-    y1 <- y1[1:length(y1)-1];
+    y1 <- y1[seq_len(length(y1) - 1)];
     y2 <- y2[2:length(y2)]
   }
   # make temptib
-  tempTib <- tibble::tibble(x1,y1,x2,y2)
+  tempTib <- tibble::tibble(x1, y1, x2, y2)
   # add matrix as list col
-  tempTib <- dplyr::mutate(tempTib, ptsMat = purrr::pmap(tempTib, function(x1,x2,y1,y2)
-  {
-    m <- matrix(c(x1,y1,x2,y2), ncol = 2, byrow = T)
+  tempTib <- dplyr::mutate(tempTib,
+                           ptsMat = purrr::pmap(tempTib,
+                                                function(x1, x2, y1, y2)
+  { m <- matrix(c(x1, y1, x2, y2), ncol = 2, byrow = T)
     return(m)
   }))
 

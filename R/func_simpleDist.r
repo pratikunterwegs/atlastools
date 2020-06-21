@@ -16,22 +16,18 @@ wat_simple_dist <- function(data, x = "x", y = "y"){
 
   dist <- dplyr::case_when(nrow(data) > 1 ~
                              # cases where sufficient data
-                             {
-                               {
-                                 x1 <- data[[x]][1:nrow(data)-1]
+                             { { x1 <- data[[x]][seq_len(nrow(data) - 1)]
                                  x2 <- data[[x]][2:nrow(data)]
                                }
-                               {
-                                 y1 <- data[[y]][1:nrow(data)-1]
+                               { y1 <- data[[y]][seq_len(nrow(data) - 1)]
                                  y2 <- data[[y]][2:nrow(data)]
                                }
 
                                # get dist
-                               c(NA, sqrt((x1 - x2)^2 + (y1 - y2)^2))
+                               c(NA, sqrt((x1 - x2) ^ 2 + (y1 - y2) ^ 2))
                              },
                            nrow(data) == 1 ~ {0.0},
-                           TRUE ~ {as.numeric(NA)})
-
+                           TRUE ~ { as.numeric(NA)})
   return(dist)
 }
 

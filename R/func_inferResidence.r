@@ -79,7 +79,7 @@ wat_infer_residence <- function(data,
   temp_data[, npoints := max(posId), by = "inf_patch"]
   temp_data[, inf_patch := dplyr::if_else(npoints == 2,
                                   true = inf_patch,
-                                  false = inf_patch + 1)]
+                                  false = as.integer(inf_patch + 1))]
   temp_data <- temp_data[npoints >= 2, ]
 
   # recount the number of positions, each inferred patch must have minimum 2 pos

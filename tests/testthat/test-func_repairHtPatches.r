@@ -8,7 +8,9 @@ testthat::test_that("high tide repair works", {
   # assume all patches are real
   data_list <- lapply(data_list, function(df) {
     df <- watlastools::wat_infer_residence(df)
-    df <- watlastools::wat_classify_points(data = df, resTimeLimit = 2)
+    df <- watlastools::wat_classify_points(data = df,
+                                           lim_res_time = 2,
+                                           min_fix_warning = 100)
     df <- watlastools::wat_make_res_patch(data = df,
                              buffer_radius = 10)
   })

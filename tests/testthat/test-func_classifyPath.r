@@ -6,7 +6,7 @@ testthat::test_that("residence classification works", {
 
   # run function
   testoutput <- watlastools::wat_classify_points(data = revdata,
-                                                 resTimeLimit = 2)
+                                                 lim_res_time = 2)
 
   # do tests
   # test that the vector class is data.table and data.frame

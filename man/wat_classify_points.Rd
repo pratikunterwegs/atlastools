@@ -4,15 +4,22 @@
 \alias{wat_classify_points}
 \title{Classify points as residence points based on residence time.}
 \usage{
-wat_classify_points(data, resTimeLimit = 2)
+wat_classify_points(data, lim_res_time = 2, min_fix_warning = 5)
 }
 \arguments{
-\item{data}{A data frame which must have a column for the residence time at each point.}
+\item{data}{A data frame which must have a column for the
+residence time at each point.}
 
-\item{resTimeLimit}{A numeric giving the time limit in minutes against which residence time is compared.}
+\item{lim_res_time}{A numeric giving the time limit in minutes
+against which residence time is compared.}
+
+\item{min_fix_warning}{Triggers a warning if the data with travel segments
+removed has fewer than this number of rows.}
 }
 \value{
-A data.frame extension object, which retains only points classified as residence points if residence time is below \code{resTimeLimit} over \code{travelSeg} points.
+A data.frame extension object, which retains only points
+classified as residence points if residence time is below \code{lim_res_time}
+ over \code{travelSeg} points.
 }
 \description{
 Classify points as residence points based on residence time.

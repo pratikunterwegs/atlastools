@@ -7,8 +7,7 @@
 wat_agg_data(data, interval = 60)
 }
 \arguments{
-\item{data}{Cleaned data - the output of the cleanData function - to aggregate.
-Must have a numeric column named time.}
+\item{data}{Cleaned data to aggregate. Must have a numeric column named time.}
 
 \item{interval}{The interval in seconds over which to aggregate.}
 }

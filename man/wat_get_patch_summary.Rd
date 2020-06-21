@@ -2,20 +2,29 @@
 % Please edit documentation in R/func_getPatchSummary.r
 \name{wat_get_patch_summary}
 \alias{wat_get_patch_summary}
-\title{Get derived data from residence patch construction: patch summaries, sf-based patches, or raw points with patch numbers.}
+\title{Get derived data from residence patch construction.}
 \usage{
-wat_get_patch_summary(res_patch_data, whichData = "summary", bufferSize = 10)
+wat_get_patch_summary(
+  res_patch_data,
+  which_data = "summary",
+  buffer_radius = 10
+)
 }
 \arguments{
-\item{res_patch_data}{A tibble with a nested list column of the raw data underlying each patch. This column is specified in the argument \code{dataColumn}}
+\item{res_patch_data}{A tibble with a nested list column of the raw data
+underlying each patch. This column is specified in the
+argument \code{dataColumn}}
 
-\item{whichData}{Which data to return, the raw data underlying the patch, or a spatial features object with only the patch summary.}
+\item{which_data}{Which data to return, the raw data underlying the patch,
+or a spatial features object with only the patch summary.}
 
-\item{bufferSize}{Spatial buffer around points when requesting sf based polygons.}
+\item{buffer_radius}{Spatial buffer radius (in metres) around points when
+requesting sf based polygons.}
 }
 \value{
-An object of type \code{sf} or \code{tibble} depending on which data is requested.
+An object of type \code{sf} or \code{tibble} depending on
+which data is requested.
 }
 \description{
-Get derived data from residence patch construction: patch summaries, sf-based patches, or raw points with patch numbers.
+Get derived data from residence patch construction.
 }

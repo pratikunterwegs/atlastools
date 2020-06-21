@@ -127,7 +127,8 @@ wat_make_res_patch <- function(data,
     # get time bewteen start of n+1 and end of n
     patch_summary[, time_diff := c(Inf,
                                   as.numeric(time_start[2:length(time_start)] -
-                                            time_end[seq_len(time_end) - 1]))]
+                                            time_end[seq_len(length(time_end) -
+                                                               1)]))]
     # get spatial difference from last to first point
     patch_summary[, spat_diff :=
                     c(watlastools::wat_bw_patch_dist(data = patch_summary,

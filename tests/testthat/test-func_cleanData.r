@@ -57,6 +57,6 @@ testthat::test_that("cleaning raw data works", {
   testthat::expect_gt(nrow(testdata), nrow(testoutput))
 
   # check that time is correctly handled
-  testthat::expect_lte(testoutput[1, ]$ts - starttime, 5)
+  testthat::expect_lte(starttime, testoutput[1, ]$ts)
   message(glue::glue("cleandata starttime = {testoutput[1,]$ts}"))
 })

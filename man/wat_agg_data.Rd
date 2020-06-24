@@ -4,11 +4,10 @@
 \alias{wat_agg_data}
 \title{A function to aggregate WATLAS data over an interval.}
 \usage{
-wat_agg_data(df, interval = 60)
+wat_agg_data(data, interval = 60)
 }
 \arguments{
-\item{df}{Cleaned data - the output of the cleanData function - to aggregate.
-Must have a numeric column named time.}
+\item{data}{Cleaned data to aggregate. Must have a numeric column named time.}
 
 \item{interval}{The interval in seconds over which to aggregate.}
 }

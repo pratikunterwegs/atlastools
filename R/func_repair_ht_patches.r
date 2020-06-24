@@ -1,17 +1,17 @@
 #' A function to repair high tide data.
 #'
 #' @param patch_data_list A list of data.tables, each the output of make_res_patch. Must have an sfc geometry column.
-#' @param spatIndepLim The spatial independence limit.
-#' @param tempIndepLim The temporal independence limit.
-#' @param bufferSize The buffer size for spatial polygons.
+#' @param lim_spat_indep The spatial independence limit.
+#' @param lim_time_indep The temporal independence limit.
+#' @param buffer_radius The buffer size for spatial polygons.
 #' @return A datatable with repaired high tide patches.
 #' @import data.table
 #' @export
 #'
 wat_repair_ht_patches <- function(patch_data_list,
-                                  spatIndepLim = 100,
-                                  tempIndepLim = 30,
-                                  bufferSize = 10){
+                                  lim_spat_indep = 100,
+                                  lim_time_indep = 30,
+                                  buffer_radius = 10){
 
   # set gloabl variables to NULL
   patch <- polygons <- tide_number <- NULL
@@ -33,8 +33,8 @@ wat_repair_ht_patches <- function(patch_data_list,
               {stringr::str_flatten(class(patch_data_list),
               collapse = " ")}!'))
 
-    assertthat::assert_that(min(c(bufferSize, spatIndepLim,
-                                  tempIndepLim)) > 0,
+    assertthat::assert_that(min(c(buffer_radius, lim_spat_indep,
+                                  lim_time_indep)) > 0,
                 msg = "wat_repair_ht: function needs positive arguments")
   }
 
@@ -45,7 +45,7 @@ wat_repair_ht_patches <- function(patch_data_list,
                   "type")
 
   # convert variable units
-  tempIndepLim <- tempIndepLim*60
+  lim_time_indep <- lim_time_indep*60
 
   tryCatch({
 
@@ -71,7 +71,7 @@ wat_repair_ht_patches <- function(patch_data_list,
     edge_data_summary[,`:=`(timediff = c(Inf,
                             as.numeric(time_start[2:length(time_start)] -
                                          time_end[1:length(time_end)-1])),
-               spatdiff = c(watlastools::wat_bw_patch_dist(df = edge_data_summary,
+               spatdiff = c(watlastools::wat_bw_patch_dist(data = edge_data_summary,
                                         x1 = "x_end", x2 = "x_start",
                                         y1 = "y_end", y2 = "y_start")))]
 
@@ -80,8 +80,8 @@ wat_repair_ht_patches <- function(patch_data_list,
     # which patches are independent?
     # assign NA as tide number of non-independent patches
     # and to the patch number of non-indep patches
-    edge_data_summary[,newpatch := (timediff > tempIndepLim |
-                                              spatdiff > spatIndepLim)]
+    edge_data_summary[,newpatch := (timediff > lim_time_indep |
+                                              spatdiff > lim_spat_indep)]
     edge_data_summary[newpatch == FALSE, "tide_number"] <- NA
     edge_data_summary[,newpatch := ifelse(newpatch == TRUE, patch, NA)]
 
@@ -127,7 +127,7 @@ wat_repair_ht_patches <- function(patch_data_list,
   {
     # distance in a patch in metres
     edge_data[,distInPatch := lapply(patchdata, function(df){
-      sum(watlastools::wat_simple_dist(df = df), na.rm = TRUE)
+      sum(watlastools::wat_simple_dist(data = df), na.rm = TRUE)
     })]
 
     # distance between patches
@@ -135,7 +135,7 @@ wat_repair_ht_patches <- function(patch_data_list,
                          by = .(id, tide_number, patch)]
 
     edge_data[,patchSummary:=NULL]
-    edge_data[,distBwPatch := watlastools::wat_bw_patch_dist(df = tempdata,
+    edge_data[,distBwPatch := watlastools::wat_bw_patch_dist(data = tempdata,
                                                             x1 = "x_end", x2 = "x_start",
                                                             y1 = "y_end", y2 = "y_start")]
     # displacement in a patch
@@ -158,7 +158,7 @@ wat_repair_ht_patches <- function(patch_data_list,
   {
     edge_data[, polygons := lapply(patchdata, function(df){
       p1 <- sf::st_as_sf(df, coords = c("x", "y"))
-      p2 <- sf::st_buffer(p1, dist = bufferSize)
+      p2 <- sf::st_buffer(p1, dist = buffer_radius)
       p2 <- sf::st_union(p2)
       return(p2)
     })]
@@ -190,7 +190,7 @@ wat_repair_ht_patches <- function(patch_data_list,
   data[,patch:=1:length(nfixes), by=.(tide_number)]
 
   # unlist all list columns
-  data[,lapply(.SD, unlist), .SDcols = setdiff(colnames(data), "patchdata")]
+  data <- data[,lapply(.SD, unlist), .SDcols = setdiff(colnames(data), "patchdata")]
 
   return(data)
   },

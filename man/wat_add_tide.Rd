@@ -5,15 +5,18 @@
 \title{A function to add high tide data to position data; also calculates the
 time of each position since high tide.}
 \usage{
-wat_add_tide(df, tide_data)
+wat_add_tide(data, tide_data)
 }
 \arguments{
-\item{df}{A data frame which is the output of the clean data function \code{wat_clean_data}.}
+\item{data}{A data frame which is the output of the clean data function
+\code{wat_clean_data}.}
 
-\item{tide_data}{A data frame of high tide times which has the following columns: 1. time (as a posixct object), 2. waterlevel, 3. tide_number.}
+\item{tide_data}{A data frame of high tide times which has the following
+columns: 1. time (as a posixct object), 2. waterlevel, 3. tide_number.}
 }
 \value{
-A datatable class object (extends data.frame) which has the additional columns tide_number and time (in mins) since high tide.
+A datatable class object (extends data.frame) which has the
+additional columns tide_number and time (in mins) since high tide.
 }
 \description{
 A function to add high tide data to position data; also calculates the

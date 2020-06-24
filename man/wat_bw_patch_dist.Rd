@@ -5,7 +5,7 @@
 \title{Get distance between patches, last point of N to first point of N+1.}
 \usage{
 wat_bw_patch_dist(
-  df,
+  data,
   x1 = "x_end",
   x2 = "x_start",
   y1 = "y_end",
@@ -13,18 +13,28 @@ wat_bw_patch_dist(
 )
 }
 \arguments{
-\item{df}{A dataframe of or extending the class data.frame. This must contain two pairs of coordinates, the start and end X and Y coordinates of a feature.}
+\item{data}{A dataframe of or extending the class data.frame.
+This must contain two pairs of coordinates, the start and end X and Y
+coordinates of a feature.}
 
-\item{x1}{The first X coordinate or longitude; for inter-patch distances, this is the last coordinate (X_end) of a patch n0.}
+\item{x1}{The first X coordinate or longitude; for inter-patch distances,
+this is the last coordinate (X_end) of a patch n0.}
 
-\item{x2}{The second X coordinate; for inter-patch distances, this is the first coordinate (X_start) of a subsequent patch n1.}
+\item{x2}{The second X coordinate; for inter-patch distances, this is the
+first coordinate (X_start) of a subsequent patch n1.}
 
-\item{y1}{The first Y coordinate or latitude; for inter-patch distances, this is the last coordinate (Y_end) of a patch n0.}
+\item{y1}{The first Y coordinate or latitude; for inter-patch distances,
+this is the last coordinate (Y_end) of a patch n0.}
 
-\item{y2}{The second Y coordinate; for inter-patch distances, this is the first coordinate (Y_start) of a subsequent patch n1.}
+\item{y2}{The second Y coordinate; for inter-patch distances, this is the
+first coordinate (Y_start) of a subsequent patch n1.}
 }
 \value{
-A numeric vector of the length of the number of patches, or rows in the input dataframe. If the input dataframe has only a single row, the vector has a length of one, and its only element is 0. In all other cases, the vector has as its elements \code{NA}, followed by n-1 distances, where n is the number of rows.
+A numeric vector of the length of the number of patches, or rows in
+the input dataframe. If the input dataframe has only a single row, the
+vector has a length of one, and its only element is 0. In all other cases,
+the vector has as its elements \code{NA}, followed by n-1 distances, where
+n is the number of rows.
 }
 \description{
 Get distance between patches, last point of N to first point of N+1.

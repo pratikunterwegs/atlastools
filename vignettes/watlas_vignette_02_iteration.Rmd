@@ -2,7 +2,7 @@
 title: "Iterating patch construction"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{watlas_iteration}
+  %\VignetteIndexEntry{Iterating patch construction}
   %\VignetteEncoding{UTF-8}
   %\VignetteEngine{knitr::rmarkdown}
 editor_options: 
@@ -27,7 +27,10 @@ library(watlastools)
 # read data and see leading lines
 library(data.table)
 library(purrr)
-library(dplyr) # pipe operator %>%
+library(magrittr) # pipe operator %>%
+
+# for plotting
+library(ggplot2)
 ```
 
 # Iterating over tidal cycles
@@ -68,6 +71,7 @@ If the first patch (_Pa_) of tidal cycle (called `tidenumber` in the data) is no
 
 ```{r repair_ht_patches}
 # count patches in unrepaired data
+patch_data <- compact(patch_data) # remove NULL elements
 map_int(patch_data, nrow) %>% sum()
 
 # repair patches for id 413
@@ -86,7 +90,6 @@ Here, we will visualise the repaired data as in the previous vignette.
 ```{r vis_rep_data}
 # plotting libraries
 library(ggplot2)
-library(ggspatial)
 
 fig_patch_repair <- ggplot(repaired_data, aes(x_mean, y_mean))+
   geom_path(aes(group = tide_number),
@@ -121,5 +124,3 @@ fig_patch_repair <- ggplot(repaired_data, aes(x_mean, y_mean))+
 fig_patch_repair
 ```
 
-
-[^1]: The steps invovled are shown in **sections 4 and 5** of the [knotPatches bookdown](https://pratikunterwegs.github.io/knotPatches/). These steps are not covered here because they make use of too many other packages.

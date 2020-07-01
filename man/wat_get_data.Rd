@@ -2,7 +2,7 @@
 % Please edit documentation in R/func_getData.r
 \name{wat_get_data}
 \alias{wat_get_data}
-\title{Get data from the NIOZ servers. Untested, unlikely to work off the NIOZ network.}
+\title{Get data from a remote ATLAS SQL database.}
 \usage{
 wat_get_data(
   tag,
@@ -18,23 +18,31 @@ wat_get_data(
 \arguments{
 \item{tag}{A three digit numeric representing the ToA tag.}
 
-\item{tracking_time_start}{Character representation of time (Central European Time, +1 UTC) from which start point data should be retrieved.}
+\item{tracking_time_start}{Character representation of time
+(Central European Time, +1 UTC) from which start point data
+should be retrieved.}
 
-\item{tracking_time_end}{Character time representing the end point corresponding to the above start point.}
+\item{tracking_time_end}{Character time representing the end point
+corresponding to the above start point.}
 
-\item{tag_prefix}{A numeric specifying the tag prefix. Defaults to \code{31001000}}
+\item{tag_prefix}{A numeric specifying the tag prefix.
+Defaults to \code{31001000}}
 
-\item{database}{The database name on the host server. Defaults to \code{db} for unknown reasons.}
+\item{database}{The database name on the host server. Defaults to
+\code{db} for unknown reasons.}
 
-\item{host}{The server address on which the data are stored. Defaults to \code{abtdb1.nioz.nl}.}
+\item{host}{The server address on which the data are stored.
+Defaults to \code{abtdb1.nioz.nl}.}
 
 \item{username}{Username to access the data.}
 
-\item{password}{Password to access the data. Contact \code{allert.bijleveld@nioz.nl} to get access.}
+\item{password}{Password to access the data.
+Contact \code{allert.bijleveld@nioz.nl} to get access.}
 }
 \value{
-A dataframe of agent positions, filtered between the required tracking times.
+A dataframe of agent positions, filtered between the
+required tracking times.
 }
 \description{
-Get data from the NIOZ servers. Untested, unlikely to work off the NIOZ network.
+Get data from a remote ATLAS SQL database.
 }

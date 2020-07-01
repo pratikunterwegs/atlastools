@@ -2,16 +2,20 @@ context("between patch distance function")
 testthat::test_that("simple distance works", {
 
   # make test positions
-  testdf <- tibble::tibble(a_start = seq(10,100, 10),
-                           a_end = a_start+2,
+  testdf <- tibble::tibble(a_start = seq(10, 100, 10),
+                           a_end = a_start + 2,
                            b_start = 1, b_end = 1)
   # run function
-  testoutput <- watlastools::wat_bw_patch_dist(testdf, x1 = "a_end", x2 = "a_start",
-                                             y1 = "b_end", y2 = "b_start")
+  testoutput <- watlastools::wat_bw_patch_dist(testdf,
+                                               x1 = "a_end",
+                                               x2 = "a_start",
+                                               y1 = "b_end",
+                                               y2 = "b_start")
   # do tests
   # should return as many elements as nrows in df
   testthat::expect_equal(length(testoutput), nrow(testdf),
-                         info = "distances returned are not same length as data provided")
+                         info = "distances returned are not \\
+                         same length as data provided")
   # test that the first element is NA
   testthat::expect_identical(testoutput[1], as.double(NA),
                              info = "first distance is not NA")

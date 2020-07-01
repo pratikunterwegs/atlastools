@@ -34,11 +34,11 @@ Imports:
     bit64
 RoxygenNote: 7.1.0
 Suggests:
+    magrittr,
     testthat (>= 2.1.0),
     knitr,
     rmarkdown,
     ggplot2,
-    ggspatial,
     patchwork,
     tmap,
     leaflet,

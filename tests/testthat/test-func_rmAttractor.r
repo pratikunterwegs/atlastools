@@ -9,7 +9,7 @@ testthat::test_that("attractor points removed", {
                                      Y = rnorm(301, 800, 20))]
 
   # run function
-  testoutput <- atlastools::wat_rm_attractor(df = testdata,
+  testoutput <- atlastools::atl_rm_attractor(df = testdata,
                                         atp_xmin = 200:201, atp_xmax = 400:401,
                                         atp_ymin = 700:701, atp_ymax = 900:901)
 

@@ -5,7 +5,7 @@ testthat::test_that("patch calc on empirical data", {
   somedata = data.table::fread("../testdata/435_025_revisit.csv")
 
   # run function for patch construction
-  testoutput <- atlastools::wat_make_res_patch(data = somedata,
+  testoutput <- atlastools::atl_make_res_patch(data = somedata,
                                              buffer_radius = 10,
                                              lim_spat_indep = 100,
                                              lim_time_indep = 30,
@@ -38,22 +38,22 @@ testthat::test_that("patch data access function works", {
   somedata = data.table::fread("../testdata/435_025_revisit.csv")
 
   # run function for patch construction
-  testoutput <- atlastools::wat_make_res_patch(data = somedata,
+  testoutput <- atlastools::atl_make_res_patch(data = somedata,
                                              buffer_radius = 10,
                                              lim_spat_indep = 50,
                                              lim_time_indep = 30)
 
   # access testoutput summary
   copy1 <- copy2 <- copy3 <- testoutput
-  data_access_smry <- atlastools::wat_get_patch_summary(res_patch_data = copy1,
+  data_access_smry <- atlastools::atl_get_patch_summary(res_patch_data = copy1,
                                                       which_data = "summary")
 
   # access testoutput spatial
-  data_access_sf <- atlastools::wat_get_patch_summary(res_patch_data = copy2,
+  data_access_sf <- atlastools::atl_get_patch_summary(res_patch_data = copy2,
                                                   which_data = "spatial")
 
   # access testoutput spatial
-  data_access_pt <- atlastools::wat_get_patch_summary(res_patch_data = copy3,
+  data_access_pt <- atlastools::atl_get_patch_summary(res_patch_data = copy3,
                                                   which_data = "points")
 
   # test class summary

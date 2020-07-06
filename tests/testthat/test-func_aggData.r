@@ -12,7 +12,7 @@ testthat::test_that("aggregated cleaned data", {
                                      VARY = runif(1000) + 300,
                                      COVXY = runif(1000) + 200)
   # run function
-  testoutput <- atlastools::wat_agg_data(testdata, interval = 60)
+  testoutput <- atlastools::atl_agg_data(testdata, interval = 60)
 
   # do tests
   # test that the vector class is data.table and data.frame
@@ -38,7 +38,7 @@ testthat::test_that("aggregated cleaned data", {
   # how many multiples of the interval?
   n_30 <- sum(testdata$time %% 30 == 0)
   # aggregate data
-  testoutput <- wat_agg_data(testdata, interval = 30)
+  testoutput <- atl_agg_data(testdata, interval = 30)
 
   # test data rows -- must be one
   testthat::expect_equal(nrow(testoutput),

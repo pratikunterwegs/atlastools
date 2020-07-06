@@ -40,10 +40,5 @@ Suggests:
     rmarkdown,
     ggplot2,
     patchwork,
-    tmap,
-    leaflet,
-    shiny,
-    shinytest,
-    RColorBrewer,
     DBI
 VignetteBuilder: knitr

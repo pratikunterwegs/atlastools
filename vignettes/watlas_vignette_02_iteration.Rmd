@@ -1,0 +1,126 @@
+---
+title: "Iterating patch construction"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Iterating patch construction}
+  %\VignetteEncoding{UTF-8}
+  %\VignetteEngine{knitr::rmarkdown}
+editor_options: 
+  chunk_output_type: console
+---
+
+watlastools was built to handle large tracking datasets from the [WATLAS system](https://www.nioz.nl/en/about/cos/coastal-movement-ecology/shorebird-tracking/watlas-tracking-regional-movements). 
+These datasets are -- currently -- split into subsets and saved locally, typically in a folder called _revisitData, revisit_data_ or similar [^1]. In general, watlastools packages would work on the whole dataset as well, but this functionality has not been tested.
+
+Here, we cover iterating watlastools functions over multiple data files, and introduce the `wat_repair_ht_patches` function.
+
+```{r, include = FALSE}
+# knitr::opts_chunk$set(
+#   collapse = TRUE,
+#   comment = "#>"
+# )
+```
+
+```{r setup, message=FALSE}
+library(watlastools)
+
+# read data and see leading lines
+library(data.table)
+library(purrr)
+library(magrittr) # pipe operator %>%
+
+# for plotting
+library(ggplot2)
+```
+
+# Iterating over tidal cycles
+
+Begin by reading in the data files from 10 tidal cycles for one individual.
+
+```{r read_data, message=FALSE}
+# list the data files available and read them in
+data_files <- list.files("vignette_data/", pattern = "413", 
+                         full.names = TRUE)
+
+data <- map(data_files, fread)
+```
+
+Apply watlastools patch functions on each tidal cycle. watlastools functions are tidyverse compatible, and can be chained using the `%>%` operator. Here, we wil use the function defaults, but they can be passed as arguments.
+
+```{r apply_watlastools, message=FALSE}
+# map over the list of data.tables
+patch_data <- map(data, function(df){
+  to_return <- df %>% 
+    wat_infer_residence() %>% 
+    wat_classify_points() %>% 
+    wat_make_res_patch()
+  return(to_return)
+})
+```
+
+The data returned is a list; each element of dataframes (really of the class `data.table`). 
+The dataframes in the list contain a list-column of dataframes (a dataframe inside another dataframe); these nested dataframes hold the point data that was used to construct each patch.
+
+# Repairing high tide patches
+
+High tide presents an issue for watlastools, since it was originally written with low tide data in mind. The issue is that residence patches at the beginning of a tidal cycle (high tide) are essentially continuations of residence patches at the end of the previous tidal cycle.
+
+The `wat_repair_ht_patches` function was written to fix this issue. It is a reworking of the original `wat_make_res_patch` function, except that it operates on a list of residence patches, as we made above, and looks only at the first and last patches of each tidal cycle.
+
+If the first patch (_Pa_) of tidal cycle (called `tidenumber` in the data) is not spatio-temporally distinct from the last patch of the previous tidal cycle (_Pb_), _Pa_ is merged into _Pb_.
+
+```{r repair_ht_patches}
+# count patches in unrepaired data
+patch_data <- compact(patch_data) # remove NULL elements
+map_int(patch_data, nrow) %>% sum()
+
+# repair patches for id 413
+repaired_data <- wat_repair_ht_patches(patch_data_list = patch_data)
+
+# count the number of repaired patches
+nrow(repaired_data)
+```
+
+From an initial unrepaired number of `r map_int(patch_data, nrow) %>% sum()`, we now have `r nrow(repaired_data)` patches.
+
+# Visualising repaired data
+
+Here, we will visualise the repaired data as in the previous vignette.
+
+```{r vis_rep_data}
+# plotting libraries
+library(ggplot2)
+
+fig_patch_repair <- ggplot(repaired_data, aes(x_mean, y_mean))+
+  geom_path(aes(group = tide_number),
+            col = "black", lwd = 0.2, lty = 2)+
+  geom_point(aes(size = duration/60,
+                 col = factor(tide_number)),
+             stroke = 1,
+             shape = 21, fill = NA,
+             alpha = 0.9)+
+  geom_text(aes(label = patch), 
+            col = "grey20", size = 2)+
+  
+  scale_size(range = c(3,10))+
+  scale_colour_brewer(palette = "Paired", direction = 1)+
+  
+  scale_x_continuous(expand = expansion(mult = c(0.1)))+
+  scale_y_continuous(expand = expansion(mult = c(0.1)))+
+    
+  coord_sf(crs = 32631)+
+  # annotation_scale(location = "br", width_hint = 0.1, text_cex = 1)+
+  
+  theme_bw()+
+  theme(legend.position = "bottom",
+        axis.text = element_blank(),
+        axis.ticks = element_blank())+
+  
+  labs(x = NULL, y = NULL, 
+       col = "# tide", size = "residence (mins)")
+```
+
+```{r show_patches, fig.width=8, fig.height=6}
+fig_patch_repair
+```
+

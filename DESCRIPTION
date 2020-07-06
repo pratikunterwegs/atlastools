@@ -1,0 +1,49 @@
+Package: watlastools
+Title: Tools for High Resolution Tracking Data from WATLAS
+Version: 0.9.9000
+Authors@R:
+    c(person(given = "Pratik",
+           family = "Gupte",
+           role = c("aut", "cre"),
+           email = "p.r.gupte@rug.nl",
+           comment = c(ORCID = "https://orcid.org/0000-0001-5294-7819")),
+    person(given = "Pedro",
+           family = "Neves",
+           role = c("ctb"),
+           email = "p.m.santos.neves@rug.nl"))
+Description: Tools to process high-resolution tracking data from the Wadden Sea ATLAS system (WATLAS: https://www.nioz.nl/en/about/cos/coastal-movement-ecology/shorebird-tracking/watlas-tracking-regional-movements).
+License: GPL-3
+Encoding: UTF-8
+LazyData: true
+URL: https://github.com/pratikunterwegs/watlastools
+BugReports: https://github.com/pratikunterwegs/watlastools/issues
+Imports:
+    dplyr,
+    purrr,
+    tibble,
+    sf,
+    glue,
+    data.table,
+    rlang,
+    stats,
+    zoo,
+    assertthat,
+    stringr,
+    fasttime,
+    RMySQL,
+    bit64
+RoxygenNote: 7.1.0
+Suggests:
+    magrittr,
+    testthat (>= 2.1.0),
+    knitr,
+    rmarkdown,
+    ggplot2,
+    patchwork,
+    tmap,
+    leaflet,
+    shiny,
+    shinytest,
+    RColorBrewer,
+    DBI
+VignetteBuilder: knitr

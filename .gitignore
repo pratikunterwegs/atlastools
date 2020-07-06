@@ -1,3 +1,4 @@
+
 # History files
 .Rhistory
 .Rapp.history
@@ -37,3 +38,13 @@ vignettes/*.pdf
 
 # R Environment Variables
 .Renviron
+
+# ignore all zip files
+*zip
+
+# ignore all in private
+private/*
+inst/doc
+doc
+Meta
+

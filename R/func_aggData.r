@@ -1,4 +1,4 @@
-#' A function to aggregate WATLAS data over an interval.
+#' Aggregate data over an interval.
 #'
 #' @param data Cleaned data to aggregate. Must have a numeric column named time.
 #' @param interval The interval in seconds over which to aggregate.
@@ -6,14 +6,14 @@
 #' @return A dataframe aggregated taking the mean over the interval.
 #' @export
 #'
-wat_agg_data <- function(data,
+atl_agg_data <- function(data,
                          interval = 60) {
 
   id <- time <- NULL
   SD <- VARX <- VARY <- COVXY <- NULL
   # check input type
   assertthat::assert_that("data.frame" %in% class(data),
-                          msg = "wat_agg_data: input not a dataframe object!")
+                          msg = "atl_agg_data: input not a dataframe object!")
 
   # id input is not a data.table set it so
   if (!data.table::is.data.table(data)) {
@@ -25,7 +25,7 @@ wat_agg_data <- function(data,
   names_req <- c("x", "y", "time", "VARX", "VARY", "COVXY")
   purrr::walk(names_req, function(nr) {
     assertthat::assert_that(nr %in% data_names,
-                            msg = glue::glue("wat_agg_data: {nr} is
+                            msg = glue::glue("atl_agg_data: {nr} is
                          required but missing from data!"))
   })
 

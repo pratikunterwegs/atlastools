@@ -1,4 +1,4 @@
-#' A function to clean data accessed from the NIOZ WATLAS server.
+#' Filter and smooth data.
 #'
 #' @param data A dataframe object returned by getData.
 #' Must contain the columns "X", "Y", "SD", "NBS", "TAG", "TIME";
@@ -21,7 +21,7 @@
 #' readable POSIXct format.
 #' @export
 #'
-wat_clean_data <- function(data,
+atl_clean_data <- function(data,
                            moving_window = 3,
                            nbs_min = 0,
                            sd_threshold = 500000,
@@ -75,7 +75,7 @@ wat_clean_data <- function(data,
 
     if (filter_speed == TRUE) {
       # filter for insane speeds if asked
-      data[, sld := atlastools::wat_simple_dist(data, "X", "Y")]
+      data[, sld := atlastools::atl_simple_dist(data, "X", "Y")]
       data[, sld_speed := sld / c(NA, as.numeric(diff(TIME)))]
       data <- data[sld_speed <= (speed_cutoff / 3.6), ]
       data[, `:=`(sld = NULL, sld_speed = NULL)]

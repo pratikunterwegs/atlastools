@@ -1,4 +1,4 @@
-#' Get derived data from residence patch construction.
+#' Get residence patch data.
 #'
 #' @param res_patch_data A tibble with a nested list column of the raw data
 #' underlying each patch. This column is specified in the
@@ -12,7 +12,7 @@
 #' @import data.table
 #' @export
 #'
-wat_get_patch_summary <- function(res_patch_data,
+atl_get_patch_summary <- function(res_patch_data,
                             which_data = "summary",
                             buffer_radius = 10) {
   id <- tide_number <- patch <- patchdata <- NULL

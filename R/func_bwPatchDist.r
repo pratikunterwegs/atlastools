@@ -1,4 +1,4 @@
-#' Get distance between patches, last point of N to first point of N+1.
+#' Get the distance between patches.
 #'
 #' @param data A dataframe of or extending the class data.frame.
 #' This must contain two pairs of coordinates, the start and end X and Y
@@ -19,7 +19,7 @@
 #' n is the number of rows.
 #' @export
 #'
-wat_bw_patch_dist <- function(data,
+atl_bw_patch_dist <- function(data,
                              x1 = "x_end", x2 = "x_start",
                              y1 = "y_end", y2 = "y_start") {
   #check for basic assumptions

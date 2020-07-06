@@ -1,4 +1,4 @@
-#' A function to remove so-called attractor points which have an unknown source. To be run before cleaning the data.
+#' Remove positions within a bounding box.
 #'
 #' @param df A dataframe or extension which contains capitalised X and Y coordinates.
 #' @param atp_xmin The min X coordinates of attractor locations.
@@ -9,7 +9,7 @@
 #' @return A data frame of tracking locations with attractor points removed.
 #' @export
 #'
-wat_rm_attractor <- function(df,
+atl_rm_attractor <- function(df,
                             atp_xmin = 639470,
                             atp_xmax = 639472,
                             atp_ymin = 5887143,

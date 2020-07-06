@@ -1,4 +1,4 @@
-#' A function to repair high tide data.
+#' Repair residence patches across susbets.
 #'
 #' @param patch_data_list A list of data.tables, each the output of make_res_patch. Must have an sfc geometry column.
 #' @param lim_spat_indep The spatial independence limit.
@@ -8,7 +8,7 @@
 #' @import data.table
 #' @export
 #'
-wat_repair_ht_patches <- function(patch_data_list,
+atl_repair_ht_patches <- function(patch_data_list,
                                   lim_spat_indep = 100,
                                   lim_time_indep = 30,
                                   buffer_radius = 10){
@@ -28,14 +28,14 @@ wat_repair_ht_patches <- function(patch_data_list,
     # check for dataframe and sf object
     # check if data frame
     assertthat::assert_that(is.list(patch_data_list),
-       msg = glue::glue('wat_repair_ht: input not a \\
+       msg = glue::glue('atl_repair_ht: input not a \\
               list, has class \\
               {stringr::str_flatten(class(patch_data_list),
               collapse = " ")}!'))
 
     assertthat::assert_that(min(c(buffer_radius, lim_spat_indep,
                                   lim_time_indep)) > 0,
-                msg = "wat_repair_ht: function needs positive arguments")
+                msg = "atl_repair_ht: function needs positive arguments")
   }
 
   # check that list elements are data tables with correct names
@@ -71,7 +71,7 @@ wat_repair_ht_patches <- function(patch_data_list,
     edge_data_summary[,`:=`(timediff = c(Inf,
                             as.numeric(time_start[2:length(time_start)] -
                                          time_end[1:length(time_end)-1])),
-               spatdiff = c(atlastools::wat_bw_patch_dist(data = edge_data_summary,
+               spatdiff = c(atlastools::atl_bw_patch_dist(data = edge_data_summary,
                                         x1 = "x_end", x2 = "x_start",
                                         y1 = "y_end", y2 = "y_start")))]
 
@@ -127,7 +127,7 @@ wat_repair_ht_patches <- function(patch_data_list,
   {
     # distance in a patch in metres
     edge_data[,distInPatch := lapply(patchdata, function(df){
-      sum(atlastools::wat_simple_dist(data = df), na.rm = TRUE)
+      sum(atlastools::atl_simple_dist(data = df), na.rm = TRUE)
     })]
 
     # distance between patches
@@ -135,7 +135,7 @@ wat_repair_ht_patches <- function(patch_data_list,
                          by = .(id, tide_number, patch)]
 
     edge_data[,patchSummary:=NULL]
-    edge_data[,distBwPatch := atlastools::wat_bw_patch_dist(data = tempdata,
+    edge_data[,distBwPatch := atlastools::atl_bw_patch_dist(data = tempdata,
                                                             x1 = "x_end", x2 = "x_start",
                                                             y1 = "y_end", y2 = "y_start")]
     # displacement in a patch
@@ -184,7 +184,7 @@ wat_repair_ht_patches <- function(patch_data_list,
   setorder(data, time_start)
 
   # fix distance between patches
-  data[, distBwPatch := wat_bw_patch_dist(data)]
+  data[, distBwPatch := atl_bw_patch_dist(data)]
 
   # fix patch numbers in tides
   data[,patch:=1:length(nfixes), by=.(tide_number)]

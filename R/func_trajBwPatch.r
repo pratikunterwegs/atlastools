@@ -9,7 +9,7 @@
 #' @return An \code{sf MULTILINESTRING} object representing the linear path between N patches, starting at the end point of the first patch, and ending at the first point of the Nth patch.
 #' @export
 #'
-wat_patch_traj <- function(df,
+atl_patch_traj <- function(df,
                            x1 = "x_end",
                            x2 = "x_start",
                            y1 = "y_end",

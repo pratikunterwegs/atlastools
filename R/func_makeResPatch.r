@@ -1,4 +1,4 @@
-#' Construct residence patches from classified residence data.
+#' Construct residence patches from position data.
 #'
 #' @param data A dataframe of values of any class that is or extends data.frame.
 #'  The dataframe must contain at least two spatial coordinates, \code{x} and
@@ -27,7 +27,7 @@
 #' @export
 #'
 
-wat_make_res_patch <- function(data,
+atl_make_res_patch <- function(data,
                             buffer_radius = 10,
                             lim_spat_indep = 100,
                             lim_time_indep = 30,
@@ -50,10 +50,10 @@ wat_make_res_patch <- function(data,
                           has class {stringr::str_flatten(class(data),
                                            collapse = ' ')}!"))
   assertthat::assert_that(min(as.numeric(diff(data$time))) >= 0,
-                          msg = "wat_make_res_patch: not ordered in time!")
+                          msg = "atl_make_res_patch: not ordered in time!")
   assertthat::assert_that(min(c(buffer_radius, lim_spat_indep,
                                 lim_time_indep, min_fixes)) > 0,
-                          msg = "wat_make_res_patch: function needs \\
+                          msg = "atl_make_res_patch: function needs \\
                           positive arguments")
 
   # convert variable units from minutes to seconds
@@ -82,7 +82,7 @@ wat_make_res_patch <- function(data,
   tryCatch(expr = {
     # identify spatial overlap
     # assign spat diff columns
-    data[, `:=`(spat_diff = atlastools::wat_simple_dist(data = data,
+    data[, `:=`(spat_diff = atlastools::atl_simple_dist(data = data,
                                                         x = "x", y = "y"))]
 
     # first spatial difference is infinity for calculation purposes
@@ -131,7 +131,7 @@ wat_make_res_patch <- function(data,
                                                                1)]))]
     # get spatial difference from last to first point
     patch_summary[, spat_diff :=
-                    c(atlastools::wat_bw_patch_dist(data = patch_summary,
+                    c(atlastools::atl_bw_patch_dist(data = patch_summary,
                                                 x1 = "x_end", x2 = "x_start",
                                                 y1 = "y_end", y2 = "y_start"))]
     # set spat_diff 1 to Inf
@@ -180,14 +180,14 @@ wat_make_res_patch <- function(data,
     # advanced metrics on ungrouped data
     # distance in a patch in metres
     data[, distInPatch := purrr::map_dbl(patchdata, function(df) {
-      sum(atlastools::wat_simple_dist(data = df), na.rm = TRUE)
+      sum(atlastools::atl_simple_dist(data = df), na.rm = TRUE)
     })]
 
     # distance between patches
     tempdata <- data[, unlist(patch_summary, recursive = FALSE),
                      by = .(id, tide_number, patch)]
     data[, patch_summary := NULL]
-    data[, distBwPatch := atlastools::wat_bw_patch_dist(data = tempdata,
+    data[, distBwPatch := atlastools::atl_bw_patch_dist(data = tempdata,
                                                   x1 = "x_end", x2 = "x_start",
                                                   y1 = "y_end", y2 = "y_start")]
     # displacement in a patch

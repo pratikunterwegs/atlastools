@@ -1,16 +1,16 @@
 ---
-title: "Using watlastools"
+title: "Using atlastools"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Using watlastools}
+  %\VignetteIndexEntry{Using atlastools}
   %\VignetteEncoding{UTF-8}
   %\VignetteEngine{knitr::rmarkdown}
 editor_options: 
   chunk_output_type: console
 ---
 
-This vignette shows the basics of using watlastools. It is a work in progress.
-watlastools has two main purposes: accessing and cleaning data, and identifying residence patches from the data.
+This vignette shows the basics of using atlastools. It is a work in progress.
+atlastools has two main purposes: accessing and cleaning data, and identifying residence patches from the data.
 Only the latter is covered here.
 
 ```{r, include = FALSE}
@@ -21,7 +21,7 @@ knitr::opts_chunk$set(
 ```
 
 ```{r setup}
-library(watlastools)
+library(atlastools)
 ```
 
 # Concept: Patches

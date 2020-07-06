@@ -9,10 +9,10 @@ editor_options:
   chunk_output_type: console
 ---
 
-watlastools was built to handle large tracking datasets from the [WATLAS system](https://www.nioz.nl/en/about/cos/coastal-movement-ecology/shorebird-tracking/watlas-tracking-regional-movements). 
-These datasets are -- currently -- split into subsets and saved locally, typically in a folder called _revisitData, revisit_data_ or similar [^1]. In general, watlastools packages would work on the whole dataset as well, but this functionality has not been tested.
+atlastools was built to handle large tracking datasets from the [WATLAS system](https://www.nioz.nl/en/about/cos/coastal-movement-ecology/shorebird-tracking/watlas-tracking-regional-movements). 
+These datasets are -- currently -- split into subsets and saved locally, typically in a folder called _revisitData, revisit_data_ or similar [^1]. In general, atlastools packages would work on the whole dataset as well, but this functionality has not been tested.
 
-Here, we cover iterating watlastools functions over multiple data files, and introduce the `wat_repair_ht_patches` function.
+Here, we cover iterating atlastools functions over multiple data files, and introduce the `wat_repair_ht_patches` function.
 
 ```{r, include = FALSE}
 # knitr::opts_chunk$set(
@@ -22,7 +22,7 @@ Here, we cover iterating watlastools functions over multiple data files, and int
 ```
 
 ```{r setup, message=FALSE}
-library(watlastools)
+library(atlastools)
 
 # read data and see leading lines
 library(data.table)
@@ -45,9 +45,9 @@ data_files <- list.files("vignette_data/", pattern = "413",
 data <- map(data_files, fread)
 ```
 
-Apply watlastools patch functions on each tidal cycle. watlastools functions are tidyverse compatible, and can be chained using the `%>%` operator. Here, we wil use the function defaults, but they can be passed as arguments.
+Apply atlastools patch functions on each tidal cycle. atlastools functions are tidyverse compatible, and can be chained using the `%>%` operator. Here, we wil use the function defaults, but they can be passed as arguments.
 
-```{r apply_watlastools, message=FALSE}
+```{r apply_atlastools, message=FALSE}
 # map over the list of data.tables
 patch_data <- map(data, function(df){
   to_return <- df %>% 
@@ -63,7 +63,7 @@ The dataframes in the list contain a list-column of dataframes (a dataframe insi
 
 # Repairing high tide patches
 
-High tide presents an issue for watlastools, since it was originally written with low tide data in mind. The issue is that residence patches at the beginning of a tidal cycle (high tide) are essentially continuations of residence patches at the end of the previous tidal cycle.
+High tide presents an issue for atlastools, since it was originally written with low tide data in mind. The issue is that residence patches at the beginning of a tidal cycle (high tide) are essentially continuations of residence patches at the end of the previous tidal cycle.
 
 The `wat_repair_ht_patches` function was written to fix this issue. It is a reworking of the original `wat_make_res_patch` function, except that it operates on a list of residence patches, as we made above, and looks only at the first and last patches of each tidal cycle.
 

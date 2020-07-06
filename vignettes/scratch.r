@@ -1,6 +1,6 @@
 ## Getting raw data
 
-`watlastools` has the function `wat_get_data` Gets data from the NIOZ server.
+`atlastools` has the function `wat_get_data` Gets data from the NIOZ server.
 `wat_get_data` is untested because the data are stored on the NIOZ servers. I haven't worked out whether connectting and retrieving this data is actually possible. An example is provided, but will not work, because the data access arguments are not public.
 
 ```{r get_raw_data}

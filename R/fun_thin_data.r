@@ -33,12 +33,8 @@ atl_thin_data <- function(data,
 
   # include asserts checking for required columns
   data_names <- colnames(data)
-  names_req <- c("x", "y", "time")
-  purrr::walk(names_req, function(nr) {
-    assertthat::assert_that(nr %in% data_names,
-                            msg = glue::glue("atl_thin_data: {nr} is
-                         required but missing from data!"))
-  })
+  atlastools:::atl_check_data(data,
+                 names_expected = c("x", "y", "time"))
 
   # check aggregation interval is greater than min time difference
   assertthat::assert_that(interval > min(diff(data$time)),

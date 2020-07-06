@@ -12,7 +12,7 @@ testthat::test_that("aggregated cleaned data", {
                                      VARY = runif(1000) + 300,
                                      COVXY = runif(1000) + 200)
   # run function
-  testoutput <- watlastools::wat_agg_data(testdata, interval = 60)
+  testoutput <- atlastools::wat_agg_data(testdata, interval = 60)
 
   # do tests
   # test that the vector class is data.table and data.frame

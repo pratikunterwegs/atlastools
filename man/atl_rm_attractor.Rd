@@ -5,7 +5,7 @@
 \title{Remove positions within a bounding box.}
 \usage{
 atl_rm_attractor(
-  df,
+  data,
   atp_xmin = 639470,
   atp_xmax = 639472,
   atp_ymin = 5887143,
@@ -13,7 +13,7 @@ atl_rm_attractor(
 )
 }
 \arguments{
-\item{df}{A dataframe or extension which contains capitalised X and Y coordinates.}
+\item{data}{A dataframe or extension which contains capitalised X and Y coordinates.}
 
 \item{atp_xmin}{The min X coordinates of attractor locations.}
 

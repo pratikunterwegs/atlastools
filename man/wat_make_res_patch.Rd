@@ -14,20 +14,35 @@ wat_make_res_patch(
 )
 }
 \arguments{
-\item{data}{A dataframe of values of any class that is or extends data.frame. The dataframe must contain at least two spatial coordinates, \code{x} and \code{y}, and a temporal coordinate, \code{time}. The names of columns specifying these can be passed as arguments below.}
+\item{data}{A dataframe of values of any class that is or extends data.frame.
+The dataframe must contain at least two spatial coordinates, \code{x} and
+\code{y}, and a temporal coordinate, \code{time}. The names of columns
+specifying these can be passed as arguments below.}
 
-\item{buffer_radius}{A numeric value specifying the radius of the buffer to be considered around each coordinate point. May be thought of as the distance that an individual can access, assess, or otherwise cover when at a discrete point in space.}
+\item{buffer_radius}{A numeric value specifying the radius of the buffer to
+be considered around each coordinate point. May be thought of as the distance
+ that an individual can access, assess, or otherwise cover when at a discrete
+  point in space.}
 
-\item{lim_spat_indep}{A numeric value of time in minutes of the time difference between two patches for them to be considered independent.}
+\item{lim_spat_indep}{A numeric value of time in minutes of the time
+difference between two patches for them to be considered independent.}
 
-\item{lim_time_indep}{A numeric value of distance in metres of the spatial distance between two patches for them to the considered independent.}
+\item{lim_time_indep}{A numeric value of distance in metres of the spatial
+distance between two patches for them to the considered independent.}
 
-\item{lim_rest_indep}{A numeric value of time in minutes of the difference in residence times between two patches for them to be considered independent.}
+\item{lim_rest_indep}{A numeric value of time in minutes of the difference
+in residence times between two patches for them to be considered independent.}
 
-\item{min_fixes}{The minimum number of fixes for a group of spatially-proximate number of ponts to be considered a preliminary residence patch.}
+\item{min_fixes}{The minimum number of fixes for a group of
+spatially-proximate number of ponts to be considered a preliminary residence
+patch.}
 }
 \value{
-A data.frame extension object. This dataframe has the added column \code{resPatch} based on cumulative patch summing. Depending on whether \code{inferPatches = TRUE}, the dataframe has additional inferred points. An additional column is created in each case, indicating whether the data are empirical fixes ('real') or 'inferred'.
+A data.frame extension object. This dataframe has the added column
+\code{resPatch} based on cumulative patch summing. Depending on whether
+\code{inferPatches = TRUE}, the dataframe has additional inferred points.
+An additional column is created in each case, indicating whether the data are
+ empirical fixes ('real') or 'inferred'.
 }
 \description{
 Construct residence patches from classified residence data.

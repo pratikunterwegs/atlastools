@@ -71,7 +71,7 @@ wat_repair_ht_patches <- function(patch_data_list,
     edge_data_summary[,`:=`(timediff = c(Inf,
                             as.numeric(time_start[2:length(time_start)] -
                                          time_end[1:length(time_end)-1])),
-               spatdiff = c(watlastools::wat_bw_patch_dist(data = edge_data_summary,
+               spatdiff = c(atlastools::wat_bw_patch_dist(data = edge_data_summary,
                                         x1 = "x_end", x2 = "x_start",
                                         y1 = "y_end", y2 = "y_start")))]
 
@@ -127,7 +127,7 @@ wat_repair_ht_patches <- function(patch_data_list,
   {
     # distance in a patch in metres
     edge_data[,distInPatch := lapply(patchdata, function(df){
-      sum(watlastools::wat_simple_dist(data = df), na.rm = TRUE)
+      sum(atlastools::wat_simple_dist(data = df), na.rm = TRUE)
     })]
 
     # distance between patches
@@ -135,7 +135,7 @@ wat_repair_ht_patches <- function(patch_data_list,
                          by = .(id, tide_number, patch)]
 
     edge_data[,patchSummary:=NULL]
-    edge_data[,distBwPatch := watlastools::wat_bw_patch_dist(data = tempdata,
+    edge_data[,distBwPatch := atlastools::wat_bw_patch_dist(data = tempdata,
                                                             x1 = "x_end", x2 = "x_start",
                                                             y1 = "y_end", y2 = "y_start")]
     # displacement in a patch

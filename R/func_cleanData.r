@@ -75,7 +75,7 @@ wat_clean_data <- function(data,
 
     if (filter_speed == TRUE) {
       # filter for insane speeds if asked
-      data[, sld := watlastools::wat_simple_dist(data, "X", "Y")]
+      data[, sld := atlastools::wat_simple_dist(data, "X", "Y")]
       data[, sld_speed := sld / c(NA, as.numeric(diff(TIME)))]
       data <- data[sld_speed <= (speed_cutoff / 3.6), ]
       data[, `:=`(sld = NULL, sld_speed = NULL)]

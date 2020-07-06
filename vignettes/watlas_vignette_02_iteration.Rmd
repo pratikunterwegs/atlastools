@@ -12,7 +12,7 @@ editor_options:
 atlastools was built to handle large tracking datasets from the [WATLAS system](https://www.nioz.nl/en/about/cos/coastal-movement-ecology/shorebird-tracking/watlas-tracking-regional-movements). 
 These datasets are -- currently -- split into subsets and saved locally, typically in a folder called _revisitData, revisit_data_ or similar [^1]. In general, atlastools packages would work on the whole dataset as well, but this functionality has not been tested.
 
-Here, we cover iterating atlastools functions over multiple data files, and introduce the `wat_repair_ht_patches` function.
+Here, we cover iterating atlastools functions over multiple data files, and introduce the `atl_repair_ht_patches` function.
 
 ```{r, include = FALSE}
 # knitr::opts_chunk$set(
@@ -51,9 +51,9 @@ Apply atlastools patch functions on each tidal cycle. atlastools functions are t
 # map over the list of data.tables
 patch_data <- map(data, function(df){
   to_return <- df %>% 
-    wat_infer_residence() %>% 
-    wat_classify_points() %>% 
-    wat_make_res_patch()
+    atl_infer_residence() %>% 
+    atl_classify_points() %>% 
+    atl_make_res_patch()
   return(to_return)
 })
 ```
@@ -65,7 +65,7 @@ The dataframes in the list contain a list-column of dataframes (a dataframe insi
 
 High tide presents an issue for atlastools, since it was originally written with low tide data in mind. The issue is that residence patches at the beginning of a tidal cycle (high tide) are essentially continuations of residence patches at the end of the previous tidal cycle.
 
-The `wat_repair_ht_patches` function was written to fix this issue. It is a reworking of the original `wat_make_res_patch` function, except that it operates on a list of residence patches, as we made above, and looks only at the first and last patches of each tidal cycle.
+The `atl_repair_ht_patches` function was written to fix this issue. It is a reworking of the original `atl_make_res_patch` function, except that it operates on a list of residence patches, as we made above, and looks only at the first and last patches of each tidal cycle.
 
 If the first patch (_Pa_) of tidal cycle (called `tidenumber` in the data) is not spatio-temporally distinct from the last patch of the previous tidal cycle (_Pb_), _Pa_ is merged into _Pb_.
 
@@ -75,7 +75,7 @@ patch_data <- compact(patch_data) # remove NULL elements
 map_int(patch_data, nrow) %>% sum()
 
 # repair patches for id 413
-repaired_data <- wat_repair_ht_patches(patch_data_list = patch_data)
+repaired_data <- atl_repair_ht_patches(patch_data_list = patch_data)
 
 # count the number of repaired patches
 nrow(repaired_data)

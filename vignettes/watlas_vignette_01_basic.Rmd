@@ -49,16 +49,16 @@ Now make residence patches after inferring residence from gaps in the data.
 ```{r process_data}
 # run the three main functions on the data
 # first infer residence
-temp_data <- wat_infer_residence(data = data,
+temp_data <- atl_infer_residence(data = data,
                                  inf_patch_time_diff = 30,
                                  inf_patch_spat_diff = 100)
 
 # classify residence points
-temp_data <- wat_classify_points(data = temp_data,
+temp_data <- atl_classify_points(data = temp_data,
                                  lim_res_time = 2)
 
 # make residence patches with sensible parameters
-patches <- wat_make_res_patch(data = temp_data,
+patches <- atl_make_res_patch(data = temp_data,
                               buffer_radius = 10,
                               lim_spat_indep = 100,
                               lim_time_indep = 30,
@@ -77,7 +77,7 @@ The patches can be visualised using ggplot (or anything else).
 
 ```{r get_patch_summary}
 # get patch summary
-patch_summary <- wat_get_patch_summary(res_patch_data = patches,
+patch_summary <- atl_get_patch_summary(res_patch_data = patches,
                                        which_data = "summary")
 
 # get the class of the full object and the column types
@@ -90,7 +90,7 @@ The patch points are the raw points that make up the residence patches.
 
 ```{r get_patch_points}
 # get patch points
-patch_points <- wat_get_patch_summary(res_patch_data = patches,
+patch_points <- atl_get_patch_summary(res_patch_data = patches,
                                       which_data = "points")
 
 # get class and column type
@@ -103,7 +103,7 @@ This should have the added class `sf`, and the polygons column should have the t
 
 ```{r get_patch_polygons}
 # get patch points
-patch_polygons <- wat_get_patch_summary(res_patch_data = patches,
+patch_polygons <- atl_get_patch_summary(res_patch_data = patches,
                                       which_data = "spatial")
 
 # get class and column type

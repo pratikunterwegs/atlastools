@@ -12,7 +12,7 @@ atl_check_data <- function(data,
 
   purrr::walk(names_expected, function(nr) {
     assertthat::assert_that(nr %in% data_names,
-                            msg = glue::glue("cleanData: {nr} is
+                            msg = glue::glue("atl_check_data: {nr} is
                          required but missing from data!"))
   })
 }

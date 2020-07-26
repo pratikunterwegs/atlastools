@@ -1,6 +1,7 @@
 #' Repair residence patches across susbets.
 #'
-#' @param patch_data_list A list of data.tables, each the output of make_res_patch. Must have an sfc geometry column.
+#' @param patch_data_list A list of data.tables, each the output of 
+#' \code{make_res_patch}. Must have an sfc geometry column.
 #' @param lim_spat_indep The spatial independence limit.
 #' @param lim_time_indep The temporal independence limit.
 #' @param buffer_radius The buffer size for spatial polygons.

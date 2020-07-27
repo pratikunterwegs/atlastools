@@ -81,7 +81,7 @@ atl_res_patch <- function(data,
 
     # count fixes and patch and remove small patches
     # count number of points per patch
-    data <- data[, nfixes := .N, by = c("id", "tide_number", "patch")]
+    data <- data[, nfixes := .N, by = c("id", "patch")]
 
     # remove patches with 2 or fewer points
     data <- data[nfixes >= min_fixes, ]
@@ -168,7 +168,7 @@ atl_res_patch <- function(data,
 
     # distance between patches
     temp_data <- data[, unlist(patch_summary, recursive = FALSE),
-                     by = .(id, tide_number, patch)]
+                     by = .(id, patch)]
     data[, patch_summary := NULL]
     data[, dist_bw_patch := atlastools::atl_patch_dist(data = temp_data,
                                                   x1 = "x_end", x2 = "x_start",
@@ -204,12 +204,14 @@ atl_res_patch <- function(data,
     data <- data.table::merge.data.table(data, temp_data,
                                          by = c("id", "patch"))
 
+    assertthat::assert_that(!is.null(data),
+                            msg = "make_patch: patch has no data")
+
     return(data)
   },
   # null error function, with option to collect data on errors
   error = function(e) {
-    message(glue::glue("there was an error in {unique(data$id)} \\
-                       {unique(data$tide_number)}:
+    message(glue::glue("there was an error in {unique(data$id)}:
                        {as.character(e)}"))
   }
   )

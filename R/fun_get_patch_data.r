@@ -14,7 +14,7 @@
 atl_patch_summary <- function(patch_data,
                               which_data = "summary",
                               buffer_radius = 10) {
-  id <- tide_number <- patch <- patchdata <- NULL
+  id <- patch <- patchdata <- NULL
 
   # check somedata is a data.frame and has a resTime column
   assertthat::assert_that(is.data.frame(patch_data),
@@ -57,9 +57,9 @@ atl_patch_summary <- function(patch_data,
 
   # get points if asked
   if (which_data %in% c("points")) {
-    patch_data <- patch_data[, .(id, tide_number, patch, patchdata)]
+    patch_data <- patch_data[, .(id, patch, patchdata)]
     patch_data <- patch_data[, unlist(patchdata, recursive = FALSE),
-                         by = .(id, tide_number, patch)]
+                         by = .(id, patch)]
   }
   return(patch_data)
 }

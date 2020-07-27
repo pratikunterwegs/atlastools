@@ -17,7 +17,8 @@ atl_res_patch(
 \item{data}{A dataframe of values of any class that is or extends data.frame.
 The dataframe must contain at least two spatial coordinates, \code{x} and
 \code{y}, and a temporal coordinate, \code{time}. The names of columns
-specifying these can be passed as arguments below.}
+specifying these can be passed as arguments below. The column \code{id}
+indicating animal id is \emph{required}.}
 
 \item{buffer_radius}{A numeric value specifying the radius of the buffer to
 be considered around each coordinate point. May be thought of as the distance

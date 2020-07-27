@@ -3,7 +3,8 @@
 #' @param data A dataframe of values of any class that is or extends data.frame.
 #'  The dataframe must contain at least two spatial coordinates, \code{x} and
 #'  \code{y}, and a temporal coordinate, \code{time}. The names of columns
-#'  specifying these can be passed as arguments below.
+#'  specifying these can be passed as arguments below. The column \code{id}
+#'  indicating animal id is \emph{required}.
 #' @param buffer_radius A numeric value specifying the radius of the buffer to
 #' be considered around each coordinate point. May be thought of as the distance
 #'  that an individual can access, assess, or otherwise cover when at a discrete
@@ -28,19 +29,10 @@
 #'
 
 atl_res_patch <- function(data,
-                            buffer_radius = 10,
-                            lim_spat_indep = 100,
-                            lim_time_indep = 30,
-                            lim_rest_indep = 30,
-                            min_fixes = 3) {
-  # handle global variable issues
-  time <- time_diff <- type <- NULL
-  patch <- nfixes <- id <- tide_number <- patchdata <- NULL
-  patch_summary <- time_start <- time_end <- duration <- nfixes <- NULL
-  resTime_mean <- restime_diff <- area <- NULL
-  x_end <- y_end <- x_start <- y_start <- NULL
-  spat_diff <- newpatch <- distInPatch <- distBwPatch <- dispInPatch <- NULL
-  polygons <- NULL
+                          buffer_radius = 10,
+                          lim_spat_indep = 100,
+                          lim_time_indep = 30,
+                          min_fixes = 3) {
 
   # check data is a data.frame and has a resTime column
   # check if data frame
@@ -49,8 +41,7 @@ atl_res_patch <- function(data,
                           dataframe object, \\
                           has class {stringr::str_flatten(class(data),
                                            collapse = ' ')}!"))
-  assertthat::assert_that(min(as.numeric(diff(data$time))) >= 0,
-                          msg = "atl_make_res_patch: not ordered in time!")
+
   assertthat::assert_that(min(c(buffer_radius, lim_spat_indep,
                                 lim_time_indep, min_fixes)) > 0,
                           msg = "atl_make_res_patch: function needs \\
@@ -61,14 +52,10 @@ atl_res_patch <- function(data,
 
   # get names and numeric variables
   data_names <- colnames(data)
-  names_req <- c("id", "tide_number", "x", "y",
-                 "time", "type", "resTime", "tidaltime")
+  names_req <- c("id", "x", "y", "time")
 
   # include asserts checking for required columns
-  purrr::walk(names_req, function(nr) {
-    assertthat::assert_that(nr %in% data_names,
-                msg = glue::glue("{nr} is required but missing from data!"))
-  })
+  atlastools:::atl_check_data(data, names_expected = names_req)
 
   # make datatable to use functions
   if (!is.data.table(data)) {
@@ -97,22 +84,22 @@ atl_res_patch <- function(data,
     data <- data[, nfixes := .N, by = c("id", "tide_number", "patch")]
 
     # remove patches with 2 or fewer points
-    data <- data[nfixes >= min_fixes | type == "inferred", ]
+    data <- data[nfixes >= min_fixes, ]
     data[, nfixes := NULL]
 
     # get time mean and extreme points for spatio-temporal independence calc
     # nest data
-    data <- data[, .(list(.SD)), by = .(id, tide_number, patch)]
+    data <- data[, .(list(.SD)), by = .(id, patch)]
     setnames(data, old = "V1", new = "patchdata")
-    data[, nfixes := purrr::map_int(patchdata, nrow)]
+    data[, nfixes := as.integer(lapply(patchdata, nrow))]
 
     # summarise mean, first and last
     data[, patch_summary := lapply(patchdata, function(dt) {
       dt2 <- dt[, unlist(lapply(.SD, function(d) {
-        list(mean = mean(d),
-             start = first(d),
-             end = last(d))
-      }), recursive = FALSE), .SDcols = c("x", "y", "time", "resTime")]
+        list(median = as.double(median(d)),
+             start = as.double(data.table::first(d)),
+             end = as.double(data.table::last(d)))
+      }), recursive = FALSE), .SDcols = c("x", "y", "time")]
 
       setnames(dt2,
                stringr::str_replace(colnames(dt2), "\\.", "_"))
@@ -122,8 +109,9 @@ atl_res_patch <- function(data,
 
     # assess independence using summary data
     patch_summary <- data[, unlist(patch_summary, recursive = FALSE),
-                          by = .(id, tide_number, patch)]
+                          by = .(id, patch)]
     data[, patch_summary := NULL]
+
     # get time bewteen start of n+1 and end of n
     patch_summary[, time_diff := c(Inf,
                                   as.numeric(time_start[2:length(time_start)] -
@@ -131,19 +119,15 @@ atl_res_patch <- function(data,
                                                                1)]))]
     # get spatial difference from last to first point
     patch_summary[, spat_diff :=
-                    c(atlastools::atl_bw_patch_dist(data = patch_summary,
-                                                x1 = "x_end", x2 = "x_start",
-                                                y1 = "y_end", y2 = "y_start"))]
+                    c(atlastools::atl_patch_dist(data = patch_summary,
+                                                 x1 = "x_end", x2 = "x_start",
+                                                 y1 = "y_end", y2 = "y_start"))]
     # set spat_diff 1 to Inf
     patch_summary[1, "spat_diff"] <- Inf
 
-    # get differences in mean residence time
-    patch_summary[, restime_diff := c(Inf, abs(as.numeric(diff(resTime_mean))))]
-
     # assess independence and assign new patch
     patch_summary[, newpatch := cumsum((time_diff > lim_time_indep) |
-                                         (spat_diff > lim_spat_indep) |
-                                         restime_diff > lim_rest_indep)]
+                                         (spat_diff > lim_spat_indep))]
 
     # get cols with old and new patch
     patch_summary <- patch_summary[, .(patch, newpatch)]
@@ -152,24 +136,23 @@ atl_res_patch <- function(data,
     # join patchdata to patch summary by new patch
     # expand data to prepare for new patches
     data <- data[, unlist(patchdata, recursive = FALSE),
-                 by = .(id, tide_number, patch)]
+                 by = .(id, patch)]
 
     data <- data.table::merge.data.table(data, patch_summary, by = "patch")
     data[, `:=`(patch = newpatch, newpatch = NULL)]
 
     # nest data again
-    data <- data[, .(list(.SD)), by = .(id, tide_number, patch)]
+    data <- data[, .(list(.SD)), by = .(id, patch)]
     setnames(data, old = "V1", new = "patchdata")
-    data[, nfixes := lapply(patchdata, nrow)]
+    data[, nfixes := as.integer(lapply(patchdata, nrow))]
 
     # basic metrics by new patch
     data[, patch_summary := lapply(patchdata, function(dt) {
       dt2 <- dt[, unlist(lapply(.SD, function(d) {
-        list(mean = mean(d),
-             start = first(d),
-             end = last(d))
-      }), recursive = FALSE), .SDcols = c("x", "y", "time",
-                                          "resTime", "tidaltime", "waterlevel")]
+        list(median = as.double(stats::median(d)),
+             start = as.double(data.table::first(d)),
+             end = as.double(data.table::last(d)))
+      }), recursive = FALSE), .SDcols = c("x", "y", "time")]
 
       setnames(dt2,
                stringr::str_replace(colnames(dt2), "\\.", "_"))
@@ -179,30 +162,23 @@ atl_res_patch <- function(data,
 
     # advanced metrics on ungrouped data
     # distance in a patch in metres
-    data[, distInPatch := purrr::map_dbl(patchdata, function(df) {
+    data[, dist_in_patch := as.double(lapply(patchdata, function(df) {
       sum(atlastools::atl_simple_dist(data = df), na.rm = TRUE)
-    })]
+    }))]
 
     # distance between patches
-    tempdata <- data[, unlist(patch_summary, recursive = FALSE),
+    temp_data <- data[, unlist(patch_summary, recursive = FALSE),
                      by = .(id, tide_number, patch)]
     data[, patch_summary := NULL]
-    data[, distBwPatch := atlastools::atl_bw_patch_dist(data = tempdata,
+    data[, dist_bw_patch := atlastools::atl_patch_dist(data = temp_data,
                                                   x1 = "x_end", x2 = "x_start",
                                                   y1 = "y_end", y2 = "y_start")]
     # displacement in a patch
     # apply func bw patch dist reversing usual end and begin
-    tempdata[, dispInPatch := sqrt((x_end - x_start) ^ 2 +
+    temp_data[, disp_in_patch := sqrt((x_end - x_start) ^ 2 +
                                      (y_end - y_start) ^ 2)]
-    # type of patch
-    data[, type := purrr::map_chr(patchdata, function(df) {
-      a <- ifelse(sum(c("real", "inferred") %in% df$type) == 2,
-                  "mixed", first(df$type))
-      return(a)
-    })]
-
     # even more advanced metrics
-    tempdata[, duration := (time_end - time_start)]
+    temp_data[, duration := (time_end - time_start)]
 
     # true spatial metrics
     data[, polygons := lapply(patchdata, function(df) {
@@ -213,20 +189,20 @@ atl_res_patch <- function(data,
     })]
 
     # add area and circularity
-    data[, area := purrr::map_dbl(polygons, sf::st_area)]
-    data[, `:=`(circularity = (4 * pi * area) / purrr::map_dbl(polygons,
+    data[, area := as.double(lapply(polygons, sf::st_area))]
+    data[, `:=`(circularity = (4 * pi * area) / as.double(lapply(polygons,
                                                                function(pgon) {
       boundary <- sf::st_boundary(pgon)
       perimeter <- sf::st_length(boundary)
       return(as.numeric(perimeter) ^ 2)
-    }))]
+    })))]
 
     # remove polygons
     data[, polygons := NULL]
 
     # remove patch summary from some data and add temp data, then del tempdata
-    data <- data.table::merge.data.table(data, tempdata,
-                                         by = c("id", "tide_number", "patch"))
+    data <- data.table::merge.data.table(data, temp_data,
+                                         by = c("id", "patch"))
 
     return(data)
   },

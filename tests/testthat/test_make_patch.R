@@ -2,57 +2,53 @@ context("residence patches and classified points")
 testthat::test_that("patch calc on empirical data", {
 
   # read in data
-  somedata = data.table::fread("../testdata/435_025_revisit.csv")
+  test_data = data.table::fread("../testdata/435_025_revisit.csv")
 
   # run function for patch construction
-  testoutput <- atlastools::atl_make_res_patch(data = somedata,
-                                             buffer_radius = 10,
-                                             lim_spat_indep = 100,
-                                             lim_time_indep = 30,
-                                             lim_rest_indep = 10,
-                                             min_fixes = 3)
+  test_output <- atlastools::atl_res_patch(data = test_data,
+                                          buffer_radius = 10,
+                                          lim_spat_indep = 100,
+                                          lim_time_indep = 30,
+                                          lim_rest_indep = 10,
+                                          min_fixes = 3)
 
   # do tests
   # test that the sf output class is at least sf
-  testthat::expect_s3_class(object = testoutput,
+  testthat::expect_s3_class(object = test_output,
                             class = c("sf", "data.frame", "data.table"))
 
   # test that names are present in output cols
-  expnames <- c("id", "tide_number", "type", "patch", "time_mean",
+  expected_names <- c("id", "tide_number", "patch", "time_mean",
                 "tidaltime_mean", "x_mean", "y_mean", "duration", "distInPatch",
                 "distBwPatch",  "dispInPatch")
-  purrr::walk(expnames, function(expname){
-    testthat::expect_true(expname %in% colnames(testoutput),
-                          info = glue::glue('{expname} expected in output \\
-                                            but not produced'))
-  })
+  atl_check_data(test_output, names_expected = expected_names)
 
   # check that data are ordered in time
-  testthat::expect_gt(min(as.numeric(diff(testoutput$time_mean)),
+  testthat::expect_gt(min(as.numeric(diff(test_output$time_mean)),
                           na.rm = TRUE), 0)
 })
 
 testthat::test_that("patch data access function works", {
 
   # read in data
-  somedata = data.table::fread("../testdata/435_025_revisit.csv")
+  test_data = data.table::fread("../testdata/435_025_revisit.csv")
 
   # run function for patch construction
-  testoutput <- atlastools::atl_make_res_patch(data = somedata,
+  test_output <- atlastools::atl_res_patch(data = test_data,
                                              buffer_radius = 10,
                                              lim_spat_indep = 50,
                                              lim_time_indep = 30)
 
-  # access testoutput summary
-  copy1 <- copy2 <- copy3 <- testoutput
+  # access test_output summary
+  copy1 <- copy2 <- copy3 <- test_output
   data_access_smry <- atlastools::atl_get_patch_summary(res_patch_data = copy1,
                                                       which_data = "summary")
 
-  # access testoutput spatial
+  # access test_output spatial
   data_access_sf <- atlastools::atl_get_patch_summary(res_patch_data = copy2,
                                                   which_data = "spatial")
 
-  # access testoutput spatial
+  # access test_output spatial
   data_access_pt <- atlastools::atl_get_patch_summary(res_patch_data = copy3,
                                                   which_data = "points")
 
@@ -66,18 +62,14 @@ testthat::test_that("patch data access function works", {
   testthat::expect_s3_class(object = data_access_sf, class = c("sf"))
 
   # test that names are present in output cols
-  expnames <- c("id", "tide_number", "type", "patch", "time_mean",
+  expected_names <- c("id", "tide_number", "patch", "time_mean",
                 "tidaltime_mean", "x_mean", "y_mean", "duration", "distInPatch",
                 "waterlevel_mean","distBwPatch", "dispInPatch")
   # test col names in data access
-  purrr::walk(expnames, function(expname){
-    testthat::expect_true(expname %in% colnames(data_access_sf),
-                          info = glue::glue("{expname} expected in output \\
-                                            but not produced"))
-  })
+  atl_check_data(test_output, names_expected = expected_names)
 
   # check that data are ordered in time
-  testthat::expect_gt(min(as.numeric(diff(testoutput$time_mean)),
+  testthat::expect_gt(min(as.numeric(diff(test_output$time_mean)),
                           na.rm = TRUE), 0)
 
 })

@@ -30,5 +30,3 @@ atl_simple_dist <- function(data, x = "x", y = "y"){
                            TRUE ~ { as.numeric(NA)})
   return(dist)
 }
-
-#### a function for patch end to patch start distances ####

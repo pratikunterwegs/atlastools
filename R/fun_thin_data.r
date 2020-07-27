@@ -53,7 +53,7 @@ atl_thin_data <- function(data,
     # or zero, whichever is greater
     data[, SD := dplyr::if_else((VARX + VARY + 2 * COVXY) > 0,
                                 sqrt(VARX + VARY + 2 * COVXY), 0)]
-  } else (method == "resample") {
+  } else if (method == "resample") {
     # resample one observation per rounded interval
     data <- data[, lapply(.SD, data.table::first), by = list(time, id)]
   }

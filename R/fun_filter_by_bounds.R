@@ -3,8 +3,6 @@
 #' @param data A dataframe or extension which contains X and Y coordinates.
 #' @param x The X coordinate column.
 #' @param y The Y coordinate column.
-#' @param time The timestamp column.
-#' @param time_range The time range.
 #' @param x_range The range of X coordinates.
 #' @param y_range The range of Y coordinates.
 #' @param remove_inside Whether to remove points from within the range.
@@ -18,8 +16,6 @@
 atl_filter_bounds <- function(data,
                             x = "x",
                             y = "y",
-                            time = "time",
-                            time_range,
                             x_range = c(639470, 639472),
                             y_range = c(5887143, 5887145),
                             remove_inside = TRUE) {
@@ -30,11 +26,11 @@ atl_filter_bounds <- function(data,
                           msg = "filter_bbox: remove inside needs TRUE/FALSE")
 
   # include asserts checking for required columns
-  names_req <- c(x, y, time)
+  names_req <- c(x, y)
   atlastools:::atl_check_data(data, names_req)
 
   # check input length of attractors
-  invisible(lapply(list(x_range, y_range, time_range), function(f) {
+  invisible(lapply(list(x_range, y_range), function(f) {
          assertthat::assert_that(length(f) == 2,
                      msg="filter_bbox: incorrect bound lengths")
   }))
@@ -43,9 +39,6 @@ atl_filter_bounds <- function(data,
   if (is.data.table(data) != TRUE) {
     data.table::setDT(data)
   }
-
-  # filter for time range before spatial filtering
-  data <- data[data.table::between(time, time_range[1], time_range[2]), ]
 
   # filter for spatial extent either inside or outside
   if (remove_inside) {

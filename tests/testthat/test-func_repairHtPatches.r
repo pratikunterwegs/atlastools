@@ -1,4 +1,5 @@
 context("repairing high tide patches")
+testthat::skip("testing repair patches unsure to include")
 testthat::test_that("high tide repair works", {
 
   # read in data

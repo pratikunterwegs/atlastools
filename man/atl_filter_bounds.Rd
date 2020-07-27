@@ -8,8 +8,6 @@ atl_filter_bounds(
   data,
   x = "x",
   y = "y",
-  time = "time",
-  time_range,
   x_range = c(639470, 639472),
   y_range = c(5887143, 5887145),
   remove_inside = TRUE
@@ -21,10 +19,6 @@ atl_filter_bounds(
 \item{x}{The X coordinate column.}
 
 \item{y}{The Y coordinate column.}
-
-\item{time}{The timestamp column.}
-
-\item{time_range}{The time range.}
 
 \item{x_range}{The range of X coordinates.}
 

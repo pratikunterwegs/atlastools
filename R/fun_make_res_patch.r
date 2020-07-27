@@ -27,7 +27,7 @@
 #' @export
 #'
 
-atl_make_res_patch <- function(data,
+atl_res_patch <- function(data,
                             buffer_radius = 10,
                             lim_spat_indep = 100,
                             lim_time_indep = 30,

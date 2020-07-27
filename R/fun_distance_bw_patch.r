@@ -19,7 +19,7 @@
 #' n is the number of rows.
 #' @export
 #'
-atl_bw_patch_dist <- function(data,
+atl_patch_dist <- function(data,
                              x1 = "x_end", x2 = "x_start",
                              y1 = "y_end", y2 = "y_start") {
   #check for basic assumptions

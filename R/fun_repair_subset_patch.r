@@ -9,7 +9,7 @@
 #' @import data.table
 #' @export
 #'
-atl_repair_ht_patches <- function(patch_data_list,
+atl_repair_patches <- function(patch_data_list,
                                   lim_spat_indep = 100,
                                   lim_time_indep = 30,
                                   buffer_radius = 10){

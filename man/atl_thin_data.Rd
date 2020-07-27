@@ -2,22 +2,22 @@
 % Please edit documentation in R/fun_thin_data.R
 \name{atl_thin_data}
 \alias{atl_thin_data}
-\title{Thin tracking data.}
+\title{Thin tracking data by resampling or aggregation.}
 \usage{
-atl_thin_data(data, interval = 60, type = c("subsample", "aggregate"))
+atl_thin_data(data, interval = 60, method = c("resample", "aggregate"))
 }
 \arguments{
 \item{data}{Cleaned data to aggregate. Must have a numeric column named time.}
 
 \item{interval}{The interval in seconds over which to aggregate.}
 
-\item{type}{Should the data be thinned by subsampling or aggregation.
-If subsampling, the first position of each group is taken.
+\item{method}{Should the data be thinned by subsampling or aggregation.
+If resampling, the first position of each group is taken.
 If aggregation, the group positions' median is taken.}
 }
 \value{
 A dataframe aggregated taking the mean over the interval.
 }
 \description{
-Thin tracking data.
+Thin tracking data by resampling or aggregation.
 }

@@ -9,13 +9,13 @@
 #' Negative degrees indicate 'left' turns. There are two fewer
 #' angles than the number of rows in the dataframe.
 #' @export
-wat_turning_angle <- function(data,
+atl_turning_angle <- function(data,
                           x = "x",
                           y = "y",
                           time = "time") {
 
   # check for column names
-  wat_check_data(data,
+  atl_check_data(data,
                  names_expected = c(x, y, time))
 
   # set order in time

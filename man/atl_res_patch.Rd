@@ -9,7 +9,6 @@ atl_res_patch(
   buffer_radius = 10,
   lim_spat_indep = 100,
   lim_time_indep = 30,
-  lim_rest_indep = 30,
   min_fixes = 3
 )
 }
@@ -31,12 +30,12 @@ difference between two patches for them to be considered independent.}
 \item{lim_time_indep}{A numeric value of distance in metres of the spatial
 distance between two patches for them to the considered independent.}
 
-\item{lim_rest_indep}{A numeric value of time in minutes of the difference
-in residence times between two patches for them to be considered independent.}
-
 \item{min_fixes}{The minimum number of fixes for a group of
 spatially-proximate number of ponts to be considered a preliminary residence
 patch.}
+
+\item{lim_rest_indep}{A numeric value of time in minutes of the difference
+in residence times between two patches for them to be considered independent.}
 }
 \value{
 A data.frame extension object. This dataframe has the added column

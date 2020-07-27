@@ -27,7 +27,7 @@ atl_filter_bounds <- function(data,
 
   # include asserts checking for required columns
   names_req <- c(x, y)
-  atlastools:::atl_check_data(data, names_req)
+  atl_check_data(data, names_req)
 
   # check input length of attractors
   invisible(lapply(list(x_range, y_range), function(f) {

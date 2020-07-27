@@ -1,4 +1,0 @@
-*.html
-*.R
-*.csv
-!vignette_data/*

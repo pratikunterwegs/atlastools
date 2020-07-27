@@ -28,6 +28,8 @@ high instantaneous speeds are considered an anomaly rather than fast transit.}
 
 \item{reflection_speed_cutoff}{The speed (in m/s) above which an anomaly is
 detected when combined with a high turning angle.}
+
+\item{est_ref_len}{How many positions are expected to be in a reflection.}
 }
 \value{
 A dataframe with reflections removed.

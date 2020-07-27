@@ -20,7 +20,7 @@ testthat::test_that("patch calc on empirical data", {
   expected_names <- c("id", "patch", "time_median",
                 "x_median", "y_median", "duration", "dist_in_patch",
                 "dist_bw_patch",  "disp_in_patch")
-  atlastools:::atl_check_data(test_output, names_expected = expected_names)
+  atl_check_data(test_output, names_expected = expected_names)
 
   # check that data are ordered in time
   testthat::expect_gt(min(as.numeric(diff(test_output$time_mean)),

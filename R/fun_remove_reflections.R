@@ -1,6 +1,7 @@
 #' Remove reflected positions.
 #'
 #' @author Pratik R. Gupte
+#'
 #' @param data A dataframe or similar which has previously been cleaned.
 #' @param x The name of the X coordinate column.
 #' @param y The name of the Y coordinate column.
@@ -9,6 +10,7 @@
 #' high instantaneous speeds are considered an anomaly rather than fast transit.
 #' @param reflection_speed_cutoff The speed (in m/s) above which an anomaly is
 #' detected when combined with a high turning angle.
+#' @param est_ref_len How many positions are expected to be in a reflection.
 #'
 #' @return A dataframe with reflections removed.
 #' @export
@@ -21,14 +23,14 @@ atl_remove_reflections <- function(data,
                                    est_ref_len = 1000) {
 
   # check data
-  watlastools:::atl_check_data(data, names_expected = c(x, y, time))
+  atl_check_data(data, names_expected = c(x, y, time))
 
   # set order
   data.table::setorderv(data, time)
 
   # get speed and angle
-  data[, `:=`(speed = watlastools::atl_get_speed(data),
-              angle = watlastools::atl_turning_angle(data))]
+  data[, `:=`(speed = atlastools::atl_get_speed(data),
+              angle = atlastools::atl_turning_angle(data))]
 
   # prepare a vector of rows to discard
   vec_discard <- integer()

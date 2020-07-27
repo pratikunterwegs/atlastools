@@ -8,13 +8,13 @@ testthat::test_that("data has expected columns", {
 
     # expect no error
     testthat::expect_silent(object = { 
-        atlastools:::atl_check_data(data = testdata,
+        atl_check_data(data = testdata,
                                    names_expected = c("x", "y", "time"))
     })
 
     # expect an error
     testthat::expect_error(expr = { 
-        atlastools:::atl_check_data(data = testdata,
+        atl_check_data(data = testdata,
                                    names_expected = c("X", "Y", "TIME"))
     })
  })

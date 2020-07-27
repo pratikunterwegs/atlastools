@@ -33,16 +33,10 @@ distance between two patches for them to the considered independent.}
 \item{min_fixes}{The minimum number of fixes for a group of
 spatially-proximate number of ponts to be considered a preliminary residence
 patch.}
-
-\item{lim_rest_indep}{A numeric value of time in minutes of the difference
-in residence times between two patches for them to be considered independent.}
 }
 \value{
 A data.frame extension object. This dataframe has the added column
-\code{resPatch} based on cumulative patch summing. Depending on whether
-\code{inferPatches = TRUE}, the dataframe has additional inferred points.
-An additional column is created in each case, indicating whether the data are
- empirical fixes ('real') or 'inferred'.
+\code{patch} and \code{patchdata} based on cumulative patch summing.
 }
 \description{
 Construct residence patches from position data.

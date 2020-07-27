@@ -11,8 +11,6 @@
 #'   point in space.
 #' @param lim_spat_indep A numeric value of time in minutes of the time
 #' difference between two patches for them to be considered independent.
-#' @param lim_rest_indep A numeric value of time in minutes of the difference
-#' in residence times between two patches for them to be considered independent.
 #' @param lim_time_indep A numeric value of distance in metres of the spatial
 #' distance between two patches for them to the considered independent.
 #' @param min_fixes The minimum number of fixes for a group of
@@ -20,19 +18,22 @@
 #' patch.
 #'
 #' @return A data.frame extension object. This dataframe has the added column
-#' \code{resPatch} based on cumulative patch summing. Depending on whether
-#' \code{inferPatches = TRUE}, the dataframe has additional inferred points.
-#' An additional column is created in each case, indicating whether the data are
-#'  empirical fixes ('real') or 'inferred'.
+#' \code{patch} and \code{patchdata} based on cumulative patch summing.
 #' @import data.table
 #' @export
 #'
-
 atl_res_patch <- function(data,
                           buffer_radius = 10,
                           lim_spat_indep = 100,
                           lim_time_indep = 30,
                           min_fixes = 3) {
+
+  area <- disp_in_patch <- NULL
+  dist_bw_patch <- dist_in_patch <- duration <- NULL
+  id <- median <- newpatch <- nfixes <- patch <- NULL
+  patchdata <- polygons <- spat_diff <- speed <- NULL
+  time <- time_diff <- time_end <- time_start <- NULL
+  x_end <- x_start <- y_end <- y_start <- NULL
 
   # check data is a data.frame and has a resTime column
   # check if data frame
@@ -55,7 +56,7 @@ atl_res_patch <- function(data,
   names_req <- c("id", "x", "y", "time")
 
   # include asserts checking for required columns
-  atlastools:::atl_check_data(data, names_expected = names_req)
+  atl_check_data(data, names_expected = names_req)
 
   # make datatable to use functions
   if (!is.data.table(data)) {
@@ -96,7 +97,7 @@ atl_res_patch <- function(data,
     # summarise mean, first and last
     data[, patch_summary := lapply(patchdata, function(dt) {
       dt2 <- dt[, unlist(lapply(.SD, function(d) {
-        list(median = as.double(median(d)),
+        list(median = as.double(stats::median(d)),
              start = as.double(data.table::first(d)),
              end = as.double(data.table::last(d)))
       }), recursive = FALSE), .SDcols = c("x", "y", "time")]

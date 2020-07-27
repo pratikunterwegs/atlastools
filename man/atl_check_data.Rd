@@ -9,10 +9,10 @@ atl_check_data(data, names_expected = c("x", "y", "time"))
 \arguments{
 \item{data}{The tracking data to check for required columns.}
 
-\item{names_needed}{The names expected.}
+\item{names_expected}{The names expected.}
 }
 \value{
-
+None. Breaks if the data does not have required columns.
 }
 \description{
 Check data has required columns.

@@ -14,14 +14,14 @@ atl_get_speed <- function(data,
                           y = "y",
                           time = "time") {
 
-  watlastools:::atl_check_data(data,
+  atl_check_data(data,
                                names_expected = c(x, y, time))
 
   # set order in time
   data.table::setorderv(data, time)
 
   # get distance
-  distance <- watlastools::atl_simple_dist(data,
+  distance <- atlastools::atl_simple_dist(data,
                                            x, y, time)
 
   # get time

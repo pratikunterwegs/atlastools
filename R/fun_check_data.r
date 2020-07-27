@@ -1,9 +1,9 @@
 #' Check data has required columns.
 #'
 #' @param data The tracking data to check for required columns.
-#' @param names_needed The names expected.
+#' @param names_expected The names expected.
 #'
-#' @return
+#' @return None. Breaks if the data does not have required columns.
 atl_check_data <- function(data,
                            names_expected = c("x", "y", "time")) {
 

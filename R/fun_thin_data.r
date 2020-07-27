@@ -12,7 +12,7 @@
 atl_thin_data <- function(data,
                          interval = 60,
                          method = c("resample",
-                                  "aggregate")) {
+                                    "aggregate")) {
 
   id <- time <- NULL
 
@@ -21,7 +21,7 @@ atl_thin_data <- function(data,
                           msg = "thin_data: input not a dataframe object!")
 
   # check that type is a character and within scope
-  assertthat::assert_that(type %in% c("resample",
+  assertthat::assert_that(method %in% c("resample",
                                       "aggregate"),
                           msg = "thin_data: type must be 'resample' or \\
                           'aggregate'")
@@ -53,11 +53,9 @@ atl_thin_data <- function(data,
     # or zero, whichever is greater
     data[, SD := dplyr::if_else((VARX + VARY + 2 * COVXY) > 0,
                                 sqrt(VARX + VARY + 2 * COVXY), 0)]
-  } else if (method == "resample") {
+  } else (method == "resample") {
     # resample one observation per rounded interval
     data <- data[, lapply(.SD, data.table::first), by = list(time, id)]
-  } else {
-    warning("thin_data: wrong method supplied but assert bypassed")
   }
 
   # check for class and whether there are rows

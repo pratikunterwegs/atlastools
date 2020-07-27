@@ -3,8 +3,8 @@ testthat::test_that("data has expected columns", {
 
     # make some test data
     testdata <- data.table::data.table(x = as.double(1:1e3),
-                                     y = as.double(1:1e3),
-                                     time = as.numeric(1:1e3))
+                                       y = as.double(1:1e3),
+                                       time = as.numeric(1:1e3))
 
     # expect no error
     testthat::expect_silent(object = { 

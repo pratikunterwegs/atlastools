@@ -14,15 +14,13 @@ atl_get_speed <- function(data,
                           y = "y",
                           time = "time") {
 
-  atl_check_data(data,
-                               names_expected = c(x, y, time))
+  atl_check_data(data, names_expected = c(x, y, time))
 
   # set order in time
   data.table::setorderv(data, time)
 
   # get distance
-  distance <- atlastools::atl_simple_dist(data,
-                                           x, y, time)
+  distance <- atlastools::atl_simple_dist(data, x, y)
 
   # get time
   time <- c(NA, diff(data[[time]]))

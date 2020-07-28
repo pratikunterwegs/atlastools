@@ -1,0 +1,93 @@
+---
+editor_options: 
+  chunk_output_type: console
+---
+
+# Three methods for removing reflections
+
+- 'Next reasonable speed' method
+- 'Next reasonable distance' method
+- 'Next extreme speed' method
+
+## Load libraries
+
+```{r warning=FALSE, message=FALSE}
+library(tidyr)
+library(dplyr)
+library(ggplot2)
+```
+
+## Next reasonable speed method
+
+This method fails for any reflections of duration $T$, where $T = D/v$, where $D$ is the displacement of the reflected points from the anchor point, and $v$ is the speed cutoff used.
+
+```{r}
+# get displacement distance and speed cutoff combinations
+displacement_distance <- c(10 ^ seq(0, 4, 0.1))
+speed_cutoffs <- seq(0, 100, 5)
+
+# use formula for algorithm defeat
+data <- crossing(displacement_distance, speed_cutoffs) %>% 
+  mutate(time_to_defeat = displacement_distance / speed_cutoffs)
+```
+
+```{r fig.cap="Figure showing the time (in minutes) required to beat the 'next reasonable speed' method, for various combinations of the reflection distance from the real positions, _D_ and the speed cutoff, _v_. Area in black represent combinations that fail"}
+# plot matrix of time to defeat
+ggplot(data)+
+  geom_tile(aes(speed_cutoffs, displacement_distance,
+                fill = time_to_defeat / 60))+
+  scale_fill_gradientn(colours = pals::kovesi.linear_bmy_10_95_c78(7),
+                       trans = "log10",
+                       limits = c(0.2, NA),
+                       breaks = c(0.3, 1, 3, 10, 30),
+                       labels = as.character(c(0.3, 1, 3, 10, 30)),
+                       na.value = "black")+
+  scale_y_log10(labels = scales::comma,
+                breaks = c(10 ^ seq(0, 5), 500, 5000))+
+  scale_x_continuous(breaks = c(10, seq(20, 100, 20)))+
+  coord_equal(ratio = 50,
+              xlim = c(10, NA),
+              ylim = c(100, NA))+
+  theme_minimal()+
+  theme(axis.text.y = element_text(angle = 90, 
+                                   hjust = 0.5),
+        legend.position = "top")+
+  labs(x = expression("speed cutoff" ~ italic("v") ~ "(m/s)"),
+       y = expression("displacement distance" ~ italic("D") ~ "(m)"),
+       fill = "reflection duration (minutes)")
+```
+
+## Next reasonable distance method
+
+```{r fig.cap="An example of a reflection, indicated by the dark line away from the real track shown in a lighter colour."}
+# simulate some data of length 1000
+library(smoove)
+nu <- 2
+tau <- 5
+dt <- .1 
+ucvm1 <- simulateUCVM(nu=nu, tau=tau, T.max = 100, dt = dt)
+
+# add a reflection to x_max + x_max / 10, y_max + y_max / 10
+data <- as_tibble(ucvm1$XY) %>% 
+  mutate(time = seq_len(nrow(.)))
+data <- data[seq_len(1000), ]
+data[(nrow(data) / 2):(nrow(data) / 2) + 50, "x"] <- max(data$x) + (max(data$x) / 10)
+data[(nrow(data) / 2):(nrow(data) / 2) + 50, "y"] <- max(data$y) + (max(data$y) / 10)
+
+# get speed estimate
+data$speed <- atlastools::atl_get_speed(data)
+
+ggplot(data)+
+  geom_point(aes(x, y,
+                col = speed),
+             shape = 16, size = 0.1)+
+  geom_path(aes(x, y,
+                col = speed),
+            size = 0.1)+
+  scale_colour_viridis_c(direction = -1,
+                         option = "E")+
+  theme_void()+
+  labs(x = NULL, y = NULL)
+```
+
+WIP.

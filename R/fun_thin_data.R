@@ -14,7 +14,7 @@ atl_thin_data <- function(data,
                          method = c("resample",
                                     "aggregate")) {
 
-  id <- time <- NULL
+  id <- time <- median <- SD <- VARX <- VARY <- COVXY <- NULL
 
   # check input type
   assertthat::assert_that("data.frame" %in% class(data),
@@ -33,7 +33,7 @@ atl_thin_data <- function(data,
 
   # include asserts checking for required columns
   data_names <- colnames(data)
-  atlastools:::atl_check_data(data,
+  atl_check_data(data,
                  names_expected = c("x", "y", "time"))
 
   # check aggregation interval is greater than min time difference
@@ -46,7 +46,8 @@ atl_thin_data <- function(data,
   # handle method option
   if (method == "aggregate") {
     # aggregate over tracking interval
-    data <- data[, lapply(.SD, median, na.rm = TRUE), by = list(time, id)]
+    data <- data[, lapply(.SD, stats::median, na.rm = TRUE), 
+                 by = list(time, id)]
 
     # THIS IS MATHEMATICALLY WRONG AND NEEDS CHANGING
     # now recalculate the SD as "square root of varx + vary + 2 covxy"

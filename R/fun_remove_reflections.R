@@ -21,7 +21,7 @@ atl_remove_reflections <- function(data,
                                    point_angle_cutoff = 45,
                                    reflection_speed_cutoff = 40,
                                    est_ref_len = 1000) {
-
+  speed <- NULL
   # check data
   atl_check_data(data, names_expected = c(x, y, time))
 

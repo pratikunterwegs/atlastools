@@ -6,11 +6,7 @@ Authors@R:
            family = "Gupte",
            role = c("aut", "cre"),
            email = "p.r.gupte@rug.nl",
-           comment = c(ORCID = "https://orcid.org/0000-0001-5294-7819")),
-    person(given = "Pedro",
-           family = "Neves",
-           role = c("ctb"),
-           email = "p.m.santos.neves@rug.nl"))
+           comment = c(ORCID = "https://orcid.org/0000-0001-5294-7819")))
 Description: Tools to process high frequency tracking data.
 License: GPL-3
 Encoding: UTF-8
@@ -36,9 +32,10 @@ RoxygenNote: 7.1.0
 Suggests:
     magrittr,
     testthat (>= 2.1.0),
+    tidyr,
+    ggplot2,
+    scales,
     knitr,
     rmarkdown,
-    ggplot2,
-    patchwork,
     DBI
 VignetteBuilder: knitr

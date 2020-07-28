@@ -43,8 +43,7 @@ vignettes/*.pdf
 *zip
 
 # ignore all in private
-private/*
-inst/doc
-doc
 Meta
 
+inst/doc
+doc

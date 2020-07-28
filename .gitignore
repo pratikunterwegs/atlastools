@@ -45,3 +45,5 @@ vignettes/*.pdf
 # ignore all in private
 Meta
 
+inst/doc
+doc

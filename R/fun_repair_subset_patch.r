@@ -165,7 +165,8 @@ atl_repair_patches <- function(patch_data_list,
 
     # add area and circularity
     edge_data[,area := purrr::map_dbl(polygons, sf::st_area)]
-    edge_data[,`:=`(circularity = (4*pi*area)/purrr::map_dbl(polygons, function(pgon){
+    edge_data[,`:=`(circularity = (4*pi*area)/purrr::map_dbl(polygons, 
+                                                             function(pgon){
       boundary <- sf::st_boundary(pgon)
       perimeter <- sf::st_length(boundary)
       return(as.numeric(perimeter)^2)
@@ -176,7 +177,8 @@ atl_repair_patches <- function(patch_data_list,
   edge_data[, polygons := NULL]
 
   # remove patch summary from some data and add temp data, then del tempdata
-  edge_data <- data.table::merge.data.table(edge_data, tempdata, by = c("id", "tide_number", "patch"))
+  edge_data <- data.table::merge.data.table(edge_data, tempdata, 
+                                        by = c("id", "tide_number", "patch"))
   edge_data[,n_fixes := unlist(lapply(patchdata, nrow))]
 
   # reattach edge cases to regular patch data and set order by start time
@@ -184,13 +186,14 @@ atl_repair_patches <- function(patch_data_list,
   setorder(data, time_start)
 
   # fix distance between patches
-  data[, dist_bw_patch := atl_bw_patch_dist(data)]
+  data[, dist_bw_patch := atl_patch_dist(data)]
 
   # fix patch numbers in tides
   data[,patch:=1:length(n_fixes), by=.(tide_number)]
 
   # unlist all list columns
-  data <- data[,lapply(.SD, unlist), .SDcols = setdiff(colnames(data), "patchdata")]
+  data <- data[,lapply(.SD, unlist), 
+               .SDcols = setdiff(colnames(data), "patchdata")]
 
   return(data)
   },

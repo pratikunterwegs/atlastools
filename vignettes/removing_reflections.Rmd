@@ -1,6 +1,10 @@
 ---
-editor_options: 
-  chunk_output_type: console
+title: "removing_reflections"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{removing_reflections}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
 ---
 
 # Three methods for removing reflections
@@ -36,7 +40,7 @@ data <- crossing(displacement_distance, speed_cutoffs) %>%
 ggplot(data)+
   geom_tile(aes(speed_cutoffs, displacement_distance,
                 fill = time_to_defeat / 60))+
-  scale_fill_gradientn(colours = pals::kovesi.linear_bmy_10_95_c78(7),
+  scale_fill_viridis_c(option = "C",
                        trans = "log10",
                        limits = c(0.2, NA),
                        breaks = c(0.3, 1, 3, 10, 30),

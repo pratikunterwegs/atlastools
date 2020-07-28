@@ -1,13 +1,12 @@
 #' Repair residence patches across susbets.
 #'
-#' @param patch_data_list A list of data.tables, each the output of 
+#' @param patch_data_list A list of data.tables, each the output of
 #' \code{make_res_patch}. Must have an sfc geometry column.
 #' @param lim_spat_indep The spatial independence limit.
 #' @param lim_time_indep The temporal independence limit.
 #' @param buffer_radius The buffer size for spatial polygons.
 #' @return A datatable with repaired high tide patches.
 #' @import data.table
-#' @export
 #'
 atl_repair_patches <- function(patch_data_list,
                                   lim_spat_indep = 100,
@@ -18,11 +17,11 @@ atl_repair_patches <- function(patch_data_list,
   patch <- polygons <- tide_number <- NULL
   time_start <- time_end <- x_start <- NULL
   x_end <- y_start <- y_end <- newpatch <- NULL
-  timediff <- spatdiff <- new_tide_number <- NULL
-  patchdata <- id <- patchSummary <- x <- NULL
+  time_diff <- spat_diff <- new_tide_number <- NULL
+  patchdata <- id <- patch_summary <- x <- NULL
   y <- resTime <- tidaltime <- waterlevel <- NULL
-  distInPatch <- distBwPatch <- dispInPatch <- NULL
-  type <- duration <- area <- nfixes <- time <- NULL
+  dist_in_patch <- dist_bw_patch <- disp_in_patch <- NULL
+  type <- duration <- area <- n_fixes <- time <- NULL
 
   # check data assumptions
   {
@@ -69,20 +68,20 @@ atl_repair_patches <- function(patch_data_list,
     edge_data_summary <- edge_data[,.(patch, time_start, time_end, x_start, x_end,
                                       y_start, y_end, tide_number)]
 
-    edge_data_summary[,`:=`(timediff = c(Inf,
+    edge_data_summary[,`:=`(time_diff = c(Inf,
                             as.numeric(time_start[2:length(time_start)] -
                                          time_end[1:length(time_end)-1])),
-               spatdiff = c(atlastools::atl_patch_dist(data = edge_data_summary,
+               spat_diff = c(atlastools::atl_patch_dist(data = edge_data_summary,
                                         x1 = "x_end", x2 = "x_start",
                                         y1 = "y_end", y2 = "y_start")))]
 
-    edge_data_summary[1,'spatdiff'] <- Inf
+    edge_data_summary[1,'spat_diff'] <- Inf
 
     # which patches are independent?
     # assign NA as tide number of non-independent patches
     # and to the patch number of non-indep patches
-    edge_data_summary[,newpatch := (timediff > lim_time_indep |
-                                              spatdiff > lim_spat_indep)]
+    edge_data_summary[,newpatch := (time_diff > lim_time_indep |
+                                              spat_diff > lim_spat_indep)]
     edge_data_summary[newpatch == FALSE, "tide_number"] <- NA
     edge_data_summary[,newpatch := ifelse(newpatch == TRUE, patch, NA)]
 
@@ -113,7 +112,7 @@ atl_repair_patches <- function(patch_data_list,
     setnames(edge_data, old = "V1", new = "patchdata")
 
     # get basic data summaries
-    edge_data[,patchSummary:= lapply(patchdata, function(dt){
+    edge_data[,patch_summary:= lapply(patchdata, function(dt){
       dt <- dt[,.(time, x, y, resTime, tidaltime, waterlevel)]
       dt <- data.table::setDF(dt)
       dt <- dplyr::summarise_all(.tbl = dt,
@@ -127,21 +126,21 @@ atl_repair_patches <- function(patch_data_list,
   # advanced metrics on ungrouped data
   {
     # distance in a patch in metres
-    edge_data[,distInPatch := lapply(patchdata, function(df){
+    edge_data[,dist_in_patch := lapply(patchdata, function(df){
       sum(atlastools::atl_simple_dist(data = df), na.rm = TRUE)
     })]
 
     # distance between patches
-    tempdata <- edge_data[,unlist(patchSummary, recursive = FALSE),
+    tempdata <- edge_data[,unlist(patch_summary, recursive = FALSE),
                          by = .(id, tide_number, patch)]
 
-    edge_data[,patchSummary:=NULL]
-    edge_data[,distBwPatch := atlastools::atl_bw_patch_dist(data = tempdata,
+    edge_data[,patch_summary:=NULL]
+    edge_data[,dist_bw_patch := atlastools::atl_patch_dist(data = tempdata,
                                                             x1 = "x_end", x2 = "x_start",
                                                             y1 = "y_end", y2 = "y_start")]
     # displacement in a patch
     # apply func bw patch dist reversing usual end and begin
-    tempdata[,dispInPatch := sqrt((x_end - x_start)^2 + (y_end - y_start)^2)]
+    tempdata[,disp_in_patch := sqrt((x_end - x_start)^2 + (y_end - y_start)^2)]
     # type of patch
     edge_data[, type := lapply(patchdata, function(df){
       a <- ifelse(sum(c("real", "inferred") %in% df$type) == 2,
@@ -178,17 +177,17 @@ atl_repair_patches <- function(patch_data_list,
 
   # remove patch summary from some data and add temp data, then del tempdata
   edge_data <- data.table::merge.data.table(edge_data, tempdata, by = c("id", "tide_number", "patch"))
-  edge_data[,nfixes := unlist(lapply(patchdata, nrow))]
+  edge_data[,n_fixes := unlist(lapply(patchdata, nrow))]
 
   # reattach edge cases to regular patch data and set order by start time
   data <- rbind(data, edge_data)
   setorder(data, time_start)
 
   # fix distance between patches
-  data[, distBwPatch := atl_bw_patch_dist(data)]
+  data[, dist_bw_patch := atl_bw_patch_dist(data)]
 
   # fix patch numbers in tides
-  data[,patch:=1:length(nfixes), by=.(tide_number)]
+  data[,patch:=1:length(n_fixes), by=.(tide_number)]
 
   # unlist all list columns
   data <- data[,lapply(.SD, unlist), .SDcols = setdiff(colnames(data), "patchdata")]

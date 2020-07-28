@@ -83,4 +83,20 @@ ggplot(data)+
   labs(x = NULL, y = NULL)
 ```
 
+And now with refelection removed.
+
+```{r}
+ggplot(atlastools::atl_remove_reflections(data))+
+  geom_point(aes(x, y,
+                col = speed),
+             shape = 16, size = 0.1)+
+  geom_path(aes(x, y,
+                col = speed),
+            size = 0.1)+
+  scale_colour_viridis_c(direction = -1,
+                         option = "E")+
+  theme_void()+
+  labs(x = NULL, y = NULL)
+```
+
 WIP.

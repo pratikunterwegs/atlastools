@@ -21,7 +21,6 @@ addons:
       - libgdal-dev
       - libgeos-dev
       - liblwgeom-dev
-      - libprotobuf-dev
 
 before_install:
   - sudo apt-get install pkg-config

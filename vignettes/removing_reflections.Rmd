@@ -64,19 +64,8 @@ ggplot(data)+
 ## Next reasonable distance method
 
 ```{r fig.cap="An example of a reflection, indicated by the dark line away from the real track shown in a lighter colour."}
-# simulate some data of length 1000
-library(smoove)
-nu <- 2
-tau <- 5
-dt <- .1 
-ucvm1 <- simulateUCVM(nu=nu, tau=tau, T.max = 100, dt = dt)
-
-# add a reflection to x_max + x_max / 10, y_max + y_max / 10
-data <- as_tibble(ucvm1$XY) %>% 
-  mutate(time = seq_len(nrow(.)))
-data <- data[seq_len(1000), ]
-data[(nrow(data) / 2):(nrow(data) / 2) + 50, "x"] <- max(data$x) + (max(data$x) / 10)
-data[(nrow(data) / 2):(nrow(data) / 2) + 50, "y"] <- max(data$y) + (max(data$y) / 10)
+# read some simulated data
+data <- data.table::fread("vignette_data/simulated_data.csv")
 
 # get speed estimate
 data$speed <- atlastools::atl_get_speed(data)

@@ -27,8 +27,7 @@ Imports:
     stringr,
     fasttime,
     RMySQL,
-    bit64
-Remotes: EliGurarie/smoove
+    bit64s
 RoxygenNote: 7.1.0
 Suggests:
     magrittr,

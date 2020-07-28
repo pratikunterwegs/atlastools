@@ -1,4 +1,5 @@
 context("repairing high tide patches")
+testthat::skip("testing repair patches unsure to include")
 testthat::test_that("high tide repair works", {
 
   # read in data
@@ -7,15 +8,11 @@ testthat::test_that("high tide repair works", {
 
   # assume all patches are real
   data_list <- lapply(data_list, function(df) {
-    df <- watlastools::wat_infer_residence(df)
-    df <- watlastools::wat_classify_points(data = df,
-                                           lim_res_time = 2,
-                                           min_fix_warning = 100)
-    df <- watlastools::wat_make_res_patch(data = df,
+    df <- atlastools::atl_make_res_patch(data = df,
                              buffer_radius = 10)
   })
 
-  repaired_data <- watlastools::wat_repair_ht_patches(
+  repaired_data <- atlastools::atl_repair_ht_patches(
                                          patch_data_list = data_list,
                                          lim_spat_indep = 100,
                                          lim_time_indep = 30,
@@ -54,7 +51,7 @@ testthat::test_that("high tide repair works", {
   time_start <- time_start[seq_len(length(time_start) - 1)]
 
   temp_indep <- c(NA, as.numeric((time_end-time_start)/60)) >= 30
-  spat_indep <- wat_bw_patch_dist(repaired_data) >= 100
+  spat_indep <- atl_bw_patch_dist(repaired_data) >= 100
   rest_indep <- TRUE # for patches separated by residence time
 
   testthat::expect_true(all(purrr::pmap_int(list(temp_indep, spat_indep,

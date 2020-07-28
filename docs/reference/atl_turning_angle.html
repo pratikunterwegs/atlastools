@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Function reference • atlastools</title>
+<title>Get the turning angle between points. — atl_turning_angle • atlastools</title>
 
 
 <!-- jquery -->
@@ -41,7 +41,8 @@
   <link href="../extra.css" rel="stylesheet">
   
 
-<meta property="og:title" content="Function reference" />
+<meta property="og:title" content="Get the turning angle between points. — atl_turning_angle" />
+<meta property="og:description" content="Get the turning angle between points." />
 
 
 
@@ -60,7 +61,7 @@
   </head>
 
   <body data-spy="scroll" data-target="#toc">
-    <div class="container template-reference-index">
+    <div class="container template-reference-topic">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -110,114 +111,48 @@
       </header>
 
 <div class="row">
-  <div class="contents col-md-9">
+  <div class="col-md-9 contents">
     <div class="page-header">
-      <h1>Reference</h1>
+    <h1>Get the turning angle between points.</h1>
+    <small class="dont-index">Source: <a href='https://github.com/pratikunterwegs/atlastools/blob/master/R/fun_get_angle.R'><code>R/fun_get_angle.R</code></a></small>
+    <div class="hidden name"><code>atl_turning_angle.Rd</code></div>
     </div>
 
-    <table class="ref-index">
+    <div class="ref-description">
+    <p>Get the turning angle between points.</p>
+    </div>
 
-    <colgroup>
-      
-      <col class="alias" />
-      <col class="title" />
-    </colgroup>
+    <pre class="usage"><span class='fu'>atl_turning_angle</span>(<span class='no'>data</span>, <span class='kw'>x</span> <span class='kw'>=</span> <span class='st'>"x"</span>, <span class='kw'>y</span> <span class='kw'>=</span> <span class='st'>"y"</span>, <span class='kw'>time</span> <span class='kw'>=</span> <span class='st'>"time"</span>)</pre>
 
-    <tbody>
-      <tr>
-        <th colspan="2">
-          <h2 id="section-all-functions" class="hasAnchor"><a href="#section-all-functions" class="anchor"></a>All functions</h2>
-          <p class="section-desc"></p>
-        </th>
-      </tr>
-      
-      
-    </tbody><tbody>
-      
-      
-      <tr>
-        
-        <td>
-          <p><code><a href="atl_check_data.html">atl_check_data()</a></code> </p>
-        </td>
-        <td><p>Check data has required columns.</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="atl_clean_data.html">atl_clean_data()</a></code> </p>
-        </td>
-        <td><p>Filter and smooth data.</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="atl_filter_bounds.html">atl_filter_bounds()</a></code> </p>
-        </td>
-        <td><p>Remove positions within a bounding box.</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="atl_filter_covariates.html">atl_filter_covariates()</a></code> </p>
-        </td>
-        <td><p>Filter data by position covariates.</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="atl_get_speed.html">atl_get_speed()</a></code> </p>
-        </td>
-        <td><p>Calculate instantaenous speed.</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="atl_patch_dist.html">atl_patch_dist()</a></code> </p>
-        </td>
-        <td><p>Get the distance between patches.</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="atl_patch_summary.html">atl_patch_summary()</a></code> </p>
-        </td>
-        <td><p>Get residence patch data.</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="atl_remove_reflections.html">atl_remove_reflections()</a></code> </p>
-        </td>
-        <td><p>Remove reflected positions.</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="atl_repair_patches.html">atl_repair_patches()</a></code> </p>
-        </td>
-        <td><p>Repair residence patches across susbets.</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="atl_res_patch.html">atl_res_patch()</a></code> </p>
-        </td>
-        <td><p>Construct residence patches from position data.</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="atl_simple_dist.html">atl_simple_dist()</a></code> </p>
-        </td>
-        <td><p>Calculate euclidean distances between successive points.</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="atl_thin_data.html">atl_thin_data()</a></code> </p>
-        </td>
-        <td><p>Thin tracking data by resampling or aggregation.</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="atl_turning_angle.html">atl_turning_angle()</a></code> </p>
-        </td>
-        <td><p>Get the turning angle between points.</p></td>
-      </tr>
-    </tbody>
+    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
+    <table class="ref-arguments">
+    <colgroup><col class="name" /><col class="desc" /></colgroup>
+    <tr>
+      <th>data</th>
+      <td><p>A dataframe or similar which must have the columns
+specified by <code>x</code>, <code>y</code>, and <code>time</code>.</p></td>
+    </tr>
+    <tr>
+      <th>x</th>
+      <td><p>The x coordinate.</p></td>
+    </tr>
+    <tr>
+      <th>y</th>
+      <td><p>The y coordinate.</p></td>
+    </tr>
+    <tr>
+      <th>time</th>
+      <td><p>The timestamp in seconds since the UNIX epoch.</p></td>
+    </tr>
     </table>
-  </div>
 
+    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
+
+    <p>A vector of turning angles in degrees.
+Negative degrees indicate 'left' turns. There are two fewer
+angles than the number of rows in the dataframe.</p>
+
+  </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
       <h2 data-toc-skip>Contents</h2>

@@ -1,3 +1,3 @@
-library(watlastools)
+library(atlastools)
 library(testthat)
-testthat::test_check("watlastools")
+testthat::test_check("atlastools")

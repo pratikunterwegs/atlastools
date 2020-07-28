@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Function reference • atlastools</title>
+<title>Check data has required columns. — atl_check_data • atlastools</title>
 
 
 <!-- jquery -->
@@ -41,7 +41,8 @@
   <link href="../extra.css" rel="stylesheet">
   
 
-<meta property="og:title" content="Function reference" />
+<meta property="og:title" content="Check data has required columns. — atl_check_data" />
+<meta property="og:description" content="Check data has required columns." />
 
 
 
@@ -60,7 +61,7 @@
   </head>
 
   <body data-spy="scroll" data-target="#toc">
-    <div class="container template-reference-index">
+    <div class="container template-reference-topic">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -110,114 +111,37 @@
       </header>
 
 <div class="row">
-  <div class="contents col-md-9">
+  <div class="col-md-9 contents">
     <div class="page-header">
-      <h1>Reference</h1>
+    <h1>Check data has required columns.</h1>
+    <small class="dont-index">Source: <a href='https://github.com/pratikunterwegs/atlastools/blob/master/R/fun_check_data.R'><code>R/fun_check_data.R</code></a></small>
+    <div class="hidden name"><code>atl_check_data.Rd</code></div>
     </div>
 
-    <table class="ref-index">
+    <div class="ref-description">
+    <p>Check data has required columns.</p>
+    </div>
 
-    <colgroup>
-      
-      <col class="alias" />
-      <col class="title" />
-    </colgroup>
+    <pre class="usage"><span class='fu'>atl_check_data</span>(<span class='no'>data</span>, <span class='kw'>names_expected</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"x"</span>, <span class='st'>"y"</span>, <span class='st'>"time"</span>))</pre>
 
-    <tbody>
-      <tr>
-        <th colspan="2">
-          <h2 id="section-all-functions" class="hasAnchor"><a href="#section-all-functions" class="anchor"></a>All functions</h2>
-          <p class="section-desc"></p>
-        </th>
-      </tr>
-      
-      
-    </tbody><tbody>
-      
-      
-      <tr>
-        
-        <td>
-          <p><code><a href="atl_check_data.html">atl_check_data()</a></code> </p>
-        </td>
-        <td><p>Check data has required columns.</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="atl_clean_data.html">atl_clean_data()</a></code> </p>
-        </td>
-        <td><p>Filter and smooth data.</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="atl_filter_bounds.html">atl_filter_bounds()</a></code> </p>
-        </td>
-        <td><p>Remove positions within a bounding box.</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="atl_filter_covariates.html">atl_filter_covariates()</a></code> </p>
-        </td>
-        <td><p>Filter data by position covariates.</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="atl_get_speed.html">atl_get_speed()</a></code> </p>
-        </td>
-        <td><p>Calculate instantaenous speed.</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="atl_patch_dist.html">atl_patch_dist()</a></code> </p>
-        </td>
-        <td><p>Get the distance between patches.</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="atl_patch_summary.html">atl_patch_summary()</a></code> </p>
-        </td>
-        <td><p>Get residence patch data.</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="atl_remove_reflections.html">atl_remove_reflections()</a></code> </p>
-        </td>
-        <td><p>Remove reflected positions.</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="atl_repair_patches.html">atl_repair_patches()</a></code> </p>
-        </td>
-        <td><p>Repair residence patches across susbets.</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="atl_res_patch.html">atl_res_patch()</a></code> </p>
-        </td>
-        <td><p>Construct residence patches from position data.</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="atl_simple_dist.html">atl_simple_dist()</a></code> </p>
-        </td>
-        <td><p>Calculate euclidean distances between successive points.</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="atl_thin_data.html">atl_thin_data()</a></code> </p>
-        </td>
-        <td><p>Thin tracking data by resampling or aggregation.</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="atl_turning_angle.html">atl_turning_angle()</a></code> </p>
-        </td>
-        <td><p>Get the turning angle between points.</p></td>
-      </tr>
-    </tbody>
+    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
+    <table class="ref-arguments">
+    <colgroup><col class="name" /><col class="desc" /></colgroup>
+    <tr>
+      <th>data</th>
+      <td><p>The tracking data to check for required columns.</p></td>
+    </tr>
+    <tr>
+      <th>names_expected</th>
+      <td><p>The names expected.</p></td>
+    </tr>
     </table>
-  </div>
 
+    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
+
+    <p>None. Breaks if the data does not have required columns.</p>
+
+  </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
       <h2 data-toc-skip>Contents</h2>

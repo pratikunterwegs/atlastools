@@ -33,7 +33,7 @@ atl_thin_data <- function(data,
 
   # include asserts checking for required columns
   data_names <- colnames(data)
-  atlastools:::atl_check_data(data,
+  atl_check_data(data,
                  names_expected = c("x", "y", "time"))
 
   # check aggregation interval is greater than min time difference

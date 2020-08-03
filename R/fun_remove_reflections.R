@@ -47,18 +47,16 @@ atl_remove_reflections <- function(data,
 
     # the next est_ref_len subsequent points are suspect
     suspect_point <- anchor_point + 1
-    suspect_speeds <- data[suspect_point:est_ref_len, speed]
+    # find the max speed after the first anomaly, which is the blink away
+    # the next highest should be the blink back
+    suspect_speeds <- data[(suspect_point + 1):est_ref_len, speed]
 
     # get the next highest speed, may be higher
     # use gt not gte else will get first suspect speed
-    nx_high_speed <- which(suspect_speeds > data[suspect_point, speed])[1]
+    nx_high_speed <- which.max(rank(suspect_speeds))
     # this gets the next highest speed, which should be the end of the
     # reflection, but may also be the beginning or end of another reflection
-    # this method is best applied to small subsets of data or similar
-    if (is.na(nx_high_speed)) {
-      nx_high_speed <- which(suspect_speeds == sort(suspect_speeds,
-                                                    decreasing = TRUE)[2])
-    }
+    
     reflection_end <- anchor_point + nx_high_speed + 1
 
     # when reflections do not end remove all subsequent data
@@ -66,6 +64,9 @@ atl_remove_reflections <- function(data,
     if (is.na(reflection_end)) {
        reflection_end <- nrow(data)
     }
+
+    assertthat::assert_that(!is.na(reflection_end),
+      msg = "remove_reflections: reflection end is NA")
 
     # message ref end
     message(glue::glue("reflection ends {reflection_end}"))
@@ -81,6 +82,7 @@ atl_remove_reflections <- function(data,
                            point_angle_cutoff)[1] - 1
 
     if (is.na(next_anchor)) {
+      # break the loop if there's no further anomalies
       break ()
     } else {
       anchor_point <- reflection_end + next_anchor
@@ -95,7 +97,6 @@ atl_remove_reflections <- function(data,
 
   # return the rows to be kept
   vec_keep <- setdiff(seq_len(nrow(data)), vec_discard)
-
   return(data[vec_keep, ])
 
 }

@@ -10,7 +10,7 @@ atl_remove_reflections(
   y = "y",
   time = "time",
   point_angle_cutoff = 45,
-  reflection_speed_cutoff = 40,
+  reflection_speed_cutoff = 20,
   est_ref_len = 1000
 )
 }

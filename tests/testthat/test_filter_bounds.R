@@ -13,8 +13,8 @@ testthat::test_that("data kept within bounds", {
   test_output <- atlastools::atl_filter_bounds(data = test_data,
                                                x = "X",
                                                y = "Y",
-                                               x_range = c(250, 450),
-                                               y_range = c(750, 850),
+                                               x_range = c(200, 500),
+                                               y_range = c(700, 850),
                                                remove_inside = FALSE)
 
   # do tests
@@ -26,10 +26,10 @@ testthat::test_that("data kept within bounds", {
   testthat::expect_gte(nrow(test_data), nrow(test_output))
 
   # check the correct points are kept
-  testthat::expect_true(all(data.table::between(test_output$X, 250, 450)),
+  testthat::expect_true(all(data.table::between(test_output$X, 200, 500)),
                         info = "within bounds not working")
 
-  testthat::expect_true(all(data.table::between(test_output$Y, 750, 850)),
+  testthat::expect_true(all(data.table::between(test_output$Y, 700, 850)),
                         info = "within bounds not working")
 
 })
@@ -48,8 +48,8 @@ testthat::test_that("data removed within bounds", {
   test_output <- atlastools::atl_filter_bounds(data = test_data,
                                                x = "X",
                                                y = "Y",
-                                               x_range = c(250, 450),
-                                               y_range = c(750, 850),
+                                               x_range = c(200, 500),
+                                               y_range = c(700, 900),
                                                remove_inside = TRUE)
 
   # do tests
@@ -61,10 +61,8 @@ testthat::test_that("data removed within bounds", {
   testthat::expect_gte(nrow(test_data), nrow(test_output))
 
   # check the correct points are kept
-  testthat::expect_true(all(!data.table::between(test_output$X, 250, 450)),
-                        info = "within bounds not working")
-
-  testthat::expect_true(all(!data.table::between(test_output$Y, 750, 850)),
+  testthat::expect_true(all(!(data.table::between(test_output$X, 200, 500) &
+                              data.table::between(test_output$Y, 700, 900))),
                         info = "within bounds not working")
 
 })

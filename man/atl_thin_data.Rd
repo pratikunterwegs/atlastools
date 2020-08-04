@@ -4,12 +4,19 @@
 \alias{atl_thin_data}
 \title{Thin tracking data by resampling or aggregation.}
 \usage{
-atl_thin_data(data, interval = 60, method = c("resample", "aggregate"))
+atl_thin_data(
+  data,
+  interval = 60,
+  id_columns = NULL,
+  method = c("resample", "aggregate")
+)
 }
 \arguments{
 \item{data}{Cleaned data to aggregate. Must have a numeric column named time.}
 
 \item{interval}{The interval in seconds over which to aggregate.}
+
+\item{id_columns}{Column names for grouping columns.}
 
 \item{method}{Should the data be thinned by subsampling or aggregation.
 If resampling, the first position of each group is taken.

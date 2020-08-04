@@ -54,11 +54,9 @@ testthat::test_that("reflections are removed", {
 })
 
 testthat::test_that("reflections do not end", {
-  
   # make test positions
   x_good <- stats::runif(100)
   x_bad <- stats::runif(50) + 50
-  
   y_good <- x_good + rev(x_good)
   y_bad <- x_bad + rev(x_bad)
   

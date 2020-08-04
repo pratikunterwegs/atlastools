@@ -18,13 +18,12 @@ atl_filter_covariates <- function(data,
   filters <- glue::glue("({filters})")
   filters <- stringr::str_c(filters, collapse = " & ")
   filters <- parse(text = filters)
-  
   # evaluate the parsed filters
   data <- data[eval(filters), ]
 
   # check for class and whether there are rows
   assertthat::assert_that("data.frame" %in% class(data),
-                  msg = "filter_covariates: cleaned data is not a dataframe object!")
+            msg = "filter_covariates: cleaned data is not a dataframe object!")
 
   # print warning if all rows are removed
   if (nrow(data) == 0) {

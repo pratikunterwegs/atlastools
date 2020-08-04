@@ -23,7 +23,7 @@ testthat::test_that("cleaning raw data works", {
                                      COVXY = 0)
 
   # make sure first NBS is greater than min for time check
-  testdata[1,]$NBS <- 5e3
+  testdata[1, ]$NBS <- 5e3
 
   # run function
   testoutput <- atl_clean_data(data = testdata,

@@ -32,7 +32,7 @@ atl_filter_bounds <- function(data,
   # check input length of attractors
   invisible(lapply(list(x_range, y_range), function(f) {
          assertthat::assert_that(length(f) == 2,
-                     msg="filter_bbox: incorrect bound lengths")
+                     msg = "filter_bbox: incorrect bound lengths")
   }))
 
   # convert to data.table

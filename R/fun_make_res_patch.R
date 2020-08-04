@@ -16,6 +16,11 @@
 #' @param min_fixes The minimum number of fixes for a group of
 #' spatially-proximate number of ponts to be considered a preliminary residence
 #' patch.
+#' @param summary_variables Optional variables for which patch-wise summary
+#' values are required. To be passed as a character vector.
+#' @param summary_functions The functions with which to summarise the summary
+#' variables; must return only a single value, such as median, mean etc. To be
+#' passed as a character vector.
 #'
 #' @return A data.frame extension object. This dataframe has the added column
 #' \code{patch} and \code{patchdata} based on cumulative patch summing.
@@ -26,12 +31,14 @@ atl_res_patch <- function(data,
                           buffer_radius = 10,
                           lim_spat_indep = 100,
                           lim_time_indep = 30,
-                          min_fixes = 3) {
+                          min_fixes = 3,
+                          summary_variables = c(),
+                          summary_functions = c()) {
 
   area <- disp_in_patch <- NULL
   dist_bw_patch <- dist_in_patch <- duration <- NULL
-  id <- median <- newpatch <- nfixes <- patch <- NULL
-  patchdata <- polygons <- spat_diff <- speed <- NULL
+  id <- newpatch <- nfixes <- patch <- NULL
+  patchdata <- polygons <- spat_diff <- NULL
   time <- time_diff <- time_end <- time_start <- NULL
   x_end <- x_start <- y_end <- y_start <- NULL
 
@@ -52,8 +59,7 @@ atl_res_patch <- function(data,
   lim_time_indep <- lim_time_indep * 60
 
   # get names and numeric variables
-  data_names <- colnames(data)
-  names_req <- c("id", "x", "y", "time")
+  names_req <- c("id", "x", "y", "time", summary_variables)
 
   # include asserts checking for required columns
   atl_check_data(data, names_expected = names_req)
@@ -64,7 +70,7 @@ atl_res_patch <- function(data,
   }
 
   # sort by time
-  data.table::setorder(data, time)
+  data.table::setorderv(data, time)
   assertthat::assert_that(min(diff(data$time)) >= 0,
                           msg = "data for segmentation is not ordered by time")
   tryCatch(expr = {
@@ -149,6 +155,7 @@ atl_res_patch <- function(data,
 
     # basic metrics by new patch
     data[, patch_summary := lapply(patchdata, function(dt) {
+      # get mandatory metrics
       dt2 <- dt[, unlist(lapply(.SD, function(d) {
         list(median = as.double(stats::median(d)),
              start = as.double(data.table::first(d)),
@@ -157,10 +164,19 @@ atl_res_patch <- function(data,
 
       setnames(dt2,
                stringr::str_replace(colnames(dt2), "\\.", "_"))
-
-      return(dt2)
+      
+      # now get optional metrics if any asked
+      if (length(summary_variables) > 0) {
+        dt3 <- data.table::dcast(dt, 1 ~ 1,
+                                 fun.aggregate = eval(lapply(summary_functions,
+                                                             as.symbol)),
+                                 value.var = summary_variables)
+        dt3[, `.` := NULL]
+        return(cbind(dt2, dt3))
+      } else {
+        return(dt2)
+      }
     })]
-
     # advanced metrics on ungrouped data
     # distance in a patch in metres
     data[, dist_in_patch := as.double(lapply(patchdata, function(df) {

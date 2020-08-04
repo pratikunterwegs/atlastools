@@ -16,7 +16,7 @@
 #' @param min_fixes The minimum number of fixes for a group of
 #' spatially-proximate number of ponts to be considered a preliminary residence
 #' patch.
-#' @param summary_variables Optional variables for which patch-wise summary 
+#' @param summary_variables Optional variables for which patch-wise summary
 #' values are required. To be passed as a character vector.
 #' @param summary_functions The functions with which to summarise the summary
 #' variables; must return only a single value, such as median, mean etc. To be
@@ -37,8 +37,8 @@ atl_res_patch <- function(data,
 
   area <- disp_in_patch <- NULL
   dist_bw_patch <- dist_in_patch <- duration <- NULL
-  id <- median <- newpatch <- nfixes <- patch <- NULL
-  patchdata <- polygons <- spat_diff <- speed <- NULL
+  id <- newpatch <- nfixes <- patch <- NULL
+  patchdata <- polygons <- spat_diff <- NULL
   time <- time_diff <- time_end <- time_start <- NULL
   x_end <- x_start <- y_end <- y_start <- NULL
 
@@ -59,7 +59,6 @@ atl_res_patch <- function(data,
   lim_time_indep <- lim_time_indep * 60
 
   # get names and numeric variables
-  data_names <- colnames(data)
   names_req <- c("id", "x", "y", "time", summary_variables)
 
   # include asserts checking for required columns
@@ -169,7 +168,7 @@ atl_res_patch <- function(data,
       # now get optional metrics if any asked
       if (length(summary_variables) > 0) {
         dt3 <- data.table::dcast(dt, 1 ~ 1, 
-                                 fun.aggregate = eval(lapply(summary_functions, 
+                                 fun.aggregate = eval(lapply(summary_functions,
                                                              as.symbol)),
                                  value.var = summary_variables)
         dt3[, `.` := NULL]
@@ -179,7 +178,6 @@ atl_res_patch <- function(data,
       }
       
     })]
-
     # advanced metrics on ungrouped data
     # distance in a patch in metres
     data[, dist_in_patch := as.double(lapply(patchdata, function(df) {

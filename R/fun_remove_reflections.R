@@ -41,7 +41,7 @@ atl_remove_reflections <- function(data,
                           data$angle >= point_angle_cutoff)[1] - 1
 
   # message
-  # message(glue::glue("first anchor at {anchor_point}"))
+  message(glue::glue("first anchor at {anchor_point}"))
 
   while (anchor_point < nrow(data) - 1) {
 
@@ -50,7 +50,6 @@ atl_remove_reflections <- function(data,
     # find the max speed after the first anomaly, which is the blink away
     # the next highest should be the blink back
     suspect_speeds <- data[(suspect_point + 1):est_ref_len, speed]
-    
     # drop NA here
     suspect_speeds <- stats::na.omit(suspect_speeds)
 
@@ -65,9 +64,8 @@ atl_remove_reflections <- function(data,
     } else {
       reflection_end <- suspect_point + nx_high_speed + 1 # one added for safety
     }
-    
     # message ref end
-    # message(glue::glue("reflection ends {reflection_end}"))
+    message(glue::glue("reflection ends {reflection_end}"))
 
     # identify rows to remove
     # may be excessive but works
@@ -89,7 +87,7 @@ atl_remove_reflections <- function(data,
                             msg = glue::glue("anchor point {anchor_point} is \\
                             before reflection end {reflection_end}"))
       # message
-      # message(glue::glue("next anchor is {anchor_point}"))
+      message(glue::glue("next anchor is {anchor_point}"))
     }
   }
 

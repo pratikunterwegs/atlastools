@@ -14,7 +14,7 @@ atl_thin_data <- function(data,
                          method = c("resample",
                                     "aggregate")) {
 
-  id <- time <- median <- SD <- VARX <- VARY <- COVXY <- NULL
+  id <- time <- SD <- VARX <- VARY <- COVXY <- NULL
 
   # check input type
   assertthat::assert_that("data.frame" %in% class(data),
@@ -32,7 +32,6 @@ atl_thin_data <- function(data,
   }
 
   # include asserts checking for required columns
-  data_names <- colnames(data)
   atl_check_data(data,
                  names_expected = c("x", "y", "time"))
 
@@ -48,7 +47,7 @@ atl_thin_data <- function(data,
     # aggregate over tracking interval
     data <- data[, lapply(.SD, stats::median, na.rm = TRUE), 
                  by = list(time, id)]
-
+    
     # THIS IS MATHEMATICALLY WRONG AND NEEDS CHANGING
     # now recalculate the SD as "square root of varx + vary + 2 covxy"
     # or zero, whichever is greater

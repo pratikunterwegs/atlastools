@@ -18,7 +18,6 @@ atl_filter_covariates <- function(data,
   filters <- glue::glue("({filters})")
   filters <- stringr::str_c(filters, collapse = " & ")
   filters <- parse(text = filters)
-  
   # evaluate the parsed filters
   data <- data[eval(filters), ]
 

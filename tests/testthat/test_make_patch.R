@@ -2,7 +2,7 @@ context("residence patches and classified points")
 testthat::test_that("patch calc on empirical data", {
 
   # read in data
-  test_data = data.table::fread("../testdata/435_025_revisit.csv")
+  test_data <- data.table::fread("../testdata/435_025_revisit.csv")
 
   # run function for patch construction
   test_output <- atlastools::atl_res_patch(data = test_data,
@@ -30,7 +30,7 @@ testthat::test_that("patch calc on empirical data", {
 testthat::test_that("patch data access function works", {
 
   # read in data
-  test_data = data.table::fread("../testdata/435_025_revisit.csv")
+  test_data <- data.table::fread("../testdata/435_025_revisit.csv")
 
   # run function for patch construction
   test_output <- atlastools::atl_res_patch(data = test_data,

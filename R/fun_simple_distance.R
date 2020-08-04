@@ -1,11 +1,11 @@
 #' Calculate euclidean distances between successive points.
 #'
-#' @param x A column name in a data.frame object that contains the numeric X or 
+#' @param x A column name in a data.frame object that contains the numeric X or
 #' longitude coordinate for position data.
-#' @param y A column name in a data.frame object that contains the numeric Y or 
+#' @param y A column name in a data.frame object that contains the numeric Y or
 #' latitude coordinate for position data.
-#' @param data A dataframe object of or extending the class data.frame, 
-#' which must contain at least two coordinate columns for the X and Y coordinates.
+#' @param data A dataframe object of or extending the class data.frame,
+#' which must contain two coordinate columns for the X and Y coordinates.
 #'
 #' @return Returns a vector of distances between consecutive points.
 #' @export
@@ -16,7 +16,6 @@ atl_simple_dist <- function(data, x = "x", y = "y") {
                           is.character(x),
                           is.character(y),
                           msg = "simpleDist: some data assumptions are not met")
-  
   if (nrow(data) > 1) {
     x1 <- data[[x]][seq_len(nrow(data) - 1)]
     x2 <- data[[x]][2:nrow(data)]

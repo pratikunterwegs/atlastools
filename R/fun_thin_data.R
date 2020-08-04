@@ -2,6 +2,7 @@
 #'
 #' @param data Cleaned data to aggregate. Must have a numeric column named time.
 #' @param interval The interval in seconds over which to aggregate.
+#' @param id_columns Column names for grouping columns.
 #' @param method Should the data be thinned by subsampling or aggregation.
 #' If resampling, the first position of each group is taken.
 #' If aggregation, the group positions' median is taken.
@@ -10,9 +11,10 @@
 #' @export
 #'
 atl_thin_data <- function(data,
-                         interval = 60,
-                         method = c("resample",
-                                    "aggregate")) {
+                          interval = 60,
+                          id_columns = NULL,
+                          method = c("resample",
+                                     "aggregate")) {
 
   id <- time <- SD <- VARX <- VARY <- COVXY <- NULL
 
@@ -33,39 +35,36 @@ atl_thin_data <- function(data,
 
   # include asserts checking for required columns
   atl_check_data(data,
-                 names_expected = c("x", "y", "time"))
+                 names_expected = c("x", "y", "time", id_columns))
 
   # check aggregation interval is greater than min time difference
   assertthat::assert_that(interval > min(diff(data$time)),
       msg = "thin_data: thinning interval less than tracking interval!")
 
-  # round interval
-  data[, time := floor(time / interval) * interval]
+  # round interval and reassign, because otherwise the original data is
+  # not retained as is, instead also being modified
+  data_copy <- data.table::copy(data)
+  data_copy[, time := floor(time / interval) * interval]
 
   # handle method option
   if (method == "aggregate") {
     # aggregate over tracking interval
-    data <- data[, lapply(.SD, stats::median, na.rm = TRUE), 
-                 by = list(time, id)]
-    
-    # THIS IS MATHEMATICALLY WRONG AND NEEDS CHANGING
-    # now recalculate the SD as "square root of varx + vary + 2 covxy"
-    # or zero, whichever is greater
-    data[, SD := dplyr::if_else((VARX + VARY + 2 * COVXY) > 0,
-                                sqrt(VARX + VARY + 2 * COVXY), 0)]
+    data_copy <- data_copy[, lapply(.SD, stats::median, na.rm = TRUE), 
+                 by = c("time", id_columns)]
   } else if (method == "resample") {
     # resample one observation per rounded interval
-    data <- data[, lapply(.SD, data.table::first), by = list(time, id)]
+    data_copy <- data_copy[, lapply(.SD, data.table::first), 
+                 by = c("time", id_columns)]
   }
 
   # check for class and whether there are rows
-  assertthat::assert_that("data.frame" %in% class(data),
+  assertthat::assert_that("data.frame" %in% class(data_copy),
                   msg = "filter_bbox: cleaned data is not a dataframe object!")
 
   # print warning if all rows are removed
-  if (nrow(data) == 0) {
+  if (nrow(data_copy) == 0) {
     warning("filter_bbox: cleaned data has no rows remaining!")
   }
-
-  return(data)
+  
+  return(data_copy)
 }

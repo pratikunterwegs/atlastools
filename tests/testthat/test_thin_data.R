@@ -14,6 +14,7 @@ testthat::test_that("aggregating cleaned data", {
                                      COVXY = runif(1000) + 200)
   # run function
   test_output <- atlastools::atl_thin_data(test_data,
+                                           id_columns = "id",
                                            interval = 60,
                                            method = "aggregate")
 
@@ -49,6 +50,7 @@ testthat::test_that("resampling cleaned data", {
   # run function
   test_output <- atlastools::atl_thin_data(test_data,
                                            interval = 60,
+                                           id_columns = "id",
                                            method = "resample")
 
   # do tests
@@ -82,6 +84,7 @@ testthat::test_that("other options fail", {
   # run function
   testthat::expect_error(atlastools::atl_thin_data(test_data,
                            interval = 60,
+                           id_columns = "id",
                            method = "another_option"))
 
 })

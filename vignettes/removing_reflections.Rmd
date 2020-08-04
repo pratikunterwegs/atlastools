@@ -40,19 +40,20 @@ data <- crossing(displacement_distance, speed_cutoffs) %>%
 ggplot(data)+
   geom_tile(aes(speed_cutoffs, displacement_distance,
                 fill = time_to_defeat / 60))+
-  scale_fill_viridis_c(option = "C",
+  scale_fill_viridis_c(option = "B",
                        trans = "log10",
-                       limits = c(0.2, NA),
+                       limits = c(0.3, NA),
                        breaks = c(0.3, 1, 3, 10, 30),
                        labels = as.character(c(0.3, 1, 3, 10, 30)),
                        na.value = "black")+
   scale_y_log10(labels = scales::comma,
                 breaks = c(10 ^ seq(0, 5), 500, 5000))+
-  scale_x_continuous(breaks = c(10, seq(20, 100, 20)))+
+  scale_x_continuous(breaks = c(3, 10, seq(20, 100, 20)))+
   coord_equal(ratio = 50,
-              xlim = c(10, NA),
-              ylim = c(100, NA))+
-  theme_minimal()+
+              xlim = c(3, NA),
+              ylim = c(100, NA),
+              expand = FALSE)+
+  theme_test()+
   theme(axis.text.y = element_text(angle = 90, 
                                    hjust = 0.5),
         legend.position = "top")+

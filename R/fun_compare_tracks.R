@@ -7,9 +7,9 @@
 #' @param y The Y coordinate.
 #' @param time The time coordinate.
 #'
-#' @return The median of the ratio of the displacement between the processed 
-#' track and the reference track, and the corresponding distance between consecutive
-#' points in the reference track.
+#' @return The median of the ratio of the displacement between the processed
+#' track and the reference track, and the corresponding distance between 
+#' consecutive points in the reference track.
 #' @export
 #' 
 atl_compare_tracks <- function(processed_data,
@@ -43,9 +43,3 @@ atl_compare_tracks <- function(processed_data,
   
   return(track_error)
 }
-
-# ggplot()+
-#   geom_path(data = reference_data,
-#             aes(x, y), size = 2)+
-#   geom_path(data = processed_data,
-#             aes(x, y), col = "red")

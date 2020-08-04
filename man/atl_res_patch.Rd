@@ -9,7 +9,9 @@ atl_res_patch(
   buffer_radius = 10,
   lim_spat_indep = 100,
   lim_time_indep = 30,
-  min_fixes = 3
+  min_fixes = 3,
+  summary_variables = c(),
+  summary_functions = c()
 )
 }
 \arguments{
@@ -33,6 +35,13 @@ distance between two patches for them to the considered independent.}
 \item{min_fixes}{The minimum number of fixes for a group of
 spatially-proximate number of ponts to be considered a preliminary residence
 patch.}
+
+\item{summary_variables}{Optional variables for which patch-wise summary
+values are required. To be passed as a character vector.}
+
+\item{summary_functions}{The functions with which to summarise the summary
+variables; must return only a single value, such as median, mean etc. To be
+passed as a character vector.}
 }
 \value{
 A data.frame extension object. This dataframe has the added column

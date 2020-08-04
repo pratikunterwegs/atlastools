@@ -10,7 +10,7 @@
   
 <!-- badges: end -->
 
-`atlastools` is an `R` package to pre-process high frequency animal tracking data. It is written and maintained by [Pratik Gupte](https://www.rug.nl/staff/p.r.gupte), at the [University of Groningen's Theoretical Biology Group](https://www.rug.nl/research/gelifes/tres/), 
+`atlastools` is an `R` package to pre-process high frequency animal tracking data. It is written and maintained by [Pratik Gupte](https://www.rug.nl/staff/p.r.gupte), at the [University of Groningen's Theoretical Biology Group](https://www.rug.nl/research/gelifes/tres/). While aimed at data from ATLAS systems, it works with any `X, Y, TIME` data.
 
 ---
 
@@ -20,7 +20,5 @@
 # This package can be installed using devtools
 install.packages("devtools")
 
-# library("devtools")
-# installation of the simplified branch
 devtools::install_github("pratikunterwegs/atlastools")
 ```

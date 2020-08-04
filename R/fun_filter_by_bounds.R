@@ -42,11 +42,11 @@ atl_filter_bounds <- function(data,
 
   # filter for spatial extent either inside or outside
   if (remove_inside) {
-    data <- data[!data.table::between(data[[x]], x_range[1], x_range[2]), ]
-    data <- data[!data.table::between(data[[y]], y_range[1], y_range[2]), ]
+    data <- data[!(data.table::between(data[[x]], x_range[1], x_range[2]) & 
+                   data.table::between(data[[y]], y_range[1], y_range[2])), ]
   } else {
-    data <- data[data.table::between(data[[x]], x_range[1], x_range[2]), ]
-    data <- data[data.table::between(data[[y]], y_range[1], y_range[2]), ]
+    data <- data[(data.table::between(data[[x]], x_range[1], x_range[2]) & 
+                    data.table::between(data[[y]], y_range[1], y_range[2])), ]
   }
 
   assertthat::assert_that("data.frame" %in% class(data),

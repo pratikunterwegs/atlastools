@@ -17,6 +17,7 @@ atl_compare_tracks <- function(processed_data,
                                x = "x",
                                y = "y",
                                time = "time") {
+  distance <- track_diff <- x_proc <- x_ref <- y_proc <- y_ref <- NULL
   
   # check data for correct names
   names_required <- c(x, y, time)
@@ -37,12 +38,8 @@ atl_compare_tracks <- function(processed_data,
                                                          x = "x_ref",
                                                          y = "y_ref")]
   # get the median of track difference (in m) by distance (also m)
-  track_error <- median(aligned_data$track_diff / aligned_data$distance,
+  track_error <- stats::median(aligned_data$track_diff / aligned_data$distance,
                         na.rm = TRUE)
-  # get the median and sd of the distance at each rounded time point
-  # summary_data <- aligned_data[, .(dist_diff_med = stats::median(dist_diff),
-  #                  dist_diff_sd = stats::sd(dist_diff)),
-  #              by = time]
   
   return(track_error)
 }

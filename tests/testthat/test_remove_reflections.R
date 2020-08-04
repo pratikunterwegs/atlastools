@@ -58,14 +58,6 @@ testthat::test_that("reflections do not end", {
   test_data[, `:=`(speed = atlastools::atl_get_speed(test_data),
                  angle = atlastools::atl_turning_angle(test_data))]
   
-  # expect a message
-  testthat::expect_message(
-    atlastools::atl_remove_reflections(test_data,
-                                       reflection_speed_cutoff = 20,
-                                       point_angle_cutoff = 5),
-    "*reflection does not end*"
-  )
-  
   # now get output
   test_output <- atlastools::atl_remove_reflections(test_data,
                                                     reflection_speed_cutoff = 5,

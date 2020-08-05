@@ -24,9 +24,9 @@ atl_compare_tracks(
 \item{time}{The time coordinate.}
 }
 \value{
-The median of the ratio of the displacement between the processed 
-track and the reference track, and the corresponding distance between consecutive
-points in the reference track.
+The median of the ratio of the displacement between the processed
+track and the reference track, and the corresponding distance between 
+consecutive points in the reference track.
 }
 \description{
 Compare reference and processed tracks.

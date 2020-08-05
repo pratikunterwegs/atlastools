@@ -31,6 +31,10 @@ atl_remove_reflections <- function(data,
   # get speed and angle
   data[, `:=`(speed = atlastools::atl_get_speed(data),
               angle = atlastools::atl_turning_angle(data))]
+  
+  # remove points that cannot be assessed
+  # can't determine whether the last few points are reflections hence remove
+  data <- data[!is.na(speed) & !is.na(angle), ]
 
   # prepare a vector of rows to discard
   vec_discard <- integer()
@@ -50,8 +54,9 @@ atl_remove_reflections <- function(data,
     # find the max speed after the first anomaly, which is the blink away
     # the next highest should be the blink back
     suspect_speeds <- data[(suspect_point + 1):est_ref_len, speed]
+    
     # drop NA here
-    suspect_speeds <- stats::na.omit(suspect_speeds)
+    suspect_speeds <- suspect_speeds[!is.na(suspect_speeds)]
 
     # get the next highest speed
     nx_high_speed <- which.max(rank(suspect_speeds))
@@ -63,9 +68,9 @@ atl_remove_reflections <- function(data,
               {est_ref_len} positions"))
     } else {
       reflection_end <- suspect_point + nx_high_speed + 1 # one added for safety
+      # message ref end
+      message(glue::glue("reflection ends {reflection_end}"))
     }
-    # message ref end
-    message(glue::glue("reflection ends {reflection_end}"))
 
     # identify rows to remove
     # may be excessive but works
@@ -81,7 +86,7 @@ atl_remove_reflections <- function(data,
       # break the loop if there's no further anomalies
       break ()
     } else {
-      anchor_point <- reflection_end + next_anchor
+      anchor_point <- reflection_end + next_anchor - 1
       # check for errors in order
       assertthat::assert_that(anchor_point > reflection_end,
                             msg = glue::glue("anchor point {anchor_point} is \\
@@ -93,6 +98,7 @@ atl_remove_reflections <- function(data,
 
   # return the rows to be kept
   vec_keep <- setdiff(seq_len(nrow(data)), vec_discard)
-  return(data[vec_keep, ])
+  data <- data[vec_keep, ]
+  return(data)
 
 }

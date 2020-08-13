@@ -48,7 +48,7 @@ atl_median_smooth <- function(data,
   data[, c(x, y) := lapply(.SD,
                            function(z) {
                              rev(stats::runmed(rev(stats::runmed(z, moving_window)),
-                                           moving_window)})),
+                                           moving_window))}),
        .SDcols = c(x, y)]
 
   assertthat::assert_that("data.frame" %in% class(data),

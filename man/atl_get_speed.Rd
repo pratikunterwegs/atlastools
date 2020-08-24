@@ -4,7 +4,7 @@
 \alias{atl_get_speed}
 \title{Calculate instantaenous speed.}
 \usage{
-atl_get_speed(data, x = "x", y = "y", time = "time")
+atl_get_speed(data, x = "x", y = "y", time = "time", type = c("in", "out"))
 }
 \arguments{
 \item{data}{A dataframe or similar which must have the columns
@@ -15,6 +15,10 @@ specified by \code{x}, \code{y}, and \code{time}.}
 \item{y}{The y coordinate.}
 
 \item{time}{The timestamp in seconds since the UNIX epoch.}
+
+\item{type}{The type of speed (incoming or outgoing) to return.
+Incoming speeds are specified by \code{type = "in"}, and outgoing speeds
+by \code{type = "out"}.}
 }
 \value{
 A vector of numerics representing speed.

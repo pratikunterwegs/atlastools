@@ -16,7 +16,7 @@ atl_get_speed <- function(data,
                           x = "x",
                           y = "y",
                           time = "time",
-                          type = c("in", "out")) {
+                          type = c("in")) {
 
   atl_check_data(data, names_expected = c(x, y, time))
 
@@ -30,12 +30,15 @@ atl_get_speed <- function(data,
   time <- c(NA, diff(data[[time]]))
 
   # simple speed
+  if (length(type) > 1) {
+    type == "in"
+  }
   if (type == "in") {
     speed <- distance / time
   } else if (type == "out") {
-    speed <- data.table::shift(distance, type = "lead") / 
+    speed <- data.table::shift(distance, type = "lead") /
               data.table::shift(time, type = "lead")
-  }  
+  }
 
   return(speed)
 

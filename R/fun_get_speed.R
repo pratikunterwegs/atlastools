@@ -5,6 +5,9 @@
 #' @param x The x coordinate.
 #' @param y The y coordinate.
 #' @param time The timestamp in seconds since the UNIX epoch.
+#' @param type The type of speed (incoming or outgoing) to return.
+#' Incoming speeds are specified by \code{type = "in"}, and outgoing speeds
+#' by \code{type = "out"}.
 #'
 #' @return A vector of numerics representing speed.
 #' The first position is assigned a speed of NA.
@@ -12,7 +15,8 @@
 atl_get_speed <- function(data,
                           x = "x",
                           y = "y",
-                          time = "time") {
+                          time = "time",
+                          type = c("in")) {
 
   atl_check_data(data, names_expected = c(x, y, time))
 
@@ -25,8 +29,12 @@ atl_get_speed <- function(data,
   # get time
   time <- c(NA, diff(data[[time]]))
 
-  # simple speed
-  speed <- distance / time
+  if (type == "in") {
+    speed <- distance / time
+  } else if (type == "out") {
+    speed <- data.table::shift(distance, type = "lead") /
+              data.table::shift(time, type = "lead")
+  }
 
   return(speed)
 

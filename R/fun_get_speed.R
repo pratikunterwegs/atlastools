@@ -29,10 +29,6 @@ atl_get_speed <- function(data,
   # get time
   time <- c(NA, diff(data[[time]]))
 
-  # simple speed
-  if (length(type) > 1) {
-    type == "in"
-  }
   if (type == "in") {
     speed <- distance / time
   } else if (type == "out") {

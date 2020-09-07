@@ -65,9 +65,8 @@ atl_filter_bounds <- function(data,
     # filter by polygon
     if (!is.na(sf_polygon)) {
       keep <- atl_within_polygon(data, sf_polygon)
+      data <- data[!keep, ]
     }
-    
-    data <- data[!keep, ]
     
   } else {
     # KEEPS DATA INSIDE THE BOUNDING BOX AND POLYGON
@@ -76,12 +75,14 @@ atl_filter_bounds <- function(data,
       data.table::between(data[[y]], y_range[1], y_range[2],
                           NAbounds = TRUE)
     
+    # filter by bbox
+    data <- data[keep, ]
+    
     # filter to KEEP those inside polygon
     if (!is.na(sf_polygon)) {
       keep <- atl_within_polygon(data, sf_polygon)
+      data <- data[keep, ]
     }
-    
-    data <- data[keep, ]
   }
 
   assertthat::assert_that("data.frame" %in% class(data),

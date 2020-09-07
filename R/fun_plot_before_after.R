@@ -22,7 +22,7 @@ atl_before_after <- function(data,
                                           {argument_values[-1]}'), 
                                   collapse = "; ")
   # plot as overlay
-  par(mar = rep(2, 4))
+  graphics::par(mar = rep(2, 4))
   graphics::plot(data$x, data$y, type = "o", 
                  col = "steelblue", 
                  xaxt = "n", yaxt = "n", ann = FALSE,
@@ -32,16 +32,16 @@ atl_before_after <- function(data,
                   xaxt = "n", yaxt = "n", ann = FALSE,
                   pch = 16,
                   lwd = 2)
-  title(main = plot_title, font.main = 1,
-        sub = plot_subtitle, font.sub = 3,
-        line = 0.5)
-  legend(x = "bottomleft", 
-         # y = min(data$y) + diff(range(data$y)) / 10,
-         legend = c("Raw data", "Processed data"),
-         col = c("steelblue",
-                 "red"),
-         lty = 1,
-         pch = c(16, NA),
-         lwd = c(1, 2),
-         bty = "n")
+  graphics::title(main = plot_title, font.main = 1,
+                  sub = plot_subtitle, font.sub = 3,
+                  line = 0.5)
+  graphics::legend(x = "bottomleft", 
+                   # y = min(data$y) + diff(range(data$y)) / 10,
+                   legend = c("Raw data", "Processed data"),
+                   col = c("steelblue",
+                           "red"),
+                   lty = 1,
+                   pch = c(16, NA),
+                   lwd = c(1, 2),
+                   bty = "n")
 }

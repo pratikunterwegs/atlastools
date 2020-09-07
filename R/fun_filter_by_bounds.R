@@ -53,20 +53,36 @@ atl_filter_bounds <- function(data,
 
   # filter for spatial extent either inside or outside
   if (remove_inside) {
+    # KEEPS DATA OUTSIDE THE BOUNDING BOX AND POLYGON
     # filter by bounding box
     keep <- !(data.table::between(data[[x]], x_range[1], x_range[2],
                                   NAbounds = TRUE) &
       data.table::between(data[[y]], y_range[1], y_range[2],
                           NAbounds = TRUE))
+    # filter by bbox first
+    data <- data[keep, ]
+    
     # filter by polygon
+    if (!is.na(sf_polygon)) {
+      keep <- atl_within_polygon(data, sf_polygon)
+    }
+    
+    data <- data[!keep, ]
+    
   } else {
+    # KEEPS DATA INSIDE THE BOUNDING BOX AND POLYGON
     keep <- data.table::between(data[[x]], x_range[1], x_range[2],
                                 NAbounds = TRUE) &
       data.table::between(data[[y]], y_range[1], y_range[2],
                           NAbounds = TRUE)
+    
+    # filter to KEEP those inside polygon
+    if (!is.na(sf_polygon)) {
+      keep <- atl_within_polygon(data, sf_polygon)
+    }
+    
+    data <- data[keep, ]
   }
-  
-  data <- data[keep, ]
 
   assertthat::assert_that("data.frame" %in% class(data),
     msg = "filter_bbox: cleaned data is not a dataframe object!")

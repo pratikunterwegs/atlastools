@@ -8,8 +8,9 @@ atl_filter_bounds(
   data,
   x = "x",
   y = "y",
-  x_range = c(639470, 639472),
-  y_range = c(5887143, 5887145),
+  x_range = NA,
+  y_range = NA,
+  sf_polygon = NA,
   remove_inside = TRUE
 )
 }

@@ -18,7 +18,7 @@ atl_filter_bounds <- function(data,
                             y = "y",
                             x_range = NA,
                             y_range = NA,
-                            sf_polygon = NA,
+                            sf_polygon = NULL,
                             remove_inside = TRUE) {
   # check input type
   assertthat::assert_that("data.frame" %in% class(data),
@@ -32,7 +32,7 @@ atl_filter_bounds <- function(data,
   
   # check for x_range or y_range or polygon
   # why NA? because between returns true for paired NA
-  assertthat::assert_that(any(!is.na(sf_polygon), 
+  assertthat::assert_that(any(!is.null(sf_polygon), 
                               !is.na(x_range), !is.na(y_range)))
   
   # make input list of bound limits
@@ -63,8 +63,10 @@ atl_filter_bounds <- function(data,
     data <- data[keep, ]
     
     # filter by polygon
-    if (!is.na(sf_polygon)) {
-      keep <- atl_within_polygon(data, sf_polygon)
+    if (!is.null(sf_polygon)) {
+      keep <- atl_within_polygon(data = data, 
+        x = x, y = y, 
+        polygon = sf_polygon)
       data <- data[!keep, ]
     }
     
@@ -79,8 +81,10 @@ atl_filter_bounds <- function(data,
     data <- data[keep, ]
     
     # filter to KEEP those inside polygon
-    if (!is.na(sf_polygon)) {
-      keep <- atl_within_polygon(data, sf_polygon)
+    if (!is.null(sf_polygon)) {
+      keep <- atlastools:::atl_within_polygon(data = data, 
+        x = x, y = y, 
+        polygon = sf_polygon)
       data <- data[keep, ]
     }
   }
@@ -119,16 +123,14 @@ atl_within_polygon <- function(data,
   # check input type
   assertthat::assert_that("data.frame" %in% class(data),
                           msg = "filter_bbox: input not a dataframe object!")
-  # include asserts checking for required columns
-  names_req <- c(x, y)
-  atl_check_data(data, names_req)
   
-  assertthat::assert_that("sf" %in% class(poylgon),
-                          msg = "filter_polygon: given spatial is not class sf")
+  assertthat::assert_that("sf" %in% class(polygon),
+                        msg = "filter_polygon: given spatial is not class sf")
   # check polygon type
-  assertthat::assert_that(any(stringi::stri_detect(class(polygon), 
-                                               regex = "(POLYGON)")),
-                          msg = "filter_polygon: given sf is not *POLYGON")
+  assertthat::assert_that(any(stringr::str_detect(
+    sf::st_geometry_type(polygon), 
+    pattern = "(POLYGON)")),
+    msg = "filter_polygon: given sf is not *POLYGON")
   
   # check for crs
   assertthat::assert_that(!is.na(sf::st_crs(polygon)))
@@ -140,9 +142,13 @@ atl_within_polygon <- function(data,
   coords <- sf::st_as_sf(coords, coords = c(x, y), crs = sf::st_crs(polygon))
   
   # get intersection
-  poly_intersections <- unlist(sf::st_intersection(polygon, coords))
+  poly_intersections <- apply(sf::st_intersects(coords, polygon), 1, any)
+
+  # add asserts
+  assertthat::assert_that(is.logical(poly_intersections),
+    msg = "filter_polygon: logical not returned")
   
-  # return row numbers which intersect the polygon
+  # return whether to keep the row or not
   return(poly_intersections)
   
 }

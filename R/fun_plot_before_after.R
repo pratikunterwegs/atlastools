@@ -10,6 +10,10 @@ atl_before_after <- function(data,
   # apply function to data COPY
   data_copy <- data.table::copy(data)
   data_copy <- fun(data_copy, ...)
+
+  # check function output
+  assertthat::assert_that(is.data.frame(data_copy),
+    msg = "before_after: processing result is not a data.frame")
   
   # set graphics parameters
   # graphics::par(mar = c(2, 2, 2, 2))

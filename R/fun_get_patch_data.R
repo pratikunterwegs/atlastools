@@ -57,9 +57,9 @@ atl_patch_summary <- function(patch_data,
 
   # get points if asked
   if (which_data %in% c("points")) {
-    patch_data <- patch_data[, .(id, patch, patchdata)]
+    patch_data <- patch_data[, list(id, patch, patchdata)]
     patch_data <- patch_data[, unlist(patchdata, recursive = FALSE),
-                         by = .(id, patch)]
+                         by = list(id, patch)]
   }
   return(patch_data)
 }

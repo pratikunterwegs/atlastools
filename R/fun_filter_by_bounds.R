@@ -5,6 +5,9 @@
 #' @param y The Y coordinate column.
 #' @param x_range The range of X coordinates.
 #' @param y_range The range of Y coordinates.
+#' @param sf_polygon An \code{sfc_*POLYGON} object which must have a defined CRS.
+#' The polygon CRS is assumed to be appropriate for the positions as well, and
+#' is assigned to the coordinates when determining the intersection.
 #' @param remove_inside Whether to remove points from within the range.
 #' Setting \code{negate = TRUE} removes positions within the bounding
 #' box specified by the X and Y ranges.
@@ -82,7 +85,7 @@ atl_filter_bounds <- function(data,
     
     # filter to KEEP those inside polygon
     if (!is.null(sf_polygon)) {
-      keep <- atlastools:::atl_within_polygon(data = data, 
+      keep <- atl_within_polygon(data = data, 
         x = x, y = y, 
         polygon = sf_polygon)
       data <- data[keep, ]
@@ -137,7 +140,7 @@ atl_within_polygon <- function(data,
   
   # get coordinates
   coord_cols <- c(x, y)
-  coords <- data[, ..coord_cols]
+  coords <- data[, coord_cols, with = FALSE]
   # make sf
   coords <- sf::st_as_sf(coords, coords = c(x, y), crs = sf::st_crs(polygon))
   

@@ -98,7 +98,7 @@ atl_res_patch <- function(data,
 
     # get time mean and extreme points for spatio-temporal independence calc
     # nest data
-    data <- data[, .(list(.SD)), by = .(id, patch)]
+    data <- data[, list(list(.SD)), by = .(id, patch)]
     setnames(data, old = "V1", new = "patchdata")
     data[, nfixes := as.integer(lapply(patchdata, nrow))]
 
@@ -118,7 +118,7 @@ atl_res_patch <- function(data,
 
     # assess independence using summary data
     patch_summary <- data[, unlist(patch_summary, recursive = FALSE),
-                          by = .(id, patch)]
+                          by = list(id, patch)]
     data[, patch_summary := NULL]
 
     # get time bewteen start of n+1 and end of n
@@ -145,13 +145,13 @@ atl_res_patch <- function(data,
     # join patchdata to patch summary by new patch
     # expand data to prepare for new patches
     data <- data[, unlist(patchdata, recursive = FALSE),
-                 by = .(id, patch)]
+                 by = list(id, patch)]
 
     data <- data.table::merge.data.table(data, patch_summary, by = "patch")
     data[, `:=`(patch = newpatch, newpatch = NULL)]
 
     # nest data again
-    data <- data[, .(list(.SD)), by = .(id, patch)]
+    data <- data[, list(list(.SD)), by = .(id, patch)]
     setnames(data, old = "V1", new = "patchdata")
     data[, nfixes := as.integer(lapply(patchdata, nrow))]
 
@@ -173,6 +173,7 @@ atl_res_patch <- function(data,
                                  fun.aggregate = eval(lapply(summary_functions,
                                                              as.symbol)),
                                  value.var = summary_variables)
+        # remove this vestigial column
         dt3[, `.` := NULL]
         return(cbind(dt2, dt3))
       } else {
@@ -187,7 +188,7 @@ atl_res_patch <- function(data,
 
     # distance between patches
     temp_data <- data[, unlist(patch_summary, recursive = FALSE),
-                     by = .(id, patch)]
+                     by = list(id, patch)]
     data[, patch_summary := NULL]
     data[, dist_bw_patch := atlastools::atl_patch_dist(data = temp_data,
                                                   x1 = "x_end", x2 = "x_start",

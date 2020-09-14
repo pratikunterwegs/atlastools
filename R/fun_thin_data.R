@@ -17,6 +17,7 @@ atl_thin_data <- function(data,
                                      "aggregate")) {
 
   id <- time <- SD <- VARX <- VARY <- COVXY <- NULL
+  x <- y <- NULL
 
   # check input type
   assertthat::assert_that("data.frame" %in% class(data),

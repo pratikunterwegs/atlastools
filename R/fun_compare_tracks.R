@@ -2,7 +2,7 @@
 #' Compare reference and processed tracks.
 #'
 #' @param processed_data The processed movement track.
-#' @param reference_data The refernece movement track.
+#' @param reference_data The reference movement track.
 #' @param x The X coordinate.
 #' @param y The Y coordinate.
 #' @param time The time coordinate.

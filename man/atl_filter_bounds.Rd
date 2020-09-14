@@ -10,7 +10,7 @@ atl_filter_bounds(
   y = "y",
   x_range = NA,
   y_range = NA,
-  sf_polygon = NA,
+  sf_polygon = NULL,
   remove_inside = TRUE
 )
 }

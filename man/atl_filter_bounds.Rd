@@ -25,6 +25,10 @@ atl_filter_bounds(
 
 \item{y_range}{The range of Y coordinates.}
 
+\item{sf_polygon}{An \code{sfc_*POLYGON} object which must have a defined CRS.
+The polygon CRS is assumed to be appropriate for the positions as well, and
+is assigned to the coordinates when determining the intersection.}
+
 \item{remove_inside}{Whether to remove points from within the range.
 Setting \code{negate = TRUE} removes positions within the bounding
 box specified by the X and Y ranges.}

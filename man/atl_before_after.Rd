@@ -4,10 +4,14 @@
 \alias{atl_before_after}
 \title{See the effect of applying a pre-processing function.}
 \usage{
-atl_before_after(data, fun, ...)
+atl_before_after(data, x = "x", y = "y", fun, ...)
 }
 \arguments{
 \item{data}{The data passed to the pre-preprocessing function.}
+
+\item{x}{The X coordinate.}
+
+\item{y}{The Y coordinate.}
 
 \item{fun}{The pre-processing function that operates on data.}
 

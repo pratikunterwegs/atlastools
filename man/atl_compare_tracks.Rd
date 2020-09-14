@@ -15,7 +15,7 @@ atl_compare_tracks(
 \arguments{
 \item{processed_data}{The processed movement track.}
 
-\item{reference_data}{The refernece movement track.}
+\item{reference_data}{The reference movement track.}
 
 \item{x}{The X coordinate.}
 

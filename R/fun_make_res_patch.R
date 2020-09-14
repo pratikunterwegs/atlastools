@@ -77,14 +77,16 @@ atl_res_patch <- function(data,
     # identify spatial overlap
     # assign spat diff columns
     data[, `:=`(spat_diff = atlastools::atl_simple_dist(data = data,
-                                                        x = "x", y = "y"))]
+                                                        x = "x", y = "y"),
+                time_diff = c(Inf, as.numeric(diff(time))))]
 
     # first spatial difference is infinity for calculation purposes
     data[1, c("spat_diff")] <- Inf
 
     # merge points if not spatially independent
     # compare distance from previous point to buffer_radius
-    data <- data[, patch := cumsum(spat_diff > (2 * buffer_radius))]
+    data <- data[, patch := cumsum(spat_diff > (2 * buffer_radius) |
+                                     time_diff > lim_time_indep)]
 
     # count fixes and patch and remove small patches
     # count number of points per patch

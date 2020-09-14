@@ -45,15 +45,19 @@ atl_thin_data <- function(data,
   # not retained as is, instead also being modified
   data_copy <- data.table::copy(data)
   data_copy[, time := floor(time / interval) * interval]
-
+  
   # handle method option
   if (method == "aggregate") {
     # aggregate over tracking interval
-    data_copy <- data_copy[, lapply(.SD, stats::median, na.rm = TRUE), 
+    data_copy <- data_copy[, c(lapply(.SD, stats::median, na.rm = TRUE),
+                               count = .N), 
                  by = c("time", id_columns)]
+    data_copy <- data.table::merge.data.table(data_copy,
+                                              obs_count, by = "time")
   } else if (method == "resample") {
     # resample one observation per rounded interval
-    data_copy <- data_copy[, lapply(.SD, data.table::first), 
+    data_copy <- data_copy[, lapply(.SD, data.table::first,
+                                    count = .N), 
                  by = c("time", id_columns)]
   }
 

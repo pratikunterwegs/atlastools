@@ -50,15 +50,35 @@ atl_thin_data <- function(data,
   if (method == "aggregate") {
     # aggregate over tracking interval
     data_copy <- data_copy[, c(lapply(.SD, stats::median, na.rm = TRUE),
-                               count = .N), 
+                               VARX_agg = stats::var(x, na.rm = TRUE),
+                               VARY_agg = stats::var(y, na.rm = TRUE),
+                               COVXY_agg = stats::cov(x, y),
+                               count = length(x)), 
                  by = c("time", id_columns)]
-    data_copy <- data.table::merge.data.table(data_copy,
-                                              obs_count, by = "time")
+    # remove old columns for variance
+    data_copy[, `:=`(VARX = NULL, VARY = NULL, COVXY = NULL)]
+    # reset names
+    data.table::setnames(data_copy,
+                         old = c("VARX_agg", "VARY_agg", "COVXY_agg"),
+                         new = c("VARX", "VARY", "COVXY"))
+    # add SD
+    data_copy[, SD := VARX + VARY + (2 * COVXY)]
   } else if (method == "resample") {
     # resample one observation per rounded interval
-    data_copy <- data_copy[, lapply(.SD, data.table::first,
-                                    count = .N), 
+    data_copy <- data_copy[, c(lapply(.SD, data.table::first),
+                               count = length(x),
+                               VARX_agg = stats::var(x, na.rm = TRUE),
+                               VARY_agg = stats::var(y, na.rm = TRUE),
+                               COVXY_agg = stats::cov(x, y)), 
                  by = c("time", id_columns)]
+    # remove old columns for variance
+    data_copy[, `:=`(VARX = NULL, VARY = NULL, COVXY = NULL)]
+    # reset names
+    data.table::setnames(data_copy,
+                         old = c("VARX_agg", "VARY_agg", "COVXY_agg"),
+                         new = c("VARX", "VARY", "COVXY"))
+    # add SD
+    data_copy[, SD := VARX + VARY + (2 * COVXY)]
   }
 
   # check for class and whether there are rows

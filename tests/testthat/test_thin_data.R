@@ -13,10 +13,10 @@ testthat::test_that("aggregating cleaned data", {
                                      VARY = runif(1000) + 300,
                                      COVXY = runif(1000) + 200)
   # run function
-  test_output <- atlastools::atl_thin_data(test_data,
-                                           id_columns = "id",
-                                           interval = 60,
-                                           method = "aggregate")
+  test_output <- atl_thin_data(test_data,
+                               id_columns = "id",
+                               interval = 60,
+                               method = "aggregate")
 
   # do tests
   # test that the vector class is data.table and data.frame
@@ -30,6 +30,9 @@ testthat::test_that("aggregating cleaned data", {
   lag <- diff(test_output$time)
   message(glue::glue("min lag = {min(lag)}"))
   testthat::expect_gte(min(lag), interval)
+  
+  # check that the count is made
+  atlastools:::atl_check_data(test_output, names_expected = "count")
 
 })
 
@@ -65,6 +68,9 @@ testthat::test_that("resampling cleaned data", {
   lag <- diff(test_output$time)
   message(glue::glue("min lag = {min(lag)}"))
   testthat::expect_gte(min(lag), interval)
+  
+  # check that the count is made
+  atlastools:::atl_check_data(test_output, names_expected = "count")
 })
 
 # test for other option

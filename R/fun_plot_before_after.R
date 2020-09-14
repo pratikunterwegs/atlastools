@@ -1,11 +1,22 @@
 
+#' See the effect of applying a pre-processing function.
+#'
+#' @param data The data passed to the pre-preprocessing function.
+#' @param fun The pre-processing function that operates on data.
+#' @param ... Arguments to the pre-processing function.
+#'
+#' @return Nothing. Makes a plot.
+#' @export
 atl_before_after <- function(data,
                              fun, ...) {
   # check data
+  assertthat::assert_that(is.data.frame(data),
+                          msg = "before_after: input is not a dataframe")
   
-  # check function
+  # function checking will be done automatically
   
-  # parse function arguments passed to ...
+  # make data.table
+  data.table::setDT(data)
   
   # apply function to data COPY
   data_copy <- data.table::copy(data)
@@ -15,10 +26,8 @@ atl_before_after <- function(data,
   assertthat::assert_that(is.data.frame(data_copy),
     msg = "before_after: processing result is not a data.frame")
   
-  # set graphics parameters
-  # graphics::par(mar = c(2, 2, 2, 2))
-  
   # get title as function arguments
+  # start from 3 because 1 and 2 are data and fun, 0 is the function name iirc
   argument_values <- as.list(match.call()[3:length(match.call())])
   plot_title <- glue::glue('{names(argument_values[1])} = \\
                                           {argument_values[1]}')

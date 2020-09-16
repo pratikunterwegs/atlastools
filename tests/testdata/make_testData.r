@@ -2,7 +2,7 @@
 
 resTimeLimit <- 4
 
-testrevdata <- tibble::tibble(id = 4e3,
+testrevdata <- data.table::CJ(id = 4e3,
 	tide_number = 1e3,
 	x = rep(c(seq(0, 5e3, 1e3),
 	          seq(5e3, 0, -1e3)), each = 100) +
@@ -18,6 +18,6 @@ testrevdata <- tibble::tibble(id = 4e3,
 	                     (11 * 60 * 2)) * 100)
 
 # write to file for testing
-readr::write_csv(testrevdata, "tests/testdata/test_revdata.csv")
+data.table::fwrite(testrevdata, "tests/testdata/test_revdata.csv")
 
 # ends here

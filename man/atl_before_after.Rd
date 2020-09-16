@@ -4,18 +4,18 @@
 \alias{atl_before_after}
 \title{See the effect of applying a pre-processing function.}
 \usage{
-atl_before_after(data, x = "x", y = "y", fun, ...)
+atl_before_after(data, fun, x = "x", y = "y", args = list())
 }
 \arguments{
 \item{data}{The data passed to the pre-preprocessing function.}
+
+\item{fun}{The pre-processing function that operates on data.}
 
 \item{x}{The X coordinate.}
 
 \item{y}{The Y coordinate.}
 
-\item{fun}{The pre-processing function that operates on data.}
-
-\item{...}{Arguments to the pre-processing function.}
+\item{args}{Arguments passed as a list to the pre-processing function.}
 }
 \value{
 Nothing. Makes a plot.

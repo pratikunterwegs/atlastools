@@ -3,16 +3,16 @@
 #'
 #' @param data The data passed to the pre-preprocessing function.
 #' @param fun The pre-processing function that operates on data.
-#' @param ... Arguments to the pre-processing function.
 #' @param x The X coordinate.
 #' @param y The Y coordinate.
+#' @param args Arguments passed as a list to the pre-processing function.
 #'
 #' @return Nothing. Makes a plot.
 #' @export
 atl_before_after <- function(data,
-                             x = "x",
-                             y = "y",
-                             fun, ...) {
+                             fun, 
+                             x = "x", y = "y",
+                             args = list()) {
   # check data
   assertthat::assert_that(is.data.frame(data),
                           msg = "before_after: input is not a dataframe")
@@ -24,8 +24,8 @@ atl_before_after <- function(data,
   
   # apply function to data COPY
   data_copy <- data.table::copy(data)
-  data_copy <- fun(data_copy, x = "x", y = "y", ...)
-
+  data_copy <- do.call(fun, c(list(data = data), args))
+  
   # check function output
   assertthat::assert_that(is.data.frame(data_copy),
     msg = "before_after: processing result is not a data.frame")

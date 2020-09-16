@@ -12,8 +12,10 @@ testthat::test_that("data can be plotted", {
                              fun = atlastools::atl_median_smooth,
                              x = "x",
                              y = "y",
-                             time = "time",
-                             moving_window = 3)
+                             args = list(time = "time",
+                                         x = "x",
+                                         y = "y",
+                                         moving_window = 3))
         )
     })
  })

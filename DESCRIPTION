@@ -14,25 +14,18 @@ LazyData: true
 URL: https://github.com/pratikunterwegs/atlastools
 BugReports: https://github.com/pratikunterwegs/atlastools/issues
 Imports:
-    dplyr,
-    purrr,
-    tibble,
     sf,
     glue,
     data.table,
-    rlang,
     stats,
-    zoo,
     assertthat,
     stringr,
     fasttime,
     RMySQL,
     bit64
-RoxygenNote: 7.1.0
+RoxygenNote: 7.1.1
 Suggests:
-    magrittr,
     testthat (>= 2.1.0),
-    tidyr,
     ggplot2,
     scales,
     knitr,

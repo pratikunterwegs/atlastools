@@ -16,8 +16,7 @@ vignette: >
 ## Load libraries
 
 ```{r warning=FALSE, message=FALSE}
-library(tidyr)
-library(dplyr)
+library(data.table)
 library(ggplot2)
 ```
 
@@ -31,8 +30,8 @@ displacement_distance <- c(10 ^ seq(0, 4, 0.1))
 speed_cutoffs <- seq(0, 100, 5)
 
 # use formula for algorithm defeat
-data <- crossing(displacement_distance, speed_cutoffs) %>% 
-  mutate(time_to_defeat = displacement_distance / speed_cutoffs)
+data <- CJ(displacement_distance, speed_cutoffs)[, 
+  time_to_defeat := displacement_distance / speed_cutoffs]
 ```
 
 ```{r fig.cap="Figure showing the time (in minutes) required to beat the 'next reasonable speed' method, for various combinations of the reflection distance from the real positions, _D_ and the speed cutoff, _v_. Area in black represent combinations that fail"}

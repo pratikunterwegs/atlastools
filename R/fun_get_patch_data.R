@@ -44,7 +44,7 @@ atl_patch_summary <- function(patch_data,
     patch_data$patchdata <- NULL
 
     # make spatial polygons
-    polygons <- purrr::reduce(patch_data$polygons, c)
+    polygons <- Reduce(c, patch_data$polygons)
     # temp remove
     patch_data[, polygons := NULL]
     # unlist all the list columns

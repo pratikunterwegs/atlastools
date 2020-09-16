@@ -29,22 +29,20 @@ atl_patch_dist <- function(data,
                       msg = "bw_patch_dist: some data assumptions are not met")
 
   # get distance returning zero if single point or NA by default
-  dist <- dplyr::case_when(nrow(data) > 1 ~ {
+  if (nrow(data) > 1) {
     # get x and y
     x1 <- data[[x1]][seq_len(nrow(data) - 1)]
     x2 <- data[[x2]][2:nrow(data)]
     y1 <- data[[y1]][seq_len(nrow(data) - 1)]
     y2 <- data[[y2]][2:nrow(data)]
     # get dist
-    c(NA, sqrt((x1 - x2) ^ 2 + (y1 - y2) ^ 2))
-    },
-    nrow(data) == 1 ~ {
-      0.0
-    },
-    TRUE ~ {
-      as.numeric(NA)
-    }
-  )
+    dist <- c(NA, sqrt((x1 - x2) ^ 2 + (y1 - y2) ^ 2))
+
+  } else if (nrow(data == 1)) {
+    dist <- 0.0
+  } else {
+    dist <- NA_real_
+  }
 
   return(dist)
 }

@@ -43,19 +43,22 @@ atl_median_smooth <- function(data,
   
   # set in ascending order of time
   data.table::setorderv(data, time)
+  
+  # make a copy
+  data_copy <- data.table::copy(data)
 
   # mutate in place
-  data[, c(x, y) := lapply(.SD,
+  data_copy[, c(x, y) := lapply(.SD,
                            function(z) {
                              rev(stats::runmed(rev(stats::runmed(z, moving_window)),
                                            moving_window))}),
        .SDcols = c(x, y)]
 
-  assertthat::assert_that("data.frame" %in% class(data),
+  assertthat::assert_that("data.frame" %in% class(data_copy),
               msg = "cleanData: cleanded data is not a dataframe object!")
 
-  if (nrow(data) > 0) {
-    return(data)
+  if (nrow(data_copy) > 0) {
+    return(data_copy)
   } else {
     warning("median_smooth: no data remaining")
     return(NULL)

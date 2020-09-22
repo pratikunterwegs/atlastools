@@ -15,7 +15,11 @@ atl_filter_covariates <- function(data,
 
   # apply filters as a single evaluated parsed expression
   # first wrap them in brackets
-  filters <- glue::glue("({filters})")
+  filters <- vapply(X = filters, 
+                    FUN = function(this_filter) { 
+                      sprintf("(%s)", this_filter) 
+                    }, 
+                    FUN.VALUE = "character")
   filters <- stringr::str_c(filters, collapse = " & ")
   filters <- parse(text = filters)
   # evaluate the parsed filters

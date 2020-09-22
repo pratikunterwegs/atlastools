@@ -122,7 +122,12 @@
     <p>Thin tracking data by resampling or aggregation.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>atl_thin_data</span>(<span class='no'>data</span>, <span class='kw'>interval</span> <span class='kw'>=</span> <span class='fl'>60</span>, <span class='kw'>method</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"resample"</span>, <span class='st'>"aggregate"</span>))</pre>
+    <pre class="usage"><span class='fu'>atl_thin_data</span>(
+  <span class='kw'>data</span>,
+  interval = <span class='fl'>60</span>,
+  id_columns = <span class='kw'>NULL</span>,
+  method = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"resample"</span>, <span class='st'>"aggregate"</span>)
+)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -134,6 +139,10 @@
     <tr>
       <th>interval</th>
       <td><p>The interval in seconds over which to aggregate.</p></td>
+    </tr>
+    <tr>
+      <th>id_columns</th>
+      <td><p>Column names for grouping columns.</p></td>
     </tr>
     <tr>
       <th>method</th>
@@ -162,7 +171,7 @@ If aggregation, the group positions' median is taken.</p></td>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

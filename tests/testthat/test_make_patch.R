@@ -23,7 +23,7 @@ testthat::test_that("patch calc on empirical data", {
   atl_check_data(test_output, names_expected = expected_names)
 
   # check that data are ordered in time
-  testthat::expect_gt(min(as.numeric(diff(test_output$time_mean)),
+  testthat::expect_gt(min(as.numeric(diff(test_output$time_median)),
                           na.rm = TRUE), 0)
 })
 
@@ -39,24 +39,23 @@ testthat::test_that("patch data access function works", {
                                            lim_time_indep = 30)
 
   # access test_output summary
-  copy1 <- copy2 <- copy3 <- test_output
-  data_access_smry <- atlastools::atl_patch_summary(patch_data = copy1,
+  data_access_smry <- atlastools::atl_patch_summary(patch_data = test_output,
                                                     which_data = "summary")
 
   # access test_output spatial
-  data_access_sf <- atlastools::atl_patch_summary(patch_data = copy2,
+  data_access_sf <- atlastools::atl_patch_summary(patch_data = test_output,
                                                   which_data = "spatial")
 
   # access test_output spatial
-  data_access_pt <- atlastools::atl_patch_summary(patch_data = copy3,
+  data_access_pt <- atlastools::atl_patch_summary(patch_data = test_output,
                                                   which_data = "points")
 
   # test class summary
   testthat::expect_s3_class(object = data_access_smry,
-                            class = c("data.frame", "tbl"))
+                            class = c("data.table", "data.frame"))
   # test class pts
   testthat::expect_s3_class(object = data_access_pt,
-                            class = c("data.frame", "tbl"))
+                            class = c("data.table", "data.frame"))
   # test class sf
   testthat::expect_s3_class(object = data_access_sf, class = c("sf"))
 
@@ -68,7 +67,7 @@ testthat::test_that("patch data access function works", {
   atl_check_data(test_output, names_expected = expected_names)
 
   # check that data are ordered in time
-  testthat::expect_gt(min(as.numeric(diff(test_output$time_mean)),
+  testthat::expect_gt(min(as.numeric(diff(test_output$time_median)),
                           na.rm = TRUE), 0)
 
 })

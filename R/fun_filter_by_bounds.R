@@ -138,6 +138,19 @@ atl_within_polygon <- function(data,
   # check for crs
   assertthat::assert_that(!is.na(sf::st_crs(polygon)))
   
+  # get bounding box of polygon
+  bbox <- sf::st_bbox(polygon)
+  
+  # get bbox filter string
+  filter_string <- c(sprintf("data.table::between(%s, %f, %f)", 
+                             x, bbox['xmin'], bbox['xmax']),
+                     sprintf("data.table::between(%s, %f, %f)", 
+                             y, bbox['ymin'], bbox['ymax']))
+
+  # filter data on bbox first
+  data <- atlastools::atl_filter_covariates(data = data,
+                                            filters = c(filter_string))
+  
   # get coordinates
   coord_cols <- c(x, y)
   coords <- data[, coord_cols, with = FALSE]

@@ -98,7 +98,7 @@ atl_res_patch <- function(data,
 
     # get time mean and extreme points for spatio-temporal independence calc
     # nest data
-    data <- data[, list(list(.SD)), by = .(id, patch)]
+    data <- data[, list(list(.SD)), by = list(id, patch)]
     setnames(data, old = "V1", new = "patchdata")
     data[, nfixes := as.integer(lapply(patchdata, nrow))]
 
@@ -139,7 +139,7 @@ atl_res_patch <- function(data,
                                          (spat_diff > lim_spat_indep))]
 
     # get cols with old and new patch
-    patch_summary <- patch_summary[, .(patch, newpatch)]
+    patch_summary <- patch_summary[, list(patch, newpatch)]
 
     # basic patch metrics for new patches
     # join patchdata to patch summary by new patch

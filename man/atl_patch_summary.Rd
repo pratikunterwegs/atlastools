@@ -7,8 +7,9 @@
 atl_patch_summary(patch_data, which_data = "summary", buffer_radius = 10)
 }
 \arguments{
-\item{patch_data}{A tibble with a nested list column of the raw data
-underlying each patch.}
+\item{patch_data}{A data.frame with a nested list column of the raw data
+underlying each patch. Since data.frames don't support nested columns,
+will actually be a data.table or similar extension.}
 
 \item{which_data}{Which data to return, the raw data underlying the patch,
 or a spatial features object with only the patch summary.}
@@ -17,7 +18,7 @@ or a spatial features object with only the patch summary.}
 requesting sf based polygons.}
 }
 \value{
-An object of type \code{sf} or \code{tibble} depending on
+An object of type \code{sf} or \code{data.table} depending on
 which data is requested.
 }
 \description{

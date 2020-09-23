@@ -1,6 +1,6 @@
 #' Get residence patch data.
 #'
-#' @param data A data.frame with a nested list column of the raw data
+#' @param patch_data A data.frame with a nested list column of the raw data
 #' underlying each patch. Since data.frames don't support nested columns,
 #' will actually be a data.table or similar extension.
 #' @param which_data Which data to return, the raw data underlying the patch,
@@ -30,7 +30,6 @@ atl_patch_summary <- function(patch_data,
     data.table::setDT(data)
   }
   
-  
   # check length of which_data
   assertthat::assert_that(length(which_data) == 1,
                           msg = "patch_summary: only one data type at a time")
@@ -52,6 +51,7 @@ atl_patch_summary <- function(patch_data,
 
     # make spatial polygons
     polygons <- Reduce(c, data$polygons)
+    polygons <- sf::st_sfc(polygons)
     # temp remove
     data[, polygons := NULL]
     # unlist all the list columns

@@ -9,8 +9,9 @@ testthat::test_that("data kept within bounds", {
   test_data <- test_data[200:500, `:=`(X = rnorm(301, 300, 20),
                                        Y = rnorm(301, 800, 20))]
   # test polygon
-  test_polygon <- sf::st_point(x = c(500, 500))
-  test_polygon <- sf::st_buffer(test_polygon, dist = 500)
+  test_polygon <- sf::st_multipoint(x = matrix(c(250, 250, 500, 500), ncol = 2,
+                                               byrow = T))
+  test_polygon <- sf::st_buffer(test_polygon, dist = 200)
   test_area <- sf::st_sf(data.frame(feature = 1, 
                                     geom = sf::st_sfc(test_polygon)))
   sf::st_crs(test_area) <- 32631 # the WATLAS system CRS
@@ -19,8 +20,8 @@ testthat::test_that("data kept within bounds", {
   test_output <- atlastools::atl_filter_bounds(data = test_data,
                                                x = "X",
                                                y = "Y",
-                                               x_range = c(200, 500),
-                                               y_range = c(700, 850),
+                                               x_range = c(100, 600),
+                                               y_range = c(100, 650),
                                                sf_polygon = test_area,
                                                remove_inside = FALSE)
   
@@ -33,10 +34,10 @@ testthat::test_that("data kept within bounds", {
   testthat::expect_gte(nrow(test_data), nrow(test_output))
 
   # check the correct points are kept
-  testthat::expect_true(all(data.table::between(test_output$X, 200, 500)),
+  testthat::expect_true(all(data.table::between(test_output$X, 100, 600)),
                         info = "within bounds not working")
 
-  testthat::expect_true(all(data.table::between(test_output$Y, 700, 850)),
+  testthat::expect_true(all(data.table::between(test_output$Y, 100, 650)),
                         info = "within bounds not working")
 
 })

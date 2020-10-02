@@ -123,6 +123,7 @@ atl_within_polygon <- function(data,
                                x = "x",
                                y = "y",
                                polygon) {
+  ptid <- NULL
   # check input type
   assertthat::assert_that("data.frame" %in% class(data),
                           msg = "filter_bbox: input not a dataframe object!")
@@ -148,24 +149,31 @@ atl_within_polygon <- function(data,
                              y, bbox['ymin'], bbox['ymax']))
 
   # filter data on bbox first
-  data <- atlastools::atl_filter_covariates(data = data,
+  this_data <- copy(data)
+  this_data[, ptid := seq_len(nrow(this_data))]
+  this_data <- atlastools::atl_filter_covariates(data = this_data,
                                             filters = c(filter_string))
+  # get remaining rows
+  rows <- this_data$ptid
   
   # get coordinates
   coord_cols <- c(x, y)
-  coords <- data[, coord_cols, with = FALSE]
+  this_data <- this_data[, coord_cols, with = FALSE]
   # make sf
-  coords <- sf::st_as_sf(coords, coords = c(x, y), crs = sf::st_crs(polygon))
+  this_data <- sf::st_as_sf(this_data, coords = c(x, y), 
+                            crs = sf::st_crs(polygon))
   
   # get intersection
-  poly_intersections <- apply(sf::st_intersects(coords, polygon), 1, any)
+  poly_intersections <- apply(sf::st_intersects(this_data, polygon), 1, any)
 
   # add asserts
   assertthat::assert_that(is.logical(poly_intersections),
     msg = "filter_polygon: logical not returned")
   
-  # return whether to keep the row or not
-  return(poly_intersections)
+  # return which rows to keep
+  rm(this_data)
+  # return rows
+  return(rows[poly_intersections])
   
 }
 

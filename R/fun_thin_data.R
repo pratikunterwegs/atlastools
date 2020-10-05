@@ -63,7 +63,7 @@ atl_thin_data <- function(data,
                          old = c("VARX_agg", "VARY_agg", "COVXY_agg"),
                          new = c("VARX", "VARY", "COVXY"))
     # add SD
-    data_copy[, SD := VARX + VARY + (2 * COVXY)]
+    data_copy[, SD := sqrt(VARX + VARY + (2 * COVXY))]
   } else if (method == "resample") {
     # resample one observation per rounded interval
     data_copy <- data_copy[, c(lapply(.SD, data.table::first),
@@ -79,7 +79,7 @@ atl_thin_data <- function(data,
                          old = c("VARX_agg", "VARY_agg", "COVXY_agg"),
                          new = c("VARX", "VARY", "COVXY"))
     # add SD
-    data_copy[, SD := VARX + VARY + (2 * COVXY)]
+    data_copy[, SD := sqrt(VARX + VARY + (2 * COVXY))]
   }
 
   # check for class and whether there are rows

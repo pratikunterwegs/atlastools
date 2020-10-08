@@ -5,7 +5,7 @@
 #' @param y The Y coordinate column.
 #' @param x_range The range of X coordinates.
 #' @param y_range The range of Y coordinates.
-#' @param sf_polygon An \code{sfc_*POLYGON} object which must have a defined CRS.
+#' @param sf_polygon \code{sfc_*POLYGON} object which must have a defined CRS.
 #' The polygon CRS is assumed to be appropriate for the positions as well, and
 #' is assigned to the coordinates when determining the intersection.
 #' @param remove_inside Whether to remove points from within the range.
@@ -35,13 +35,15 @@ atl_filter_bounds <- function(data,
   
   # check for x_range or y_range or polygon
   # why NA? because between returns true for paired NA
-  assertthat::assert_that(any(!is.null(sf_polygon), 
+  assertthat::assert_that(any(!is.null(sf_polygon),
                               !is.na(x_range), !is.na(y_range)))
   
   # make input list of bound limits
   bounds <- list(x_range = x_range, y_range = y_range)
   # remove NA ie unsupplied limits
-  bounds[sapply(bounds, function(b){ any(is.na(b)) })] <- NULL
+  bounds[sapply(bounds, function(b) { 
+    any(is.na(b)) 
+  })] <- NULL
 
   # check input length of attractors
   invisible(lapply(bounds, function(f) {
@@ -144,34 +146,34 @@ atl_within_polygon <- function(data,
   
   # get bbox filter string
   filter_string <- c(sprintf("data.table::between(%s, %f, %f)", 
-                             x, bbox['xmin'], bbox['xmax']),
+                             x, bbox["xmin"], bbox["xmax"]),
                      sprintf("data.table::between(%s, %f, %f)", 
-                             y, bbox['ymin'], bbox['ymax']))
+                             y, bbox["ymin"], bbox["ymax"]))
 
   # filter data on bbox first
-  this_data <- copy(data)
-  this_data[, ptid := seq_len(nrow(this_data))]
-  this_data <- atlastools::atl_filter_covariates(data = this_data,
+  data[, ptid := seq_len(nrow(data))]
+  data <- atlastools::atl_filter_covariates(data = data,
                                             filters = c(filter_string))
   # get remaining rows
-  rows <- this_data$ptid
+  rows <- data$ptid
+
+  # set ptid to NULL
+  data[, ptid := NULL]
   
   # get coordinates
   coord_cols <- c(x, y)
-  this_data <- this_data[, coord_cols, with = FALSE]
+  data <- data[, coord_cols, with = FALSE]
   # make sf
-  this_data <- sf::st_as_sf(this_data, coords = c(x, y), 
+  data <- sf::st_as_sf(data, coords = c(x, y), 
                             crs = sf::st_crs(polygon))
   
   # get intersection
-  poly_intersections <- apply(sf::st_intersects(this_data, polygon), 1, any)
+  poly_intersections <- apply(sf::st_intersects(data, polygon), 1, any)
 
   # add asserts
   assertthat::assert_that(is.logical(poly_intersections),
     msg = "filter_polygon: logical not returned")
   
-  # return which rows to keep
-  rm(this_data)
   # return rows
   return(rows[poly_intersections])
   

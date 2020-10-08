@@ -20,7 +20,7 @@ atl_thin_data(
 
 \item{method}{Should the data be thinned by subsampling or aggregation.
 If resampling, the first position of each group is taken.
-If aggregation, the group positions' median is taken.}
+If aggregation, the group positions' mean is taken.}
 }
 \value{
 A dataframe aggregated taking the mean over the interval.

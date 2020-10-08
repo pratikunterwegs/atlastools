@@ -20,8 +20,6 @@ Imports:
     stats,
     assertthat,
     stringr,
-    fasttime,
-    RMySQL,
     bit64
 RoxygenNote: 7.1.1
 Suggests:
@@ -29,6 +27,5 @@ Suggests:
     ggplot2,
     scales,
     knitr,
-    rmarkdown,
-    DBI
+    rmarkdown
 VignetteBuilder: knitr

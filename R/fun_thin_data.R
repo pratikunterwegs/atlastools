@@ -5,7 +5,7 @@
 #' @param id_columns Column names for grouping columns.
 #' @param method Should the data be thinned by subsampling or aggregation.
 #' If resampling, the first position of each group is taken.
-#' If aggregation, the group positions' median is taken.
+#' If aggregation, the group positions' mean is taken.
 #'
 #' @return A dataframe aggregated taking the mean over the interval.
 #' @export
@@ -16,7 +16,7 @@ atl_thin_data <- function(data,
                           method = c("resample",
                                      "aggregate")) {
 
-  id <- time <- SD <- VARX <- VARY <- COVXY <- NULL
+  time <- SD <- VARX <- VARY <- COVXY <- NULL
   x <- y <- NULL
 
   # check input type
@@ -42,54 +42,52 @@ atl_thin_data <- function(data,
   assertthat::assert_that(interval > min(diff(data$time)),
       msg = "thin_data: thinning interval less than tracking interval!")
 
-  # round interval and reassign, because otherwise the original data is
-  # not retained as is, instead also being modified
-  data_copy <- data.table::copy(data)
-  data_copy[, time := floor(time / interval) * interval]
+  # round interval and reassign, this modifies by reference!
+  data[, time := floor(time / interval) * interval]
   
   # handle method option
   if (method == "aggregate") {
     # aggregate over tracking interval
-    data_copy <- data_copy[, c(lapply(.SD, stats::median, na.rm = TRUE),
+    data <- data[, c(lapply(.SD, mean, na.rm = TRUE),
                                VARX_agg = stats::var(x, na.rm = TRUE),
                                VARY_agg = stats::var(y, na.rm = TRUE),
                                COVXY_agg = stats::cov(x, y),
                                count = length(x)), 
                  by = c("time", id_columns)]
     # remove old columns for variance
-    data_copy[, `:=`(VARX = NULL, VARY = NULL, COVXY = NULL)]
+    data[, `:=`(VARX = NULL, VARY = NULL, COVXY = NULL)]
     # reset names
-    data.table::setnames(data_copy,
+    data.table::setnames(data,
                          old = c("VARX_agg", "VARY_agg", "COVXY_agg"),
                          new = c("VARX", "VARY", "COVXY"))
     # add SD
-    data_copy[, SD := sqrt(VARX + VARY + (2 * COVXY))]
+    data[, SD := sqrt(VARX + VARY + (2 * COVXY))]
   } else if (method == "resample") {
-    # resample one observation per rounded interval
-    data_copy <- data_copy[, c(lapply(.SD, data.table::first),
+    # resample the first observation per rounded interval
+    data <- data[, c(lapply(.SD, data.table::first),
                                count = length(x),
                                VARX_agg = stats::var(x, na.rm = TRUE),
                                VARY_agg = stats::var(y, na.rm = TRUE),
                                COVXY_agg = stats::cov(x, y)), 
                  by = c("time", id_columns)]
     # remove old columns for variance
-    data_copy[, `:=`(VARX = NULL, VARY = NULL, COVXY = NULL)]
+    data[, `:=`(VARX = NULL, VARY = NULL, COVXY = NULL)]
     # reset names
-    data.table::setnames(data_copy,
+    data.table::setnames(data,
                          old = c("VARX_agg", "VARY_agg", "COVXY_agg"),
                          new = c("VARX", "VARY", "COVXY"))
     # add SD
-    data_copy[, SD := sqrt(VARX + VARY + (2 * COVXY))]
+    data[, SD := sqrt(VARX + VARY + (2 * COVXY))]
   }
 
   # check for class and whether there are rows
-  assertthat::assert_that("data.frame" %in% class(data_copy),
+  assertthat::assert_that("data.frame" %in% class(data),
                   msg = "filter_bbox: cleaned data is not a dataframe object!")
 
   # print warning if all rows are removed
-  if (nrow(data_copy) == 0) {
+  if (nrow(data) == 0) {
     warning("filter_bbox: cleaned data has no rows remaining!")
   }
   
-  return(data_copy)
+  return(data)
 }

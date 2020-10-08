@@ -16,7 +16,7 @@ atl_filter_covariates <- function(data,
   # apply filters as a single evaluated parsed expression
   # first wrap them in brackets
   filters <- vapply(X = filters, 
-                    FUN = function(this_filter) { 
+                    FUN = function(this_filter) {
                       sprintf("(%s)", this_filter) 
                     }, 
                     FUN.VALUE = "character")

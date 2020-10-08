@@ -149,29 +149,29 @@ atl_within_polygon <- function(data,
                              y, bbox['ymin'], bbox['ymax']))
 
   # filter data on bbox first
-  this_data <- copy(data)
-  this_data[, ptid := seq_len(nrow(this_data))]
-  this_data <- atlastools::atl_filter_covariates(data = this_data,
+  data[, ptid := seq_len(nrow(data))]
+  data <- atlastools::atl_filter_covariates(data = data,
                                             filters = c(filter_string))
   # get remaining rows
-  rows <- this_data$ptid
+  rows <- data$ptid
+
+  # set ptid to NULL
+  data[, ptid := NULL]
   
   # get coordinates
   coord_cols <- c(x, y)
-  this_data <- this_data[, coord_cols, with = FALSE]
+  data <- data[, coord_cols, with = FALSE]
   # make sf
-  this_data <- sf::st_as_sf(this_data, coords = c(x, y), 
+  data <- sf::st_as_sf(data, coords = c(x, y), 
                             crs = sf::st_crs(polygon))
   
   # get intersection
-  poly_intersections <- apply(sf::st_intersects(this_data, polygon), 1, any)
+  poly_intersections <- apply(sf::st_intersects(data, polygon), 1, any)
 
   # add asserts
   assertthat::assert_that(is.logical(poly_intersections),
     msg = "filter_polygon: logical not returned")
   
-  # return which rows to keep
-  rm(this_data)
   # return rows
   return(rows[poly_intersections])
   

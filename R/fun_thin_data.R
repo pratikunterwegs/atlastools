@@ -5,7 +5,7 @@
 #' @param id_columns Column names for grouping columns.
 #' @param method Should the data be thinned by subsampling or aggregation.
 #' If resampling, the first position of each group is taken.
-#' If aggregation, the group positions' median is taken.
+#' If aggregation, the group positions' mean is taken.
 #'
 #' @return A dataframe aggregated taking the mean over the interval.
 #' @export
@@ -48,7 +48,7 @@ atl_thin_data <- function(data,
   # handle method option
   if (method == "aggregate") {
     # aggregate over tracking interval
-    data <- data[, c(lapply(.SD, stats::median, na.rm = TRUE),
+    data <- data[, c(lapply(.SD, stats::mean, na.rm = TRUE),
                                VARX_agg = stats::var(x, na.rm = TRUE),
                                VARY_agg = stats::var(y, na.rm = TRUE),
                                COVXY_agg = stats::cov(x, y),
@@ -63,7 +63,7 @@ atl_thin_data <- function(data,
     # add SD
     data[, SD := sqrt(VARX + VARY + (2 * COVXY))]
   } else if (method == "resample") {
-    # resample one observation per rounded interval
+    # resample the first observation per rounded interval
     data <- data[, c(lapply(.SD, data.table::first),
                                count = length(x),
                                VARX_agg = stats::var(x, na.rm = TRUE),

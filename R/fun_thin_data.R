@@ -48,7 +48,7 @@ atl_thin_data <- function(data,
   # handle method option
   if (method == "aggregate") {
     # aggregate over tracking interval
-    data <- data[, c(lapply(.SD, stats::mean, na.rm = TRUE),
+    data <- data[, c(lapply(.SD, mean, na.rm = TRUE),
                                VARX_agg = stats::var(x, na.rm = TRUE),
                                VARY_agg = stats::var(y, na.rm = TRUE),
                                COVXY_agg = stats::cov(x, y),

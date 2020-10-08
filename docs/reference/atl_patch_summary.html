@@ -122,15 +122,16 @@
     <p>Get residence patch data.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>atl_patch_summary</span>(<span class='kw'>patch_data</span>, which_data = <span class='st'>"summary"</span>, buffer_radius = <span class='fl'>10</span>)</pre>
+    <pre class="usage"><span class='fu'>atl_patch_summary</span>(<span class='no'>patch_data</span>, <span class='kw'>which_data</span> <span class='kw'>=</span> <span class='st'>"summary"</span>, <span class='kw'>buffer_radius</span> <span class='kw'>=</span> <span class='fl'>10</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>patch_data</th>
-      <td><p>A tibble with a nested list column of the raw data
-underlying each patch.</p></td>
+      <td><p>A data.frame with a nested list column of the raw data
+underlying each patch. Since data.frames don't support nested columns,
+will actually be a data.table or similar extension.</p></td>
     </tr>
     <tr>
       <th>which_data</th>
@@ -146,7 +147,7 @@ requesting sf based polygons.</p></td>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>An object of type <code>sf</code> or <code>tibble</code> depending on
+    <p>An object of type <code>sf</code> or <code>data.table</code> depending on
 which data is requested.</p>
 
   </div>
@@ -164,7 +165,7 @@ which data is requested.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
 </div>
 
       </footer>

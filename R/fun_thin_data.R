@@ -16,7 +16,7 @@ atl_thin_data <- function(data,
                           method = c("resample",
                                      "aggregate")) {
 
-  id <- time <- SD <- VARX <- VARY <- COVXY <- NULL
+  time <- SD <- VARX <- VARY <- COVXY <- NULL
   x <- y <- NULL
 
   # check input type

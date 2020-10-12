@@ -25,11 +25,6 @@ testthat::test_that("aggregating cleaned data", {
 
   # check that some rows are removed or that none are added
   testthat::expect_gte(nrow(test_data), nrow(test_output))
-
-  # check that the correct interval is achieved
-  lag <- diff(test_output$time)
-  message(glue::glue("min lag = {min(lag)}"))
-  testthat::expect_gte(min(lag), interval)
   
   # check that the count is made
   atlastools:::atl_check_data(test_output, names_expected = "count")
@@ -63,11 +58,6 @@ testthat::test_that("resampling cleaned data", {
 
   # check that some rows are removed or that none are added
   testthat::expect_gte(nrow(test_data), nrow(test_output))
-
-  # check that the correct interval is achieved
-  lag <- diff(test_output$time)
-  message(glue::glue("min lag = {min(lag)}"))
-  testthat::expect_gte(min(lag), interval)
   
   # check that the count is made
   atlastools:::atl_check_data(test_output, names_expected = "count")

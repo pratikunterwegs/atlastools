@@ -43,7 +43,7 @@ atl_thin_data <- function(data,
       msg = "thin_data: thinning interval less than tracking interval!")
 
   # round interval and reassign, this modifies by reference!
-  data[, time := floor( as.numeric(time) / interval) * interval]
+  data[, time_copy_ := floor( as.numeric(time) / interval) * interval]
   
   # handle method option
   if (method == "aggregate") {
@@ -53,7 +53,7 @@ atl_thin_data <- function(data,
                                VARY_agg = stats::var(y, na.rm = TRUE),
                                COVXY_agg = stats::cov(x, y),
                                count = length(x)), 
-                 by = c("time", id_columns)]
+                 by = c("time_copy_", id_columns)]
     # remove old columns for variance
     data[, `:=`(VARX = NULL, VARY = NULL, COVXY = NULL)]
     # reset names
@@ -69,7 +69,7 @@ atl_thin_data <- function(data,
                                VARX_agg = stats::var(x, na.rm = TRUE),
                                VARY_agg = stats::var(y, na.rm = TRUE),
                                COVXY_agg = stats::cov(x, y)), 
-                 by = c("time", id_columns)]
+                 by = c("time_copy_", id_columns)]
     # remove old columns for variance
     data[, `:=`(VARX = NULL, VARY = NULL, COVXY = NULL)]
     # reset names
@@ -79,6 +79,13 @@ atl_thin_data <- function(data,
     # add SD
     data[, SD := sqrt(VARX + VARY + (2 * COVXY))]
   }
+  
+  # assert copy time is of interval
+  lag <- diff(data$time_copy_)
+  assertthat::assert_that(min(lag) >= interval,
+                          msg = "thin_data: diff time < interval asked!")
+  # remove column
+  data[, time_copy_ := NULL]
 
   # check for class and whether there are rows
   assertthat::assert_that("data.frame" %in% class(data),

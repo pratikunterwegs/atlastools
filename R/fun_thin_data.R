@@ -43,7 +43,7 @@ atl_thin_data <- function(data,
       msg = "thin_data: thinning interval less than tracking interval!")
 
   # round interval and reassign, this modifies by reference!
-  data[, time := floor(time / interval) * interval]
+  data[, time := floor( as.numeric(time) / interval) * interval]
   
   # handle method option
   if (method == "aggregate") {

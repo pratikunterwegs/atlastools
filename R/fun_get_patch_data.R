@@ -17,22 +17,24 @@ atl_patch_summary <- function(patch_data,
                               buffer_radius = 10) {
   id <- patch <- patchdata <- NULL
 
-  
+
   # check somedata is a data.frame and has a resTime column
   assertthat::assert_that(is.data.frame(patch_data),
-              msg = glue::glue("getPatchData: input not a dataframe object, \\
+    msg = glue::glue("getPatchData: input not a dataframe object, \\
               has class {stringr::str_flatten(class(data),
-                               collapse = ' ')}!"))
+                               collapse = ' ')}!")
+  )
   # work on a copy
   data <- data.table::copy(patch_data)
   # convert both to DT if not
   if (!data.table::is.data.table(data)) {
     data.table::setDT(data)
   }
-  
+
   # check length of which_data
   assertthat::assert_that(length(which_data) == 1,
-                          msg = "patch_summary: only one data type at a time")
+    msg = "patch_summary: only one data type at a time"
+  )
 
   # return only summary if requested
   if (which_data == "summary") {
@@ -64,7 +66,8 @@ atl_patch_summary <- function(patch_data,
     # get points if asked
     data <- data[, list(id, patch, patchdata)]
     data <- data[, unlist(patchdata, recursive = FALSE),
-                         by = list(id, patch)]
+      by = list(id, patch)
+    ]
   }
   return(data)
 }

@@ -15,11 +15,13 @@ atl_filter_covariates <- function(data,
 
   # apply filters as a single evaluated parsed expression
   # first wrap them in brackets
-  filters <- vapply(X = filters, 
-                    FUN = function(this_filter) {
-                      sprintf("(%s)", this_filter) 
-                    }, 
-                    FUN.VALUE = "character")
+  filters <- vapply(
+    X = filters,
+    FUN = function(this_filter) {
+      sprintf("(%s)", this_filter)
+    },
+    FUN.VALUE = "character"
+  )
   filters <- stringr::str_c(filters, collapse = " & ")
   filters <- parse(text = filters)
   # evaluate the parsed filters
@@ -27,7 +29,8 @@ atl_filter_covariates <- function(data,
 
   # check for class and whether there are rows
   assertthat::assert_that("data.frame" %in% class(data),
-            msg = "filter_covariates: cleaned data is not a dataframe object!")
+    msg = "filter_covariates: cleaned data is not a dataframe object!"
+  )
 
   # print warning if all rows are removed
   if (nrow(data) == 0) {
@@ -35,5 +38,4 @@ atl_filter_covariates <- function(data,
   }
 
   return(data)
-
 }

@@ -1,6 +1,4 @@
-# Pre-processing Tools for High Frequency Tracking Data
-
-**Functions to handle data from the Wadden Sea ATLAS project**
+# Pre-processing Tools for High-throughput Animal Tracking Data
 
 <!-- badges: start -->
   [![AppVeyor build status](https://ci.appveyor.com/api/projects/status/github/pratikunterwegs/atlastools?branch=master&svg=true)](https://ci.appveyor.com/project/pratikunterwegs/atlastools) 

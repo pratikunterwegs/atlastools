@@ -144,7 +144,7 @@ atl_res_patch <- function(data,
       )]
       # get spatial difference from last to first point
       patch_summary[, spat_diff :=
-        c(atlastools::atl_patch_dist(
+        c(atl_patch_dist(
           data = patch_summary,
           x1 = "x_end", x2 = "x_start",
           y1 = "y_end", y2 = "y_start"
@@ -217,7 +217,7 @@ atl_res_patch <- function(data,
         by = list(id, patch)
       ]
       data[, patch_summary := NULL]
-      data[, dist_bw_patch := atlastools::atl_patch_dist(
+      data[, dist_bw_patch := atl_patch_dist(
         data = temp_data,
         x1 = "x_end", x2 = "x_start",
         y1 = "y_end", y2 = "y_start"

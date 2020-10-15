@@ -8,7 +8,7 @@ testthat::test_that("simple distance works", {
     b_start = 1, b_end = 1
   )
   # run function
-  testoutput <- atlastools::atl_patch_dist(testdf,
+  testoutput <- atlastools:::atl_patch_dist(testdf,
     x1 = "a_end",
     x2 = "a_start",
     y1 = "b_end",

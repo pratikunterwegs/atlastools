@@ -20,13 +20,14 @@
 #' @export
 #'
 atl_patch_dist <- function(data,
-                             x1 = "x_end", x2 = "x_start",
-                             y1 = "y_end", y2 = "y_start") {
-  #check for basic assumptions
+                           x1 = "x_end", x2 = "x_start",
+                           y1 = "y_end", y2 = "y_start") {
+  # check for basic assumptions
   assertthat::assert_that(is.data.frame(data),
-                          is.character(x1),
-                          is.character(y1),
-                      msg = "bw_patch_dist: some data assumptions are not met")
+    is.character(x1),
+    is.character(y1),
+    msg = "bw_patch_dist: some data assumptions are not met"
+  )
 
   # get distance returning zero if single point or NA by default
   if (nrow(data) > 1) {
@@ -36,8 +37,7 @@ atl_patch_dist <- function(data,
     y1 <- data[[y1]][seq_len(nrow(data) - 1)]
     y2 <- data[[y2]][2:nrow(data)]
     # get dist
-    dist <- c(NA, sqrt((x1 - x2) ^ 2 + (y1 - y2) ^ 2))
-
+    dist <- c(NA, sqrt((x1 - x2)^2 + (y1 - y2)^2))
   } else if (nrow(data == 1)) {
     dist <- 0.0
   } else {

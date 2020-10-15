@@ -25,7 +25,7 @@ atl_filter_bounds(
 
 \item{y_range}{The range of Y coordinates.}
 
-\item{sf_polygon}{An \code{sfc_*POLYGON} object which must have a defined CRS.
+\item{sf_polygon}{\code{sfc_*POLYGON} object which must have a defined CRS.
 The polygon CRS is assumed to be appropriate for the positions as well, and
 is assigned to the coordinates when determining the intersection.}
 

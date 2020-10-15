@@ -5,15 +5,17 @@ testthat::test_that("reflections are removed", {
   test_data <- data.table::fread("../testdata/simulated_data_reflection.csv")
 
   # get speeds
-  test_data[, `:=`(speed = atlastools::atl_get_speed(test_data),
-                 angle = atlastools::atl_turning_angle(test_data))]
+  test_data[, `:=`(
+    speed = atlastools::atl_get_speed(test_data),
+    angle = atlastools::atl_turning_angle(test_data)
+  )]
 
   test_output <- atlastools::atl_remove_reflections(test_data)
 
   # do tests
   # should return fewer elements than nrows in df
   testthat::expect_lte(nrow(test_output), nrow(test_data))
-  
+
   # no extreme speeds should remain
   testthat::expect_lte(max(test_output$speed, na.rm = TRUE), 20)
 
@@ -22,17 +24,22 @@ testthat::test_that("reflections are removed", {
   x_test <- seq_len(250)
 
   y_test <- c(rep(0, 100), rep(20, 50), rep(0, 100)) + stats::runif(250)
-  test_data <- data.table::data.table(x = x_test,
-                                    y = y_test,
-                                    time = seq_len(250) * 3)
+  test_data <- data.table::data.table(
+    x = x_test,
+    y = y_test,
+    time = seq_len(250) * 3
+  )
 
   # get speeds
-  test_data[, `:=`(speed = atlastools::atl_get_speed(test_data),
-                 angle = atlastools::atl_turning_angle(test_data))]
+  test_data[, `:=`(
+    speed = atlastools::atl_get_speed(test_data),
+    angle = atlastools::atl_turning_angle(test_data)
+  )]
 
   test_output <- atlastools::atl_remove_reflections(test_data,
-                                        reflection_speed_cutoff = 5,
-                                        point_angle_cutoff = 5)
+    reflection_speed_cutoff = 5,
+    point_angle_cutoff = 5
+  )
 
   # do tests
   # should return fewer elements than nrows in df
@@ -40,34 +47,35 @@ testthat::test_that("reflections are removed", {
 
   # should remove points with x and y coordinates less than 5
   testthat::expect_lt(max(test_output$y), 5)
-
 })
 
 testthat::test_that("reflections do not end", {
   # make test positions
   test_data <- data.table::fread("../testdata/simulated_data_reflection.csv")
-  
+
   # make an extra unending reflection
   test_data[800:nrow(test_data), "x"] <- -20 + stats::runif(201)
   test_data[800:nrow(test_data), "y"] <- 80 + stats::runif(201)
-  
-  
+
+
   # get speeds
-  test_data[, `:=`(speed = atlastools::atl_get_speed(test_data),
-                 angle = atlastools::atl_turning_angle(test_data))]
-  
+  test_data[, `:=`(
+    speed = atlastools::atl_get_speed(test_data),
+    angle = atlastools::atl_turning_angle(test_data)
+  )]
+
   # now get output
   test_output <- atlastools::atl_remove_reflections(test_data,
-                                                  reflection_speed_cutoff = 20,
-                                                  point_angle_cutoff = 5)
-  
+    reflection_speed_cutoff = 20,
+    point_angle_cutoff = 5
+  )
+
   # do tests
   # should return fewer elements than nrows in df
   testthat::expect_lte(nrow(test_output), nrow(test_data))
-  
+
   # should remove points with y coordinates less than 60
   # this is still true even though the reflection does not end
   # in this subset
   testthat::expect_lt(max(test_output$y), 60)
-  
 })

@@ -10,13 +10,14 @@
 #' angles than the number of rows in the dataframe.
 #' @export
 atl_turning_angle <- function(data,
-                          x = "x",
-                          y = "y",
-                          time = "time") {
+                              x = "x",
+                              y = "y",
+                              time = "time") {
 
   # check for column names
   atl_check_data(data,
-                 names_expected = c(x, y, time))
+    names_expected = c(x, y, time)
+  )
 
   # set order in time
   if (!data.table::is.data.table(data)) {
@@ -35,15 +36,15 @@ atl_turning_angle <- function(data,
     y3 <- data[[y]][3:nrow(data)]
 
     # get three sides of a triangle of (x1,y1), (x2,y2), (x3,y3)
-    dist_x1_x2 <- sqrt(((x2 - x1) ^ 2) + ((y2 - y1) ^ 2))
-    dist_x2_x3 <- sqrt(((x3 - x2) ^ 2) + ((y3 - y2) ^ 2))
-    dist_x3_x1 <- sqrt(((x3 - x1) ^ 2) + ((y3 - y1) ^ 2))
+    dist_x1_x2 <- sqrt(((x2 - x1)^2) + ((y2 - y1)^2))
+    dist_x2_x3 <- sqrt(((x3 - x2)^2) + ((y3 - y2)^2))
+    dist_x3_x1 <- sqrt(((x3 - x1)^2) + ((y3 - y1)^2))
 
     # use the law of cosines
-    angle <- acos(((dist_x1_x2 ^ 2) +
-                     (dist_x2_x3 ^ 2) -
-                     (dist_x3_x1 ^ 2)) /
-                    (2 * dist_x1_x2 * dist_x2_x3))
+    angle <- acos(((dist_x1_x2^2) +
+      (dist_x2_x3^2) -
+      (dist_x3_x1^2)) /
+      (2 * dist_x1_x2 * dist_x2_x3))
 
     # convert to degrees
     angle <- angle * 180 / pi
@@ -53,7 +54,6 @@ atl_turning_angle <- function(data,
 
     # add NA to maintain length
     angle <- c(NA_real_, angle, NA_real_)
-
   } else if (nrow(data) == 1) {
     angle <- NA_real_
   }

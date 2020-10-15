@@ -29,9 +29,11 @@ atl_remove_reflections <- function(data,
   data.table::setorderv(data, time)
 
   # get speed and angle
-  data[, `:=`(speed = atlastools::atl_get_speed(data),
-              angle = atlastools::atl_turning_angle(data))]
-  
+  data[, `:=`(
+    speed = atlastools::atl_get_speed(data),
+    angle = atlastools::atl_turning_angle(data)
+  )]
+
   # remove points that cannot be assessed
   # can't determine whether the last few points are reflections hence remove
   data <- data[!is.na(speed) & !is.na(angle), ]
@@ -41,8 +43,8 @@ atl_remove_reflections <- function(data,
 
   # identify the last point before an anomaly
   anchor_point <- which(data$speed >=
-                          reflection_speed_cutoff &
-                          data$angle >= point_angle_cutoff)[1] - 1
+    reflection_speed_cutoff &
+    data$angle >= point_angle_cutoff)[1] - 1
 
   # message
   message(glue::glue("first anchor at {anchor_point}"))
@@ -54,7 +56,7 @@ atl_remove_reflections <- function(data,
     # find the max speed after the first anomaly, which is the blink away
     # the next highest should be the blink back
     suspect_speeds <- data[(suspect_point + 1):est_ref_len, speed]
-    
+
     # drop NA here
     suspect_speeds <- suspect_speeds[!is.na(suspect_speeds)]
 
@@ -78,19 +80,20 @@ atl_remove_reflections <- function(data,
 
     # set the next anchor
     next_anchor <- which(data$speed[reflection_end:nrow(data)] >=
-                           reflection_speed_cutoff &
-                           data$angle[reflection_end:nrow(data)] >=
-                           point_angle_cutoff)[1]
+      reflection_speed_cutoff &
+      data$angle[reflection_end:nrow(data)] >=
+        point_angle_cutoff)[1]
 
     if (is.na(next_anchor)) {
       # break the loop if there's no further anomalies
-      break ()
+      break()
     } else {
       anchor_point <- reflection_end + next_anchor - 1
       # check for errors in order
       assertthat::assert_that(anchor_point > reflection_end,
-                            msg = glue::glue("anchor point {anchor_point} is \\
-                            before reflection end {reflection_end}"))
+        msg = glue::glue("anchor point {anchor_point} is \\
+                            before reflection end {reflection_end}")
+      )
       # message
       message(glue::glue("next anchor is {anchor_point}"))
     }
@@ -100,5 +103,4 @@ atl_remove_reflections <- function(data,
   vec_keep <- setdiff(seq_len(nrow(data)), vec_discard)
   data <- data[vec_keep, ]
   return(data)
-
 }

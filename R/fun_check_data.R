@@ -12,7 +12,8 @@ atl_check_data <- function(data,
 
   invisible(lapply(names_expected, function(nr) {
     assertthat::assert_that(nr %in% data_names,
-                            msg = glue::glue("atl_check_data: {nr} is
-                         required but missing from data!"))
+      msg = glue::glue("atl_check_data: {nr} is
+                         required but missing from data!")
+    )
   }))
 }

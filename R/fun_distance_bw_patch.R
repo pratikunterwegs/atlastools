@@ -1,5 +1,6 @@
 #' Get the distance between patches.
 #'
+#' @noRd
 #' @param data A dataframe of or extending the class data.frame.
 #' This must contain two pairs of coordinates, the start and end X and Y
 #' coordinates of a feature.
@@ -17,7 +18,6 @@
 #' vector has a length of one, and its only element is 0. In all other cases,
 #' the vector has as its elements \code{NA}, followed by n-1 distances, where
 #' n is the number of rows.
-#' @export
 #'
 atl_patch_dist <- function(data,
                            x1 = "x_end", x2 = "x_start",

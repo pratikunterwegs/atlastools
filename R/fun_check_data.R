@@ -1,5 +1,6 @@
 #' Check data has required columns.
 #'
+#' @noRd
 #' @param data The tracking data to check for required columns.
 #' @param names_expected The names expected.
 #'

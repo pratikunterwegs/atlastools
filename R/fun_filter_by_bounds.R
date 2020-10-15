@@ -122,6 +122,7 @@ atl_filter_bounds <- function(data,
 
 #' Detect position intersections with a polygon.
 #'
+#' @noRd
 #' @description Detects which positions intersect a \code{sfc_*POLYGON}. Tested
 #' only for single polygon objects.
 #'

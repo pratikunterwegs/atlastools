@@ -17,7 +17,7 @@
 #' vector has a length of one, and its only element is 0. In all other cases,
 #' the vector has as its elements \code{NA}, followed by n-1 distances, where
 #' n is the number of rows.
-#' 
+#'
 #' @export
 #'
 atl_patch_dist <- function(data,

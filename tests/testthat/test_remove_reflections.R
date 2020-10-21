@@ -10,17 +10,18 @@ testthat::test_that("reflections are removed", {
     out_speed = atlastools::atl_get_speed(test_data, type = "out"),
     angle = atlastools::atl_turning_angle(test_data)
   )]
-  
+
   # remove NA speeds
   stats::na.omit(test_data, cols = c("in_speed", "out_speed", "angle"))
-  
+
   # remove outliers
   test_data <- test_data[in_speed < 0.024 & out_speed < 0.024, ]
-  
+
   # remove reflections
   test_output <- atlastools::atl_remove_reflections(test_data,
-                                        point_angle_cutoff = 10,
-                                        reflection_speed_cutoff = 0.024)
+    point_angle_cutoff = 10,
+    reflection_speed_cutoff = 0.024
+  )
 
   # do tests
   # should return fewer elements than nrows in df
@@ -62,17 +63,17 @@ testthat::test_that("reflections are removed", {
 testthat::test_that("reflections do not end", {
   # make test positions
   test_data <- data.table::fread("../testdata/data_errors.csv")[seq(1000L), ]
-  
+
   # get speeds
   test_data[, `:=`(
     in_speed = atlastools::atl_get_speed(test_data),
     out_speed = atlastools::atl_get_speed(test_data, type = "out"),
     angle = atlastools::atl_turning_angle(test_data)
   )]
-  
+
   # remove NA speeds
   stats::na.omit(test_data, cols = c("in_speed", "out_speed", "angle"))
-  
+
   # remove outliers
   test_data <- test_data[in_speed < 0.024 & out_speed < 0.024, ]
 

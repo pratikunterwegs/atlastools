@@ -14,15 +14,15 @@ testthat::test_that("simple distance works", {
     y1 = "b_end",
     y2 = "b_start"
   )
-  
+
   # test single patch case
   test_output_single <- atlastools:::atl_patch_dist(testdf[1],
-                                                    x1 = "a_end",
-                                                    x2 = "a_start",
-                                                    y1 = "b_end",
-                                                    y2 = "b_start"
+    x1 = "a_end",
+    x2 = "a_start",
+    y1 = "b_end",
+    y2 = "b_start"
   )
-  
+
   # do tests
   # should return as many elements as nrows in df
   testthat::expect_equal(length(testoutput), nrow(testdf),
@@ -33,10 +33,10 @@ testthat::test_that("simple distance works", {
   testthat::expect_identical(testoutput[1], NA_real_,
     info = "first distance is not NA"
   )
-  
+
   # test the single patch case for NA
   testthat::expect_identical(test_output_single, NA_real_)
-  
+
   # test that the vector class is numeric or double
   testthat::expect_type(testoutput, "double")
 

@@ -58,6 +58,13 @@ testthat::test_that("simple distance is correct", {
     time = "TIME"
   )
 
+  # test speed out
+  test_speed_out <- atlastools::atl_get_speed(test_data,
+    x = "X", y = "Y",
+    time = "TIME",
+    type = "out"
+  )
+
   # distance using sf
   data_sf <- sf::st_as_sf(test_data,
     coords = c("X", "Y")
@@ -73,9 +80,18 @@ testthat::test_that("simple distance is correct", {
 
   # check that the distances are correct
   testthat::expect_equal(test_distances, sf_distance)
+
   # check the speeds are correct
   testthat::expect_equal(
     sf_distance / c(NA, diff(test_data[["TIME"]])),
     test_speed
+  )
+
+  # check that out speed is correct
+  testthat::expect_equal(
+    data.table::shift(sf_distance / c(NA, diff(test_data[["TIME"]])),
+      type = "lead"
+    ),
+    test_speed_out
   )
 })

@@ -13,6 +13,11 @@
 atl_filter_covariates <- function(data,
                                   filters = c()) {
 
+  # convert to data.table
+  if (!is.data.table(data)) {
+    data.table::setDT(data)
+  }
+
   # apply filters as a single evaluated parsed expression
   # first wrap them in brackets
   filters <- vapply(

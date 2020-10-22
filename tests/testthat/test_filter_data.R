@@ -1,7 +1,7 @@
 context("check data filtering\n")
 testthat::test_that("data is correctly filtered", {
   # make some test data
-  test_data <- data.table::data.table(
+  test_data <- data.frame(
     x = as.double(1:1e3),
     y = as.double(1:1e3),
     time = as.numeric(1:1e3),

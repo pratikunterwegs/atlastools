@@ -57,7 +57,7 @@ atl_filter_bounds <- function(data,
   }))
 
   # convert to data.table
-  if (is.data.table(data) != TRUE) {
+  if (!is.data.table(data)) {
     data.table::setDT(data)
   }
 

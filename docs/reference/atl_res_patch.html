@@ -42,7 +42,12 @@
   
 
 <meta property="og:title" content="Construct residence patches from position data. — atl_res_patch" />
-<meta property="og:description" content="Construct residence patches from position data." />
+<meta property="og:description" content="atl_res_patch clusters positions into residence patches.
+The function expects a specific organisation of the data: there should be
+at least the following columns, x, y, time, and
+id, all named in lower case, and corresponding to the coordinates,
+timestamp in the UNIX format (seconds since 1970), and the identity of the
+tracked individual." />
 
 
 
@@ -119,17 +124,22 @@
     </div>
 
     <div class="ref-description">
-    <p>Construct residence patches from position data.</p>
+    <p><code>atl_res_patch</code> clusters positions into residence patches.
+The function expects a specific organisation of the data: there should be
+at least the following columns, <code>x</code>, <code>y</code>, <code>time</code>, and
+<code>id</code>, all named in lower case, and corresponding to the coordinates,
+timestamp in the UNIX format (seconds since 1970), and the identity of the
+tracked individual.</p>
     </div>
 
     <pre class="usage"><span class='fu'>atl_res_patch</span>(
-  <span class='no'>data</span>,
-  <span class='kw'>buffer_radius</span> <span class='kw'>=</span> <span class='fl'>10</span>,
-  <span class='kw'>lim_spat_indep</span> <span class='kw'>=</span> <span class='fl'>100</span>,
-  <span class='kw'>lim_time_indep</span> <span class='kw'>=</span> <span class='fl'>30</span>,
-  <span class='kw'>min_fixes</span> <span class='kw'>=</span> <span class='fl'>3</span>,
-  <span class='kw'>summary_variables</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(),
-  <span class='kw'>summary_functions</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>()
+  <span class='kw'>data</span>,
+  buffer_radius = <span class='fl'>10</span>,
+  lim_spat_indep = <span class='fl'>100</span>,
+  lim_time_indep = <span class='fl'>30</span>,
+  min_fixes = <span class='fl'>3</span>,
+  summary_variables = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(),
+  summary_functions = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>()
 )</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
@@ -182,7 +192,9 @@ passed as a character vector.</p></td>
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
     <p>A data.frame extension object. This dataframe has the added column
-<code>patch</code> and <code>patchdata</code> based on cumulative patch summing.</p>
+<code>patch</code> and <code>patchdata</code>, indicating the patch identity and the
+data used to construct the patch. In addition, there are columns with patch
+summary variables.</p>
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
@@ -199,7 +211,7 @@ passed as a character vector.</p></td>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

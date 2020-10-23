@@ -1,5 +1,12 @@
 #' Construct residence patches from position data.
 #'
+#' \code{atl_res_patch} clusters positions into residence patches.
+#' The function expects a specific organisation of the data: there should be
+#' at least the following columns, \code{x}, \code{y}, \code{time}, and
+#' \code{id}, all named in lower case, and corresponding to the coordinates,
+#' timestamp in the UNIX format (seconds since 1970), and the identity of the
+#' tracked individual.
+#' 
 #' @param data A dataframe of values of any class that is or extends data.frame.
 #'  The dataframe must contain at least two spatial coordinates, \code{x} and
 #'  \code{y}, and a temporal coordinate, \code{time}. The names of columns
@@ -23,7 +30,9 @@
 #' passed as a character vector.
 #'
 #' @return A data.frame extension object. This dataframe has the added column
-#' \code{patch} and \code{patchdata} based on cumulative patch summing.
+#' \code{patch} and \code{patchdata}, indicating the patch identity and the
+#' data used to construct the patch. In addition, there are columns with patch
+#' summary variables.
 #' @import data.table
 #' @export
 #'

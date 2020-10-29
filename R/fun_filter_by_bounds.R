@@ -1,4 +1,13 @@
-#' Remove positions within a bounding box.
+#' Filter positions by an area.
+#' 
+#' Filters out positions lying inside or outside an area.
+#' The area can be defined in two ways, either by its X and Y coordinate
+#' ranges, or by an \code{sf-*POLYGON} object.
+#' \code{MULTIPOLYGON} objects are supported by the internal function
+#' \code{atl_within_polygon}.
+#' 
+#' This function \emph{does not} modify in place, i.e., \emph{the results
+#' need to be assigned to a new data.table}.
 #'
 #' @param data A dataframe or extension which contains X and Y coordinates.
 #' @param x The X coordinate column.
@@ -56,9 +65,11 @@ atl_filter_bounds <- function(data,
     )
   }))
 
+  was_df <- FALSE
   # convert to data.table
   if (!is.data.table(data)) {
     data.table::setDT(data)
+    was_df <- TRUE
   }
 
   # filter for spatial extent either inside or outside
@@ -72,16 +83,18 @@ atl_filter_bounds <- function(data,
         NAbounds = TRUE
       ))
     # filter by bbox first
-    data <- data[keep, ]
+    # this is where the first copy is made
+    # because the number of rows is reduced
+    data_ <- data[keep, ]
 
     # filter by polygon
     if (!is.null(sf_polygon)) {
       keep <- atl_within_polygon(
-        data = data,
+        data = data_,
         x = x, y = y,
         polygon = sf_polygon
       )
-      data <- data[!keep, ]
+      data_ <- data_[!keep, ]
     }
   } else {
     # KEEPS DATA INSIDE THE BOUNDING BOX AND POLYGON
@@ -93,36 +106,41 @@ atl_filter_bounds <- function(data,
       )
 
     # filter by bbox
-    data <- data[keep, ]
+    data_ <- data[keep, ]
 
     # filter to KEEP those inside polygon
     if (!is.null(sf_polygon)) {
       keep <- atl_within_polygon(
-        data = data,
+        data = data_,
         x = x, y = y,
         polygon = sf_polygon
       )
-      data <- data[keep, ]
+      data_ <- data_[keep, ]
     }
   }
 
-  assertthat::assert_that("data.frame" %in% class(data),
+  # reconvert original data to data.frame
+  if (was_df) {
+    data.table::setDF(data)
+    assert_that::assert_that(!is.data.table(data))
+  }
+
+  assertthat::assert_that("data.frame" %in% class(data_),
     msg = "filter_bbox: cleaned data is not a dataframe object!"
   )
 
   # print warning if all rows are removed
-  if (nrow(data) == 0) {
+  if (nrow(data_) == 0) {
     warning("filter_bbox: cleaned data has no rows remaining!")
   }
 
-  return(data)
+  return(data_)
 }
 
 # ends here
 
 #' Detect position intersections with a polygon.
 #'
-#' @noRd
 #' @description Detects which positions intersect a \code{sfc_*POLYGON}. Tested
 #' only for single polygon objects.
 #'

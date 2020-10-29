@@ -29,9 +29,11 @@ testthat::test_that("cleaning raw data works", {
     COVXY = 0
   )
 
+  # make copy
+  test_output <- data.table::copy(test_data)
   # run function
-  test_output <- atlastools::atl_median_smooth(
-    data = test_data,
+  atlastools::atl_median_smooth(
+    data = test_output,
     moving_window = 3
   )
 

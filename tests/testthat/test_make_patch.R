@@ -10,7 +10,9 @@ testthat::test_that("patch calc on empirical data", {
     buffer_radius = 10,
     lim_spat_indep = 100,
     lim_time_indep = 30,
-    min_fixes = 3
+    min_fixes = 3,
+    summary_variables = "waterlevel",
+    summary_functions = c("mean", "sd")
   )
 
   # do tests
@@ -24,9 +26,10 @@ testthat::test_that("patch calc on empirical data", {
   expected_names <- c(
     "id", "patch", "time_median",
     "x_median", "y_median", "duration", "dist_in_patch",
-    "dist_bw_patch", "disp_in_patch"
+    "dist_bw_patch", "disp_in_patch",
+    "waterlevel_mean", "waterlevel_sd"
   )
-  atl_check_data(test_output, names_expected = expected_names)
+  atlastools:::atl_check_data(test_output, names_expected = expected_names)
 
   # check that data are ordered in time
   testthat::expect_gt(min(as.numeric(diff(test_output$time_median)),
@@ -85,7 +88,7 @@ testthat::test_that("patch data access function works", {
     "dist_bw_patch", "disp_in_patch"
   )
   # test col names in data access
-  atl_check_data(test_output, names_expected = expected_names)
+  atlastools:::atl_check_data(test_output, names_expected = expected_names)
 
   # check that data are ordered in time
   testthat::expect_gt(min(as.numeric(diff(test_output$time_median)),

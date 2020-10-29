@@ -1,25 +1,39 @@
 #' Get the distance between patches.
+#' 
+#' Gets the linear distance between the first point of patch \code{i} and
+#' the last point of the previous patch patch \code{i - 1}.
+#' Distance is returned in metres.
+#' This function is used internally by other functions, and rarely on its own.
 #'
-#' @param data A dataframe of or extending the class data.frame.
+#' @param data A dataframe of or extending the class data.frame, such as a
+#' data.table.
 #' This must contain two pairs of coordinates, the start and end X and Y
 #' coordinates of a feature.
 #' @param x1 The first X coordinate or longitude; for inter-patch distances,
-#' this is the last coordinate (X_end) of a patch n0.
+#' this is the last coordinate (x_end) of a patch \eqn{i}.
 #' @param x2 The second X coordinate; for inter-patch distances, this is the
-#' first coordinate (X_start) of a subsequent patch n1.
+#' first coordinate (x_start) of a subsequent patch \eqn{i + 1}.
 #' @param y1 The first Y coordinate or latitude; for inter-patch distances,
-#' this is the last coordinate (Y_end) of a patch n0.
+#' this is the last coordinate (y_end) of a patch \eqn{i}.
 #' @param y2 The second Y coordinate; for inter-patch distances, this is the
-#' first coordinate (Y_start) of a subsequent patch n1.
+#' first coordinate (y_start) of a subsequent patch \eqn{i + 1}.
 #'
 #' @return A numeric vector of the length of the number of patches, or rows in
-#' the input dataframe. If the input dataframe has only a single row, the
-#' vector has a length of one, and its only element is 0. In all other cases,
-#' the vector has as its elements \code{NA}, followed by n-1 distances, where
-#' n is the number of rows.
+#' the input dataframe.
+#' For single patches, returns \code{NA}.
+#' The vector has as its elements \code{NA}, followed by 
+#' n-1 distances, where n is the number of rows.
 #'
+#' @examples 
+#' # basic usage of atl_patch_dist
+#' \dontrun{
+#' atl_patch_dist(data = data,
+#'                x1 = "x_end", x2 = "x_start",
+#'                y1 = "y_end", y2 = "y_start")
+#' }
+#' 
 #' @export
-#'
+#' 
 atl_patch_dist <- function(data,
                            x1 = "x_end", x2 = "x_start",
                            y1 = "y_end", y2 = "y_start") {

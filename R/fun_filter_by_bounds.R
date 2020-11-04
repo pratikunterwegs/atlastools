@@ -122,7 +122,7 @@ atl_filter_bounds <- function(data,
   # reconvert original data to data.frame
   if (was_df) {
     data.table::setDF(data)
-    assert_that::assert_that(!is.data.table(data))
+    assertthat::assert_that(!is.data.table(data))
   }
 
   assertthat::assert_that("data.frame" %in% class(data_),

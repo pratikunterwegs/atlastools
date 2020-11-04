@@ -2,7 +2,7 @@
 % Please edit documentation in R/fun_filter_by_bounds.R
 \name{atl_filter_bounds}
 \alias{atl_filter_bounds}
-\title{Remove positions within a bounding box.}
+\title{Filter positions by an area.}
 \usage{
 atl_filter_bounds(
   data,
@@ -37,5 +37,13 @@ box specified by the X and Y ranges.}
 A data frame of tracking locations with attractor points removed.
 }
 \description{
-Remove positions within a bounding box.
+Filters out positions lying inside or outside an area.
+The area can be defined in two ways, either by its X and Y coordinate
+ranges, or by an \code{sf-*POLYGON} object.
+\code{MULTIPOLYGON} objects are supported by the internal function
+\code{atl_within_polygon}.
+}
+\details{
+This function \emph{does not} modify in place, i.e., \emph{the results
+need to be assigned to a new data.table}.
 }

@@ -54,43 +54,30 @@ atl_thin_data <- function(data,
 
   # handle method option
   if (method == "aggregate") {
-    # aggregate over tracking interval
-    data <- data[, c(lapply(.SD, mean, na.rm = TRUE),
-      VARX_agg = stats::var(x, na.rm = TRUE),
-      VARY_agg = stats::var(y, na.rm = TRUE),
-      COVXY_agg = stats::cov(x, y),
+    if (all(c("VARX", "VARY") %in% colnames(data))) {
+      # aggregate over tracking interval
+      data <- data[, c(lapply(.SD, mean, na.rm = TRUE),
+        VARX_agg = sum(VARX, na.rm = TRUE),
+        VARY_agg = sum(VARY, na.rm = TRUE),
+        count = length(x)
+      ),
+      by = c("time_agg", id_columns)
+      ]
+      # remove old columns for variance
+      data[, `:=`(VARX = NULL, VARY = NULL, COVXY = NULL, SD = NULL)]
+      # reset names
+      data.table::setnames(data,
+        old = c("VARX_agg", "VARY_agg"),
+        new = c("VARX", "VARY")
+      )
+    }
+  } else if (method == "resample") {
+    # resample the first observation per rounded interval
+    data <- data[, c(lapply(.SD, data.table::first),
       count = length(x)
     ),
     by = c("time_agg", id_columns)
     ]
-    # remove old columns for variance
-    data[, `:=`(VARX = NULL, VARY = NULL, COVXY = NULL)]
-    # reset names
-    data.table::setnames(data,
-      old = c("VARX_agg", "VARY_agg", "COVXY_agg"),
-      new = c("VARX", "VARY", "COVXY")
-    )
-    # add SD
-    data[, SD := sqrt(VARX + VARY + (2 * COVXY))]
-  } else if (method == "resample") {
-    # resample the first observation per rounded interval
-    data <- data[, c(lapply(.SD, data.table::first),
-      count = length(x),
-      VARX_agg = stats::var(x, na.rm = TRUE),
-      VARY_agg = stats::var(y, na.rm = TRUE),
-      COVXY_agg = stats::cov(x, y)
-    ),
-    by = c("time_agg", id_columns)
-    ]
-    # remove old columns for variance
-    data[, `:=`(VARX = NULL, VARY = NULL, COVXY = NULL)]
-    # reset names
-    data.table::setnames(data,
-      old = c("VARX_agg", "VARY_agg", "COVXY_agg"),
-      new = c("VARX", "VARY", "COVXY")
-    )
-    # add SD
-    data[, SD := sqrt(VARX + VARY + (2 * COVXY))]
   }
 
   # assert copy time is of interval

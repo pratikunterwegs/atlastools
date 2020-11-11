@@ -63,14 +63,26 @@ atl_thin_data <- function(data,
       ),
       by = c("time_agg", id_columns)
       ]
-      # remove old columns for variance
-      data[, `:=`(VARX = NULL, VARY = NULL, COVXY = NULL, SD = NULL)]
-      # reset names
-      data.table::setnames(data,
-        old = c("VARX_agg", "VARY_agg"),
-        new = c("VARX", "VARY")
-      )
+    } else {
+      # aggregate over tracking interval
+      data <- data[, c(lapply(.SD, mean, na.rm = TRUE),
+        count = length(x)
+      ),
+      by = c("time_agg", id_columns)
+      ]
     }
+
+    # remove error columns
+    data <- data[, setdiff(colnames(data), 
+                           c("VARX", "VARY", "COVXY", "SD")),
+                 with = FALSE]
+
+    # reset names to propagated error
+    data.table::setnames(data,
+      old = c("VARX_agg", "VARY_agg"),
+      new = c("VARX", "VARY"),
+      skip_absent = TRUE
+    )
   } else if (method == "resample") {
     # resample the first observation per rounded interval
     data <- data[, c(lapply(.SD, data.table::first),

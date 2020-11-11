@@ -14,6 +14,10 @@ testthat::test_that("aggregating cleaned data", {
     VARY = runif(1000) + 300,
     COVXY = runif(1000) + 200
   )
+
+  # make SD
+  test_data[, SD := sqrt(VARX + VARY + 2 * COVXY)]
+
   # run function
   test_output <- atl_thin_data(test_data,
     id_columns = "id",
@@ -33,6 +37,11 @@ testthat::test_that("aggregating cleaned data", {
 
   # check that the count is made
   atlastools:::atl_check_data(test_output, names_expected = "count")
+
+  # check there is no SD column
+  testthat::expect_error(
+    atlastools:::atl_check_data(test_output, names_expected = c("COVXY", "SD"))
+  )
 })
 
 # test for resampling
@@ -51,6 +60,10 @@ testthat::test_that("resampling cleaned data", {
     VARY = runif(1000) + 300,
     COVXY = runif(1000) + 200
   )
+
+  # make SD
+  test_data[, SD := sqrt(VARX + VARY + 2 * COVXY)]
+
   # run function
   test_output <- atlastools::atl_thin_data(test_data,
     interval = 60,
@@ -70,6 +83,11 @@ testthat::test_that("resampling cleaned data", {
 
   # check that the count is made
   atlastools:::atl_check_data(test_output, names_expected = "count")
+
+  # check there is no SD column
+  testthat::expect_silent(
+    atlastools:::atl_check_data(test_output, names_expected = c("COVXY", "SD"))
+  )
 })
 
 # test for other option

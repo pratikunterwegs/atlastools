@@ -1,11 +1,11 @@
 #' Filter positions by an area.
-#' 
+#'
 #' Filters out positions lying inside or outside an area.
 #' The area can be defined in two ways, either by its X and Y coordinate
 #' ranges, or by an \code{sf-*POLYGON} object.
 #' \code{MULTIPOLYGON} objects are supported by the internal function
 #' \code{atl_within_polygon}.
-#' 
+#'
 #' This function \emph{does not} modify in place, i.e., \emph{the results
 #' need to be assigned to a new data.table}.
 #'

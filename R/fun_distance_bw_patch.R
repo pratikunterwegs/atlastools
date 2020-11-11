@@ -1,5 +1,5 @@
 #' Get the distance between patches.
-#' 
+#'
 #' Gets the linear distance between the first point of patch \code{i} and
 #' the last point of the previous patch patch \code{i - 1}.
 #' Distance is returned in metres.
@@ -21,19 +21,21 @@
 #' @return A numeric vector of the length of the number of patches, or rows in
 #' the input dataframe.
 #' For single patches, returns \code{NA}.
-#' The vector has as its elements \code{NA}, followed by 
+#' The vector has as its elements \code{NA}, followed by
 #' n-1 distances, where n is the number of rows.
 #'
-#' @examples 
+#' @examples
 #' # basic usage of atl_patch_dist
 #' \dontrun{
-#' atl_patch_dist(data = data,
-#'                x1 = "x_end", x2 = "x_start",
-#'                y1 = "y_end", y2 = "y_start")
+#' atl_patch_dist(
+#'   data = data,
+#'   x1 = "x_end", x2 = "x_start",
+#'   y1 = "y_end", y2 = "y_start"
+#' )
 #' }
-#' 
+#'
 #' @export
-#' 
+#'
 atl_patch_dist <- function(data,
                            x1 = "x_end", x2 = "x_start",
                            y1 = "y_end", y2 = "y_start") {

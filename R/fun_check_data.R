@@ -1,8 +1,22 @@
 #' Check data has required columns.
 #'
+#' An internal function that checks that the data.table has the required
+#' columns. Used within a number, if not all, other atlastools functions.
+#'
 #' @noRd
-#' @param data The tracking data to check for required columns.
-#' @param names_expected The names expected.
+#' @param data The tracking data to check for required columns. Must be in the
+#' form of a data.frame or similar, which can be handled by the function
+#' colnames.
+#' @param names_expected The names expected as a character vector.
+#' By default, checks for the column names \code{x, y, time}.
+#' @examples
+#' # basic (and only) use
+#' \dontrun{
+#' atl_check_data(
+#'   data = data,
+#'   names_expected = c("x", "y", "time")
+#' )
+#' }
 #'
 #' @return None. Breaks if the data does not have required columns.
 atl_check_data <- function(data,

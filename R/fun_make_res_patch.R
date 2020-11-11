@@ -6,7 +6,7 @@
 #' \code{id}, all named in lower case, and corresponding to the coordinates,
 #' timestamp in the UNIX format (seconds since 1970), and the identity of the
 #' tracked individual.
-#' 
+#'
 #' @param data A dataframe of values of any class that is or extends data.frame.
 #'  The dataframe must contain at least two spatial coordinates, \code{x} and
 #'  \code{y}, and a temporal coordinate, \code{time}. The names of columns

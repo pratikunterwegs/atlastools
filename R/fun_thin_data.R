@@ -4,8 +4,9 @@
 #' @param interval The interval in seconds over which to aggregate.
 #' @param id_columns Column names for grouping columns.
 #' @param method Should the data be thinned by subsampling or aggregation.
-#' If resampling, the first position of each group is taken.
-#' If aggregation, the group positions' mean is taken.
+#' If resampling (\code{method = "resample"}), the first position of each group
+#' is taken. If aggregation (\code{method = "aggregate"}), the group positions'
+#' mean is taken.
 #'
 #' @return A dataframe aggregated taking the mean over the interval.
 #' @export
@@ -58,8 +59,8 @@ atl_thin_data <- function(data,
       # aggregate over tracking interval
       # the variance of an average is the sum of variances / sample size square
       data <- data[, c(lapply(.SD, mean, na.rm = TRUE),
-        VARX_agg = sum(VARX, na.rm = TRUE) / (.N ^ 2),
-        VARY_agg = sum(VARY, na.rm = TRUE) / (.N ^ 2),
+        VARX_agg = sum(VARX, na.rm = TRUE) / (.N^2),
+        VARY_agg = sum(VARY, na.rm = TRUE) / (.N^2),
         count = length(x)
       ),
       by = c("time_agg", id_columns)
@@ -74,9 +75,12 @@ atl_thin_data <- function(data,
     }
 
     # remove error columns
-    data <- data[, setdiff(colnames(data), 
-                           c("VARX", "VARY", "COVXY", "SD")),
-                 with = FALSE]
+    data <- data[, setdiff(
+      colnames(data),
+      c("VARX", "VARY", "COVXY", "SD")
+    ),
+    with = FALSE
+    ]
 
     # reset names to propagated error
     data.table::setnames(data,

@@ -59,8 +59,8 @@ atl_thin_data <- function(data,
       # aggregate over tracking interval
       # the variance of an average is the sum of variances / sample size square
       data <- data[, c(lapply(.SD, mean, na.rm = TRUE),
-        VARX_agg = sum(VARX, na.rm = TRUE) / (.N^2),
-        VARY_agg = sum(VARY, na.rm = TRUE) / (.N^2),
+        VARX_agg = sum(VARX, na.rm = TRUE) / (length(VARX) ^ 2),
+        VARY_agg = sum(VARY, na.rm = TRUE) / (length(VARY) ^ 2),
         count = length(x)
       ),
       by = c("time_agg", id_columns)

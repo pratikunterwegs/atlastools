@@ -44,6 +44,46 @@ testthat::test_that("aggregating cleaned data", {
   )
 })
 
+# test data without COVX and COVY
+testthat::test_that("aggregating cleaned data", {
+  interval <- 60
+  # make test_data
+  test_data <- data.table::data.table(
+    x = as.double(1:1e3),
+    y = as.double(1:1e3),
+    time = as.numeric(1:1e3),
+    ts = as.POSIXct(1:1e3,
+      origin = "1970-01-01"
+    ),
+    id = as.factor("abc")
+  )
+
+  # run function
+  test_output <- atl_thin_data(test_data,
+    id_columns = "id",
+    interval = 60,
+    method = "aggregate"
+  )
+
+  # do tests
+  # test that the vector class is data.table and data.frame
+  testthat::expect_s3_class(
+    object = test_output,
+    class = c("data.table", "data.frame")
+  )
+
+  # check that some rows are removed or that none are added
+  testthat::expect_gte(nrow(test_data), nrow(test_output))
+
+  # check that the count is made
+  atlastools:::atl_check_data(test_output, names_expected = "count")
+
+  # check there is no SD column
+  testthat::expect_error(
+    atlastools:::atl_check_data(test_output, names_expected = c("VARX", "SD"))
+  )
+})
+
 # test for resampling
 testthat::test_that("resampling cleaned data", {
   interval <- 60

@@ -36,11 +36,12 @@ testthat::test_that("aggregating cleaned data", {
   testthat::expect_gte(nrow(test_data), nrow(test_output))
 
   # check that the count is made
-  atlastools:::atl_check_data(test_output, names_expected = "count")
+  atlastools:::atl_check_data(test_output, 
+                              names_expected = c("count", "SD", "VARX"))
 
   # check there is no SD column
   testthat::expect_error(
-    atlastools:::atl_check_data(test_output, names_expected = c("COVXY", "SD"))
+    atlastools:::atl_check_data(test_output, names_expected = c("COVXY"))
   )
 })
 

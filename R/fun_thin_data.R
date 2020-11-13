@@ -66,7 +66,7 @@ atl_thin_data <- function(data,
         # divided by sample size squared length(SD) ^ 2
         # the standard deviation is the square root of the variance
         
-        SD = sqrt(sum(SD ^ 2) / (length(SD) ^ 2)),
+        SD = sqrt(sum(SD ^ 2, na.rm = TRUE) / (length(SD) ^ 2)),
         count = length(x)
       ),
       by = c("time_agg", id_columns)
@@ -111,13 +111,8 @@ atl_thin_data <- function(data,
 
   # check for class and whether there are rows
   assertthat::assert_that("data.frame" %in% class(data),
-    msg = "filter_bbox: cleaned data is not a dataframe object!"
+    msg = "thin_data: thinned data is not a dataframe object!"
   )
-
-  # print warning if all rows are removed
-  if (nrow(data) == 0) {
-    warning("filter_bbox: cleaned data has no rows remaining!")
-  }
 
   return(data)
 }

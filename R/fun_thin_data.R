@@ -55,12 +55,18 @@ atl_thin_data <- function(data,
 
   # handle method option
   if (method == "aggregate") {
-    if (all(c("VARX", "VARY") %in% colnames(data))) {
+    if (all(c("VARX", "VARY", "SD") %in% colnames(data))) {
       # aggregate over tracking interval
       # the variance of an average is the sum of variances / sample size square
       data <- data[, c(lapply(.SD, mean, na.rm = TRUE),
         VARX_agg = sum(VARX, na.rm = TRUE) / (length(VARX) ^ 2),
         VARY_agg = sum(VARY, na.rm = TRUE) / (length(VARY) ^ 2),
+        
+        # variance of an average is sum of variances sum(SD ^ 2)
+        # divided by sample size squared length(SD) ^ 2
+        # the standard deviation is the square root of the variance
+        
+        SD = sqrt(sum(SD ^ 2) / (length(SD) ^ 2)),
         count = length(x)
       ),
       by = c("time_agg", id_columns)
@@ -77,7 +83,7 @@ atl_thin_data <- function(data,
     # remove error columns
     data <- data[, setdiff(
       colnames(data),
-      c("VARX", "VARY", "COVXY", "SD")
+      c("VARX", "VARY", "COVXY")
     ),
     with = FALSE
     ]

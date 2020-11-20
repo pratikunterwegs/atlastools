@@ -4,16 +4,16 @@ testthat::test_that("simple distance and speed works", {
   # make test positions
   test_df <- data.table::data.table(
     a = 1,
-    b = 1:100,
+    y = 1:100,
     time = 1:100
   )
   # run function with custom col names
-  test_output <- atlastools::atl_simple_dist(test_df, x = "a", y = "b")
+  test_output <- atlastools::atl_simple_dist(test_df, x = "a", y = "y")
 
   # get speeds as well
   test_speed <- atlastools::atl_get_speed(test_df,
     x = "a",
-    y = "b",
+    y = "y",
     time = "time"
   )
 

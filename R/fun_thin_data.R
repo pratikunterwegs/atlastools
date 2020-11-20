@@ -59,14 +59,14 @@ atl_thin_data <- function(data,
       # aggregate over tracking interval
       # the variance of an average is the sum of variances / sample size square
       data <- data[, c(lapply(.SD, mean, na.rm = TRUE),
-        VARX_agg = sum(VARX, na.rm = TRUE) / (length(VARX) ^ 2),
-        VARY_agg = sum(VARY, na.rm = TRUE) / (length(VARY) ^ 2),
-        
+        VARX_agg = sum(VARX, na.rm = TRUE) / (length(VARX)^2),
+        VARY_agg = sum(VARY, na.rm = TRUE) / (length(VARY)^2),
+
         # variance of an average is sum of variances sum(SD ^ 2)
         # divided by sample size squared length(SD) ^ 2
         # the standard deviation is the square root of the variance
-        
-        SD = sqrt(sum(SD ^ 2) / (length(SD) ^ 2)),
+
+        SD = sqrt(sum(SD^2, na.rm = TRUE) / (length(SD)^2)),
         count = length(x)
       ),
       by = c("time_agg", id_columns)
@@ -111,13 +111,8 @@ atl_thin_data <- function(data,
 
   # check for class and whether there are rows
   assertthat::assert_that("data.frame" %in% class(data),
-    msg = "filter_bbox: cleaned data is not a dataframe object!"
+    msg = "thin_data: thinned data is not a dataframe object!"
   )
-
-  # print warning if all rows are removed
-  if (nrow(data) == 0) {
-    warning("filter_bbox: cleaned data has no rows remaining!")
-  }
 
   return(data)
 }

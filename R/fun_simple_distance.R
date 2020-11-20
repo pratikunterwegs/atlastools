@@ -12,11 +12,7 @@
 #'
 atl_simple_dist <- function(data, x = "x", y = "y") {
   # check for basic assumptions
-  assertthat::assert_that(is.data.frame(data),
-    is.character(x),
-    is.character(y),
-    msg = "simpleDist: some data assumptions are not met"
-  )
+  atl_check_data(data, names_expected = c(x, y))
   if (nrow(data) > 1) {
     x1 <- data[[x]][seq_len(nrow(data) - 1)]
     x2 <- data[[x]][2:nrow(data)]

@@ -23,15 +23,17 @@ atl_remove_reflections <- function(data,
                                    est_ref_len = 1000) {
   speed <- angle <- NULL
   # check data
-  atl_check_data(data, names_expected = c(x, y, time))
+  atlastools:::atl_check_data(data, names_expected = c(x, y, time))
 
   # set order
   data.table::setorderv(data, time)
 
   # get speed and angle
+  speed <- atl_get_speed(data, x = x, y = y, time = time)
+  angle <- atl_turning_angle(data, x = x, y = y, time = time)
   data[, `:=`(
-    speed = atlastools::atl_get_speed(data),
-    angle = atlastools::atl_turning_angle(data)
+    speed = speed,
+    angle = angle
   )]
 
   # remove points that cannot be assessed

@@ -12,22 +12,24 @@ testthat::test_that("reflections are removed", {
   )]
 
   # remove NA speeds
-  stats::na.omit(test_data, 
-                    cols = c("in_speed", "out_speed", "angle"))
+  stats::na.omit(test_data,
+    cols = c("in_speed", "out_speed", "angle")
+  )
 
   # remove outliers
   test_data <- test_data[in_speed < 0.024 & out_speed < 0.024, ]
-  
+
   # setnames
   data.table::setnames(test_data,
-                       old = c("x", "y", "time"),
-                       new = c("X", "Y", "Time"))
+    old = c("x", "y", "time"),
+    new = c("X", "Y", "Time")
+  )
 
   # remove reflections
   test_output <- atlastools::atl_remove_reflections(test_data,
-                                                    x = "X",
-                                                    y = "Y",
-                                                    time = "Time",
+    x = "X",
+    y = "Y",
+    time = "Time",
     point_angle_cutoff = 10,
     reflection_speed_cutoff = 0.024
   )

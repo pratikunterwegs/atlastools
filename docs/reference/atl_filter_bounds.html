@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Remove positions within a bounding box. — atl_filter_bounds • atlastools</title>
+<title>Filter positions by an area. — atl_filter_bounds • atlastools</title>
 
 
 <!-- jquery -->
@@ -41,8 +41,12 @@
   <link href="../extra.css" rel="stylesheet">
   
 
-<meta property="og:title" content="Remove positions within a bounding box. — atl_filter_bounds" />
-<meta property="og:description" content="Remove positions within a bounding box." />
+<meta property="og:title" content="Filter positions by an area. — atl_filter_bounds" />
+<meta property="og:description" content="Filters out positions lying inside or outside an area.
+The area can be defined in two ways, either by its X and Y coordinate
+ranges, or by an sf-*POLYGON object.
+MULTIPOLYGON objects are supported by the internal function
+atl_within_polygon." />
 
 
 
@@ -113,13 +117,17 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Remove positions within a bounding box.</h1>
+    <h1>Filter positions by an area.</h1>
     <small class="dont-index">Source: <a href='https://github.com/pratikunterwegs/atlastools/blob/master/R/fun_filter_by_bounds.R'><code>R/fun_filter_by_bounds.R</code></a></small>
     <div class="hidden name"><code>atl_filter_bounds.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Remove positions within a bounding box.</p>
+    <p>Filters out positions lying inside or outside an area.
+The area can be defined in two ways, either by its X and Y coordinate
+ranges, or by an <code>sf-*POLYGON</code> object.
+<code>MULTIPOLYGON</code> objects are supported by the internal function
+<code>atl_within_polygon</code>.</p>
     </div>
 
     <pre class="usage"><span class='fu'>atl_filter_bounds</span>(
@@ -172,6 +180,10 @@ box specified by the X and Y ranges.</p></td>
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
     <p>A data frame of tracking locations with attractor points removed.</p>
+    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
+
+    <p>This function <em>does not</em> modify in place, i.e., <em>the results
+need to be assigned to a new data.table</em>.</p>
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

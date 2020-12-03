@@ -42,7 +42,10 @@
   
 
 <meta property="og:title" content="Get the distance between patches. — atl_patch_dist" />
-<meta property="og:description" content="Get the distance between patches." />
+<meta property="og:description" content="Gets the linear distance between the first point of patch i and
+the last point of the previous patch patch i - 1.
+Distance is returned in metres.
+This function is used internally by other functions, and rarely on its own." />
 
 
 
@@ -119,7 +122,10 @@
     </div>
 
     <div class="ref-description">
-    <p>Get the distance between patches.</p>
+    <p>Gets the linear distance between the first point of patch <code>i</code> and
+the last point of the previous patch patch <code>i - 1</code>.
+Distance is returned in metres.
+This function is used internally by other functions, and rarely on its own.</p>
     </div>
 
     <pre class="usage"><span class='fu'>atl_patch_dist</span>(
@@ -135,40 +141,50 @@
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>data</th>
-      <td><p>A dataframe of or extending the class data.frame.
+      <td><p>A dataframe of or extending the class data.frame, such as a
+data.table.
 This must contain two pairs of coordinates, the start and end X and Y
 coordinates of a feature.</p></td>
     </tr>
     <tr>
       <th>x1</th>
       <td><p>The first X coordinate or longitude; for inter-patch distances,
-this is the last coordinate (X_end) of a patch n0.</p></td>
+this is the last coordinate (x_end) of a patch \(i\).</p></td>
     </tr>
     <tr>
       <th>x2</th>
       <td><p>The second X coordinate; for inter-patch distances, this is the
-first coordinate (X_start) of a subsequent patch n1.</p></td>
+first coordinate (x_start) of a subsequent patch \(i + 1\).</p></td>
     </tr>
     <tr>
       <th>y1</th>
       <td><p>The first Y coordinate or latitude; for inter-patch distances,
-this is the last coordinate (Y_end) of a patch n0.</p></td>
+this is the last coordinate (y_end) of a patch \(i\).</p></td>
     </tr>
     <tr>
       <th>y2</th>
       <td><p>The second Y coordinate; for inter-patch distances, this is the
-first coordinate (Y_start) of a subsequent patch n1.</p></td>
+first coordinate (y_start) of a subsequent patch \(i + 1\).</p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
     <p>A numeric vector of the length of the number of patches, or rows in
-the input dataframe. If the input dataframe has only a single row, the
-vector has a length of one, and its only element is 0. In all other cases,
-the vector has as its elements <code>NA</code>, followed by n-1 distances, where
-n is the number of rows.</p>
+the input dataframe.
+For single patches, returns <code>NA</code>.
+The vector has as its elements <code>NA</code>, followed by 
+n-1 distances, where n is the number of rows.</p>
 
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"><div class='input'><span class='co'># basic usage of atl_patch_dist</span>
+<span class='co'>if</span> (<span class='fl'>FALSE</span>) {
+<span class='fu'>atl_patch_dist</span>(data = <span class='kw'>data</span>,
+               x1 = <span class='st'>"x_end"</span>, x2 = <span class='st'>"x_start"</span>,
+               y1 = <span class='st'>"y_end"</span>, y2 = <span class='st'>"y_start"</span>)
+}
+
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

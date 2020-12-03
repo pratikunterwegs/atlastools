@@ -1,7 +1,6 @@
 pandoc: 2.8.0.1
 pkgdown: 1.6.1
 pkgdown_sha: ~
-articles:
-  removing_reflections: removing_reflections.html
-last_built: 2020-10-23T09:49Z
+articles: {}
+last_built: 2020-12-01T12:34Z
 

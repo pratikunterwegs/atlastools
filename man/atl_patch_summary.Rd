@@ -11,8 +11,9 @@ atl_patch_summary(patch_data, which_data = "summary", buffer_radius = 10)
 underlying each patch. Since data.frames don't support nested columns,
 will actually be a data.table or similar extension.}
 
-\item{which_data}{Which data to return, the raw data underlying the patch,
-or a spatial features object with only the patch summary.}
+\item{which_data}{Which data to return. May be the raw data underlying the patch (\code{which_data = "points"}),
+or a spatial features (\code{sf-MULTIPOLYGON}) object with patch covariates (\code{which_data = "spatial"}),
+or a data.table of the patch covariates without the geometry column (\code{which_data = "summary"}).}
 
 \item{buffer_radius}{Spatial buffer radius (in metres) around points when
 requesting sf based polygons.}
@@ -22,5 +23,16 @@ An object of type \code{sf} or \code{data.table} depending on
 which data is requested.
 }
 \description{
-Get residence patch data.
+The function \code{atl_patch_summary} can be used to extract patch-specific summary data such as the median coordinates, the patch duration, the distance travelled within the patch, the displacement within the patch, and the patch area.
+}
+\examples{
+\dontrun{
+patch_summary <- atl_patch_summary(patch_data = patches,
+                   which_data = "summary",
+                   buffer_radius = 10)
+}
+
+}
+\author{
+Pratik R. Gupte
 }

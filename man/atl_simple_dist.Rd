@@ -2,7 +2,7 @@
 % Please edit documentation in R/fun_simple_distance.R
 \name{atl_simple_dist}
 \alias{atl_simple_dist}
-\title{Calculate euclidean distances between successive points.}
+\title{Calculate distances between successive points.}
 \usage{
 atl_simple_dist(data, x = "x", y = "y")
 }
@@ -20,5 +20,5 @@ latitude coordinate for position data.}
 Returns a vector of distances between consecutive points.
 }
 \description{
-Calculate euclidean distances between successive points.
+Gets the euclidean distance between consecutive points in a coordinate reference system in metres, i.e., UTM systems.
 }

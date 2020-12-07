@@ -1,4 +1,8 @@
-#' Filter and smooth data.
+#' Apply a median smooth to coordinates.
+#' 
+#' Applies a median smooth defined by a rolling window to the X and Y coordinates of the data. 
+#' This function \emph{modifies in place}, i.e., \emph{the results
+#' need not be assigned to a new data.table}.
 #'
 #' @param data A dataframe object returned by getData.
 #' Must contain the columns "X", "Y", "SD", "NBS", "TAG", "TIME";
@@ -14,6 +18,15 @@
 #' @return A datatable class object (extends data.frame) which has the
 #' additional columns posID and ts, which is TIME converted to human
 #' readable POSIXct format.
+#' 
+#' @examples 
+#' \dontrun{
+#' atl_median_smooth(data = track_data,
+#'                  x = "x", y = "y",
+#'                  time = "time",
+#'                  moving_window = 5)
+#' }
+#' 
 #' @export
 #'
 atl_median_smooth <- function(data,

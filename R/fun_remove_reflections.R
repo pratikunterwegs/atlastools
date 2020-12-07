@@ -1,5 +1,10 @@
 #' Remove reflected positions.
 #'
+#' Remove reflections, or prolonged spikes from a movement track by identifying the bounds and removing positions between them.
+#' The important function arguments here are \code{point_angle_cutoff} ($A$), \code{reflection_speed_cutoff} ($S$), and \code{est_ref_len}, the maximum number of positions after the anchor point that are candidates for the end of the prolonged spike. 
+#' If the prolonged spike ends after less than N positions, the true end point is used as the outer bound of the spike.
+#' However, the algorithm behind this function fails when the prolonged spike ends after more than N positions. Users are advised to use a liberally large value of N in the \code{est_ref_len} argument; 1,000 may be appropriate.
+#' 
 #' @author Pratik R. Gupte
 #'
 #' @param data A dataframe or similar which has previously been cleaned.
@@ -13,6 +18,14 @@
 #' @param est_ref_len How many positions are expected to be in a reflection.
 #'
 #' @return A dataframe with reflections removed.
+#' @examples 
+#' \dontrun{
+#' filtered_data <- atl_remove_reflections(data = track_data,
+#'                       x = "x", y = "y", time = "time",
+#'                       point_angle_cutoff = A,
+#'                       reflection_speed_cutoff = S,
+#'                       est_ref_len = N)
+#' }
 #' @export
 atl_remove_reflections <- function(data,
                                    x = "x",
@@ -23,7 +36,7 @@ atl_remove_reflections <- function(data,
                                    est_ref_len = 1000) {
   speed <- angle <- NULL
   # check data
-  atlastools:::atl_check_data(data, names_expected = c(x, y, time))
+  atl_check_data(data, names_expected = c(x, y, time))
 
   # set order
   data.table::setorderv(data, time)

@@ -25,5 +25,16 @@ A vector of numerics representing speed.
 The first position is assigned a speed of NA.
 }
 \description{
-Calculate instantaenous speed.
+Returns speed in metres per time interval. The time interval is dependent
+on the units of the column specified in \code{time}.
+}
+\examples{
+\dontrun{
+data$speed_in <- atl_get_speed(data,
+               x = "x", y = "y",
+               time = "time", type = c("in"))
+}
+}
+\author{
+Pratik R. Gupte
 }

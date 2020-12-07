@@ -43,7 +43,16 @@ ranges, or by an \code{sf-*POLYGON} object.
 \code{MULTIPOLYGON} objects are supported by the internal function
 \code{atl_within_polygon}.
 }
-\details{
-This function \emph{does not} modify in place, i.e., \emph{the results
-need to be assigned to a new data.table}.
+\examples{
+\dontrun{
+filtered_data <- atl_filter_bounds(data = data,
+                 x = "X", y = "Y",
+                 x_range = c(x_min, x_max),
+                 y_range = c(y_min, y_max),
+                 sf_polygon = your_polygon,
+                 remove_inside = FALSE)
+}
+}
+\author{
+Pratik R. Gupte
 }

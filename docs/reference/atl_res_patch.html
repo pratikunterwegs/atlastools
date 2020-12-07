@@ -42,12 +42,17 @@
   
 
 <meta property="og:title" content="Construct residence patches from position data. — atl_res_patch" />
-<meta property="og:description" content="atl_res_patch clusters positions into residence patches.
+<meta property="og:description" content="A cleaned movement track can be classified into residence patches using the function atl_res_patch.
 The function expects a specific organisation of the data: there should be
 at least the following columns, x, y, time, and
 id, all named in lower case, and corresponding to the coordinates,
 timestamp in the UNIX format (seconds since 1970), and the identity of the
-tracked individual." />
+tracked individual.
+The result contains only the data that was classified as a residence patch and removes transit between them.
+atl_res_patch requires only three parameters: (1) the distance threshold between positions (called buffer_size), (2) the distance threshold between clusters of positions (called lim_spat_indep), and (3) the time interval between clusters (called lim_time_indep).
+Clusters formed of fewer than a minimum number of positions can be excluded.
+The exclusion of clusters with few positions can help in removing bias due to short stops, but if such short stops are also of interest, they can be included by reducing the min_fixes argument.
+Position covariates such as speed may also be summarised patch-wise by passing covariate names and  summary functions as character vectors to the summary_variables and summary_functions arguments, respectively." />
 
 
 
@@ -124,12 +129,17 @@ tracked individual." />
     </div>
 
     <div class="ref-description">
-    <p><code>atl_res_patch</code> clusters positions into residence patches.
+    <p>A cleaned movement track can be classified into residence patches using the function <code>atl_res_patch</code>.
 The function expects a specific organisation of the data: there should be
 at least the following columns, <code>x</code>, <code>y</code>, <code>time</code>, and
 <code>id</code>, all named in lower case, and corresponding to the coordinates,
 timestamp in the UNIX format (seconds since 1970), and the identity of the
-tracked individual.</p>
+tracked individual.
+The result contains only the data that was classified as a residence patch and removes transit between them.
+<code>atl_res_patch</code> requires only three parameters: (1) the distance threshold between positions (called <code>buffer_size</code>), (2) the distance threshold between clusters of positions (called <code>lim_spat_indep</code>), and (3) the time interval between clusters (called <code>lim_time_indep</code>).
+Clusters formed of fewer than a minimum number of positions can be excluded.
+The exclusion of clusters with few positions can help in removing bias due to short stops, but if such short stops are also of interest, they can be included by reducing the <code>min_fixes</code> argument.
+Position covariates such as speed may also be summarised patch-wise by passing covariate names and  summary functions as character vectors to the <code>summary_variables</code> and <code>summary_functions</code> arguments, respectively.</p>
     </div>
 
     <pre class="usage"><span class='fu'>atl_res_patch</span>(
@@ -162,13 +172,13 @@ be considered around each coordinate point. May be thought of as the distance
     </tr>
     <tr>
       <th>lim_spat_indep</th>
-      <td><p>A numeric value of time in minutes of the time
-difference between two patches for them to be considered independent.</p></td>
+      <td><p>A numeric value of distance in metres of the spatial
+distance between two patches for them to the considered independent.</p></td>
     </tr>
     <tr>
       <th>lim_time_indep</th>
-      <td><p>A numeric value of distance in metres of the spatial
-distance between two patches for them to the considered independent.</p></td>
+      <td><p>A numeric value of time in minutes of the time
+difference between two patches for them to be considered independent.</p></td>
     </tr>
     <tr>
       <th>min_fixes</th>
@@ -195,7 +205,21 @@ passed as a character vector.</p></td>
 <code>patch</code> and <code>patchdata</code>, indicating the patch identity and the
 data used to construct the patch. In addition, there are columns with patch
 summary variables.</p>
+    <h2 class="hasAnchor" id="author"><a class="anchor" href="#author"></a>Author</h2>
 
+    <p>Pratik R. Gupte</p>
+
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"><div class='input'><span class='co'>if</span> (<span class='fl'>FALSE</span>) {
+<span class='kw'>patches</span> <span class='op'>&lt;-</span> <span class='fu'>atl_res_patch</span>(data = <span class='kw'>track_data</span>,
+               buffer_radius = <span class='fl'>10</span>,
+               lim_spat_indep = <span class='fl'>100</span>,
+               lim_time_indep = <span class='fl'>30</span>,
+               min_fixes = <span class='fl'>3</span>,
+               summary_variables = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"speed"</span>),
+               summary_functions = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"mean"</span>, <span class='st'>"sd"</span>))
+}
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

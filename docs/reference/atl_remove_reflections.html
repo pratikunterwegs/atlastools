@@ -42,7 +42,10 @@
   
 
 <meta property="og:title" content="Remove reflected positions. — atl_remove_reflections" />
-<meta property="og:description" content="Remove reflected positions." />
+<meta property="og:description" content="Remove reflections, or prolonged spikes from a movement track by identifying the bounds and removing positions between them.
+The important function arguments here are point_angle_cutoff ($A$), reflection_speed_cutoff ($S$), and est_ref_len, the maximum number of positions after the anchor point that are candidates for the end of the prolonged spike. 
+If the prolonged spike ends after less than N positions, the true end point is used as the outer bound of the spike.
+However, the algorithm behind this function fails when the prolonged spike ends after more than N positions. Users are advised to use a liberally large value of N in the est_ref_len argument; 1,000 may be appropriate." />
 
 
 
@@ -119,7 +122,10 @@
     </div>
 
     <div class="ref-description">
-    <p>Remove reflected positions.</p>
+    <p>Remove reflections, or prolonged spikes from a movement track by identifying the bounds and removing positions between them.
+The important function arguments here are <code>point_angle_cutoff</code> ($A$), <code>reflection_speed_cutoff</code> ($S$), and <code>est_ref_len</code>, the maximum number of positions after the anchor point that are candidates for the end of the prolonged spike. 
+If the prolonged spike ends after less than N positions, the true end point is used as the outer bound of the spike.
+However, the algorithm behind this function fails when the prolonged spike ends after more than N positions. Users are advised to use a liberally large value of N in the <code>est_ref_len</code> argument; 1,000 may be appropriate.</p>
     </div>
 
     <pre class="usage"><span class='fu'>atl_remove_reflections</span>(
@@ -174,6 +180,15 @@ detected when combined with a high turning angle.</p></td>
 
     <p>Pratik R. Gupte</p>
 
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"><div class='input'><span class='co'>if</span> (<span class='fl'>FALSE</span>) {
+<span class='kw'>filtered_data</span> <span class='op'>&lt;-</span> <span class='fu'>atl_remove_reflections</span>(data = <span class='kw'>track_data</span>,
+                      x = <span class='st'>"x"</span>, y = <span class='st'>"y"</span>, time = <span class='st'>"time"</span>,
+                      point_angle_cutoff = <span class='kw'>A</span>,
+                      reflection_speed_cutoff = <span class='kw'>S</span>,
+                      est_ref_len = <span class='kw'>N</span>)
+}
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

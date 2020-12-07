@@ -180,11 +180,20 @@ box specified by the X and Y ranges.</p></td>
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
     <p>A data frame of tracking locations with attractor points removed.</p>
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
+    <h2 class="hasAnchor" id="author"><a class="anchor" href="#author"></a>Author</h2>
 
-    <p>This function <em>does not</em> modify in place, i.e., <em>the results
-need to be assigned to a new data.table</em>.</p>
+    <p>Pratik R. Gupte</p>
 
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"><div class='input'><span class='co'>if</span> (<span class='fl'>FALSE</span>) {
+<span class='kw'>filtered_data</span> <span class='op'>&lt;-</span> <span class='fu'>atl_filter_bounds</span>(data = <span class='kw'>data</span>,
+                 x = <span class='st'>"X"</span>, y = <span class='st'>"Y"</span>,
+                 x_range = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='kw'>x_min</span>, <span class='kw'>x_max</span>),
+                 y_range = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='kw'>y_min</span>, <span class='kw'>y_max</span>),
+                 sf_polygon = <span class='kw'>your_polygon</span>,
+                 remove_inside = <span class='fl'>FALSE</span>)
+}
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

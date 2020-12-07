@@ -2,7 +2,7 @@
 % Please edit documentation in R/fun_smooth_data.R
 \name{atl_median_smooth}
 \alias{atl_median_smooth}
-\title{Filter and smooth data.}
+\title{Apply a median smooth to coordinates.}
 \usage{
 atl_median_smooth(data, x = "X", y = "Y", time = "TIME", moving_window = 3)
 }
@@ -29,5 +29,16 @@ additional columns posID and ts, which is TIME converted to human
 readable POSIXct format.
 }
 \description{
-Filter and smooth data.
+Applies a median smooth defined by a rolling window to the X and Y coordinates of the data. 
+This function \emph{modifies in place}, i.e., \emph{the results
+need not be assigned to a new data.table}.
+}
+\examples{
+\dontrun{
+atl_median_smooth(data = track_data,
+                 x = "x", y = "y",
+                 time = "time",
+                 moving_window = 5)
+}
+
 }

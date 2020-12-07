@@ -1,9 +1,9 @@
 #' Check data has required columns.
 #'
 #' An internal function that checks that the data.table has the required
-#' columns. Used within a number, if not all, other atlastools functions.
+#' columns. Used within most, if not all, other atlastools functions.
 #'
-#' @noRd
+#' @author Pratik R. Gupte
 #' @param data The tracking data to check for required columns. Must be in the
 #' form of a data.frame or similar, which can be handled by the function
 #' colnames.

@@ -1,5 +1,5 @@
 Package: atlastools
-Title: Tools for High Frequency Tracking Data
+Title: Tools for Pre-Processing High-Throughput Animal Tracking Data
 Version: 0.9.9000
 Authors@R:
     c(person(given = "Pratik",
@@ -7,7 +7,7 @@ Authors@R:
            role = c("aut", "cre"),
            email = "p.r.gupte@rug.nl",
            comment = c(ORCID = "https://orcid.org/0000-0001-5294-7819")))
-Description: Tools to process high frequency tracking data.
+Description: Tools to pre-process high-throughput tracking data. Developed for use with ATLAS tracking systems, but suitable for use with nearly any XY-time animal tracking data.
 License: GPL-3
 Encoding: UTF-8
 LazyData: true

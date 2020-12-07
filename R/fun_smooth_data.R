@@ -14,6 +14,15 @@
 #' @return A datatable class object (extends data.frame) which has the
 #' additional columns posID and ts, which is TIME converted to human
 #' readable POSIXct format.
+#' 
+#' @examples 
+#' \dontrun{
+#' atl_median_smooth(data = track_data,
+#'                  x = "x", y = "y",
+#'                  time = "time",
+#'                  moving_window = 5)
+#' }
+#' 
 #' @export
 #'
 atl_median_smooth <- function(data,

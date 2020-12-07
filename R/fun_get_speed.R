@@ -11,6 +11,13 @@
 #'
 #' @return A vector of numerics representing speed.
 #' The first position is assigned a speed of NA.
+#' 
+#' @examples 
+#' \dontrun{
+#' data$speed_in <- atl_get_speed(data,
+#'                x = "x", y = "y",
+#'                time = "time", type = c("in"))
+#' }
 #' @export
 atl_get_speed <- function(data,
                           x = "x",

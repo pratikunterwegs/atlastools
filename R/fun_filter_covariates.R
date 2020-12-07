@@ -9,6 +9,19 @@
 #' A missing filter variables \emph{will} result in an empty data frame.
 #'
 #' @return A dataframe filtered using the filters specified.
+#' @examples
+#' \dontrun{
+#' night_data <- atl_filter_covariates(data = dataset,
+#'                filters = c("!inrange(hour, 6, 18)"))
+#'
+#' data_in_area <- atl_filter_covariates(data = dataset,
+#'                    filters = c("between(time, t_min, t_max)",
+#'                                "between(x, x_min, x_max)"))
+#' filtered_data <- atl_filter_covariates(data = data,
+#'                    filters = c("NBS > 3",
+#'                                "SD < 100",
+#'                                "between(day, 5, 8)"))
+#' }
 #' @export
 atl_filter_covariates <- function(data,
                                   filters = c()) {

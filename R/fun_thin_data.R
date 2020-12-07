@@ -9,6 +9,15 @@
 #' mean is taken.
 #'
 #' @return A dataframe aggregated taking the mean over the interval.
+#' 
+#' @examples 
+#' \dontrun{
+#' thinned_data <- atl_thin_data(data,
+#'                     interval = 60,
+#'                     id_columns = c("animal_id"),
+#'                     method = "aggregate")
+#'}
+#' 
 #' @export
 #'
 atl_thin_data <- function(data,

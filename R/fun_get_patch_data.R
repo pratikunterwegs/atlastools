@@ -1,6 +1,6 @@
 #' Get residence patch data.
 #'
-#' The function \code{atl\_patch\_summary} can be used to extract patch-specific summary data such as the median coordinates, the patch duration, the distance travelled within the patch, the displacement within the patch, and the patch area.
+#' The function \code{atl_patch_summary} can be used to extract patch-specific summary data such as the median coordinates, the patch duration, the distance travelled within the patch, the displacement within the patch, and the patch area.
 #' 
 #' @author Pratik R. Gupte
 #' @param patch_data A data.frame with a nested list column of the raw data

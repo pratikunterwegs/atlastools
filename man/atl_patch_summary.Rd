@@ -23,7 +23,7 @@ An object of type \code{sf} or \code{data.table} depending on
 which data is requested.
 }
 \description{
-The function \code{atl\_patch\_summary} can be used to extract patch-specific summary data such as the median coordinates, the patch duration, the distance travelled within the patch, the displacement within the patch, and the patch area.
+The function \code{atl_patch_summary} can be used to extract patch-specific summary data such as the median coordinates, the patch duration, the distance travelled within the patch, the displacement within the patch, and the patch area.
 }
 \examples{
 \dontrun{

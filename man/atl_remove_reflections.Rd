@@ -36,9 +36,9 @@ A dataframe with reflections removed.
 }
 \description{
 Remove reflections, or prolonged spikes from a movement track by identifying the bounds and removing positions between them.
-The important function arguments here are \code{point\_angle\_cutoff} ($A$), \code{reflection\_speed\_cutoff} ($S$), and \code{est\_ref\_len}, the maximum number of positions after the anchor point that are candidates for the end of the prolonged spike. 
+The important function arguments here are \code{point_angle_cutoff} ($A$), \code{reflection_speed_cutoff} ($S$), and \code{est_ref_len}, the maximum number of positions after the anchor point that are candidates for the end of the prolonged spike. 
 If the prolonged spike ends after less than N positions, the true end point is used as the outer bound of the spike.
-However, the algorithm behind this function fails when the prolonged spike ends after more than N positions. Users are advised to use a liberally large value of N in the \code{est\_ref\_len} argument; 1,000 may be appropriate.
+However, the algorithm behind this function fails when the prolonged spike ends after more than N positions. Users are advised to use a liberally large value of N in the \code{est_ref_len} argument; 1,000 may be appropriate.
 }
 \examples{
 \dontrun{

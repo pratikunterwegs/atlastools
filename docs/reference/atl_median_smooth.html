@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Filter and smooth data. — atl_median_smooth • atlastools</title>
+<title>Apply a median smooth to coordinates. — atl_median_smooth • atlastools</title>
 
 
 <!-- jquery -->
@@ -41,8 +41,10 @@
   <link href="../extra.css" rel="stylesheet">
   
 
-<meta property="og:title" content="Filter and smooth data. — atl_median_smooth" />
-<meta property="og:description" content="Filter and smooth data." />
+<meta property="og:title" content="Apply a median smooth to coordinates. — atl_median_smooth" />
+<meta property="og:description" content="Applies a median smooth defined by a rolling window to the X and Y coordinates of the data. 
+This function modifies in place, i.e., the results
+need not be assigned to a new data.table." />
 
 
 
@@ -113,13 +115,15 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Filter and smooth data.</h1>
+    <h1>Apply a median smooth to coordinates.</h1>
     <small class="dont-index">Source: <a href='https://github.com/pratikunterwegs/atlastools/blob/master/R/fun_smooth_data.R'><code>R/fun_smooth_data.R</code></a></small>
     <div class="hidden name"><code>atl_median_smooth.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Filter and smooth data.</p>
+    <p>Applies a median smooth defined by a rolling window to the X and Y coordinates of the data. 
+This function <em>modifies in place</em>, i.e., <em>the results
+need not be assigned to a new data.table</em>.</p>
     </div>
 
     <pre class="usage"><span class='fu'>atl_median_smooth</span>(<span class='kw'>data</span>, x = <span class='st'>"X"</span>, y = <span class='st'>"Y"</span>, time = <span class='st'>"TIME"</span>, moving_window = <span class='fl'>3</span>)</pre>
@@ -161,6 +165,15 @@ Must be an odd number.</p></td>
 additional columns posID and ts, which is TIME converted to human
 readable POSIXct format.</p>
 
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"><div class='input'><span class='co'>if</span> (<span class='fl'>FALSE</span>) {
+<span class='fu'>atl_median_smooth</span>(data = <span class='kw'>track_data</span>,
+                 x = <span class='st'>"x"</span>, y = <span class='st'>"y"</span>,
+                 time = <span class='st'>"time"</span>,
+                 moving_window = <span class='fl'>5</span>)
+}
+
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

@@ -1,5 +1,12 @@
 #' Filter data by position covariates.
 #'
+#' The atlastools function \code{atl\_filter\_covariates} allows convenient filtering of a dataset by any number of logical filters (code in Listing 2).
+#' This function can be used to easily filter timestamps in a range, as well as combine simple spatial and temporal filters.
+#' It accepts a character vector of \code{R} expressions that each return a logical vector (i.e., \code{TRUE} or \code{FALSE}; see Listing 2).
+#' Each filtering condition is interpreted in the context of the dataset supplied, and used to filter for rows that satisfy each of the filter conditions. 
+#' Users must make sure that the filtering variables exist in their dataset in order to avoid errors.
+#' 
+#' @author Pratik R. Gupte
 #' @param data A dataframe or similar containing the variables to be filtered.
 #' @param filters A character vector of filter expressions. An example might be
 #' \code{"speed < 20"}. The filtering variables must be in the dataframe.

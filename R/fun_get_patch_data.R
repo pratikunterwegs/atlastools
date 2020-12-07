@@ -15,6 +15,14 @@
 #' @return An object of type \code{sf} or \code{data.table} depending on
 #' which data is requested.
 #' @import data.table
+#' 
+#' @examples 
+#' \dontrun{
+#' patch_summary <- atl_patch_summary(patch_data = patches,
+#'                    which_data = "summary",
+#'                    buffer_radius = 10)
+#' }
+#' 
 #' @export
 #'
 atl_patch_summary <- function(patch_data,

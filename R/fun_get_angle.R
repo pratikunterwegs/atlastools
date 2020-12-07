@@ -8,6 +8,12 @@
 #' @return A vector of turning angles in degrees.
 #' Negative degrees indicate 'left' turns. There are two fewer
 #' angles than the number of rows in the dataframe.
+#' 
+#' @examples 
+#' \dontrun{
+#' data$angle <- atl_turning_angle(data,
+#'                  x = "x", y = "y", time = "time")
+#' }
 #' @export
 atl_turning_angle <- function(data,
                               x = "x",

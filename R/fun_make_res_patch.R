@@ -16,10 +16,10 @@
 #' be considered around each coordinate point. May be thought of as the distance
 #'  that an individual can access, assess, or otherwise cover when at a discrete
 #'   point in space.
-#' @param lim_spat_indep A numeric value of time in minutes of the time
-#' difference between two patches for them to be considered independent.
-#' @param lim_time_indep A numeric value of distance in metres of the spatial
+#' @param lim_spat_indep A numeric value of distance in metres of the spatial
 #' distance between two patches for them to the considered independent.
+#' @param lim_time_indep A numeric value of time in minutes of the time
+#' difference between two patches for them to be considered independent.
 #' @param min_fixes The minimum number of fixes for a group of
 #' spatially-proximate number of ponts to be considered a preliminary residence
 #' patch.

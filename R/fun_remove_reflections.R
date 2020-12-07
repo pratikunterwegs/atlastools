@@ -13,6 +13,14 @@
 #' @param est_ref_len How many positions are expected to be in a reflection.
 #'
 #' @return A dataframe with reflections removed.
+#' @examples 
+#' \dontrun{
+#' filtered_data <- atl_remove_reflections(data = track_data,
+#'                       x = "x", y = "y", time = "time",
+#'                       point_angle_cutoff = A,
+#'                       reflection_speed_cutoff = S,
+#'                       est_ref_len = N)
+#' }
 #' @export
 atl_remove_reflections <- function(data,
                                    x = "x",

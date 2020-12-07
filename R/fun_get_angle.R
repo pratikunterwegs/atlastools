@@ -1,5 +1,9 @@
 #' Get the turning angle between points.
 #'
+#' Gets the relative heading between two positions using the law of cosines.
+#' The turning angle is returned in degrees.
+#' 
+#' @author Pratik R. Gupte
 #' @param data A dataframe or similar which must have the columns
 #' specified by \code{x}, \code{y}, and \code{time}.
 #' @param x The x coordinate.

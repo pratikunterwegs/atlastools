@@ -1,5 +1,9 @@
 #' Calculate instantaenous speed.
 #'
+#' Returns speed in metres per time interval. The time interval is dependent
+#' on the units of the column specified in \code{time}.
+#' 
+#' @author Pratik R. Gupte
 #' @param data A dataframe or similar which must have the columns
 #' specified by \code{x}, \code{y}, and \code{time}.
 #' @param x The x coordinate.

@@ -6,9 +6,7 @@
 #' \code{MULTIPOLYGON} objects are supported by the internal function
 #' \code{atl_within_polygon}.
 #'
-#' This function \emph{does not} modify in place, i.e., \emph{the results
-#' need to be assigned to a new data.table}.
-#'
+#' @author Pratik R. Gupte
 #' @param data A dataframe or extension which contains X and Y coordinates.
 #' @param x The X coordinate column.
 #' @param y The Y coordinate column.

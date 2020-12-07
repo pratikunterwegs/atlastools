@@ -5,6 +5,7 @@
 #' Distance is returned in metres.
 #' This function is used internally by other functions, and rarely on its own.
 #'
+#' @author Pratik R. Gupte
 #' @param data A dataframe of or extending the class data.frame, such as a
 #' data.table.
 #' This must contain two pairs of coordinates, the start and end X and Y

@@ -1,9 +1,8 @@
 #' Get residence patch data.
 #'
-#' atl_res_patch clusters positions into residence patches. 
-#' The result contains only the data that was classified as a residence patch and removes transit between them. 
-#' atl_patch_summary can be used to extract all points or extract each patch as a spatial polygon.
+#' The function \code{atl\_patch\_summary} can be used to extract patch-specific summary data such as the median coordinates, the patch duration, the distance travelled within the patch, the displacement within the patch, and the patch area.
 #' 
+#' @author Pratik R. Gupte
 #' @param patch_data A data.frame with a nested list column of the raw data
 #' underlying each patch. Since data.frames don't support nested columns,
 #' will actually be a data.table or similar extension.

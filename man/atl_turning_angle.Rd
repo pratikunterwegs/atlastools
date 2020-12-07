@@ -22,5 +22,15 @@ Negative degrees indicate 'left' turns. There are two fewer
 angles than the number of rows in the dataframe.
 }
 \description{
-Get the turning angle between points.
+Gets the relative heading between two positions using the law of cosines.
+The turning angle is returned in degrees.
+}
+\examples{
+\dontrun{
+data$angle <- atl_turning_angle(data,
+                 x = "x", y = "y", time = "time")
+}
+}
+\author{
+Pratik R. Gupte
 }

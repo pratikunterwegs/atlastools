@@ -23,6 +23,15 @@
 #'
 #'
 #' @return A data frame of tracking locations with attractor points removed.
+#' @examples
+#' \dontrun{
+#' filtered_data <- atl_filter_bounds(data = data,
+#'                  x = "X", y = "Y",
+#'                  x_range = c(x_min, x_max),
+#'                  y_range = c(y_min, y_max),
+#'                  sf_polygon = your_polygon,
+#'                  remove_inside = FALSE)
+#' }
 #' @export
 #'
 atl_filter_bounds <- function(data,

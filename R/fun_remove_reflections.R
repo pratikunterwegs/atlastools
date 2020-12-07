@@ -31,7 +31,7 @@ atl_remove_reflections <- function(data,
                                    est_ref_len = 1000) {
   speed <- angle <- NULL
   # check data
-  atlastools:::atl_check_data(data, names_expected = c(x, y, time))
+  atl_check_data(data, names_expected = c(x, y, time))
 
   # set order
   data.table::setorderv(data, time)

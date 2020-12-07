@@ -34,6 +34,16 @@
 #' data used to construct the patch. In addition, there are columns with patch
 #' summary variables.
 #' @import data.table
+#' @examples
+#'\dontrun{
+#' patches <- atl_res_patch(data = track_data,
+#'                buffer_radius = 10,
+#'                lim_spat_indep = 100,
+#'                lim_time_indep = 30,
+#'                min_fixes = 3,
+#'                summary_variables = c("speed"),
+#'                summary_functions = c("mean", "sd"))
+#'}
 #' @export
 #'
 atl_res_patch <- function(data,

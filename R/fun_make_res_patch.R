@@ -1,16 +1,26 @@
 #' Construct residence patches from position data.
 #'
-#' A cleaned movement track can be classified into residence patches using the function \code{atl_res_patch}.
+#' A cleaned movement track can be classified into residence patches using the 
+#' function \code{atl_res_patch}.
 #' The function expects a specific organisation of the data: there should be
 #' at least the following columns, \code{x}, \code{y}, \code{time}, and
 #' \code{id}, all named in lower case, and corresponding to the coordinates,
 #' timestamp in the UNIX format (seconds since 1970), and the identity of the
 #' tracked individual.
-#' The result contains only the data that was classified as a residence patch and removes transit between them.
-#' \code{atl_res_patch} requires only three parameters: (1) the distance threshold between positions (called \code{buffer_size}), (2) the distance threshold between clusters of positions (called \code{lim_spat_indep}), and (3) the time interval between clusters (called \code{lim_time_indep}).
+#' The result contains only the data that was classified as a residence patch 
+#' and removes transit between them.
+#' \code{atl_res_patch} requires only three parameters: (1) the distance 
+#' threshold between positions (called \code{buffer_size}), (2) the distance 
+#' threshold between clusters of positions (called \code{lim_spat_indep}), 
+#' and (3) the time interval between clusters (called \code{lim_time_indep}).
 #' Clusters formed of fewer than a minimum number of positions can be excluded.
-#' The exclusion of clusters with few positions can help in removing bias due to short stops, but if such short stops are also of interest, they can be included by reducing the \code{min_fixes} argument.
-#' Position covariates such as speed may also be summarised patch-wise by passing covariate names and  summary functions as character vectors to the \code{summary_variables} and \code{summary_functions} arguments, respectively.
+#' The exclusion of clusters with few positions can help in removing bias due to
+#'  short stops, but if such short stops are also of interest, they can be 
+#' included by reducing the \code{min_fixes} argument.
+#' Position covariates such as speed may also be summarised patch-wise by 
+#' passing covariate names and  summary functions as character vectors to the 
+#' \code{summary_variables} and \code{summary_functions} arguments, respectively
+#' .
 #'
 #' @author Pratik R. Gupte
 #' @param data A dataframe of values of any class that is or extends data.frame.
@@ -41,15 +51,17 @@
 #' summary variables.
 #' @import data.table
 #' @examples
-#'\dontrun{
-#' patches <- atl_res_patch(data = track_data,
-#'                buffer_radius = 10,
-#'                lim_spat_indep = 100,
-#'                lim_time_indep = 30,
-#'                min_fixes = 3,
-#'                summary_variables = c("speed"),
-#'                summary_functions = c("mean", "sd"))
-#'}
+#' \dontrun{
+#' patches <- atl_res_patch(
+#'   data = track_data,
+#'   buffer_radius = 10,
+#'   lim_spat_indep = 100,
+#'   lim_time_indep = 30,
+#'   min_fixes = 3,
+#'   summary_variables = c("speed"),
+#'   summary_functions = c("mean", "sd")
+#' )
+#' }
 #' @export
 #'
 atl_res_patch <- function(data,

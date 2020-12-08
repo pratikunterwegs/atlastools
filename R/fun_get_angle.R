@@ -2,7 +2,7 @@
 #'
 #' Gets the relative heading between two positions using the law of cosines.
 #' The turning angle is returned in degrees.
-#' 
+#'
 #' @author Pratik R. Gupte
 #' @param data A dataframe or similar which must have the columns
 #' specified by \code{x}, \code{y}, and \code{time}.
@@ -12,11 +12,12 @@
 #' @return A vector of turning angles in degrees.
 #' Negative degrees indicate 'left' turns. There are two fewer
 #' angles than the number of rows in the dataframe.
-#' 
-#' @examples 
+#'
+#' @examples
 #' \dontrun{
 #' data$angle <- atl_turning_angle(data,
-#'                  x = "x", y = "y", time = "time")
+#'   x = "x", y = "y", time = "time"
+#' )
 #' }
 #' @export
 atl_turning_angle <- function(data,

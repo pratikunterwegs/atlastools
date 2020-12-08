@@ -2,7 +2,7 @@
 #'
 #' Returns speed in metres per time interval. The time interval is dependent
 #' on the units of the column specified in \code{time}.
-#' 
+#'
 #' @author Pratik R. Gupte
 #' @param data A dataframe or similar which must have the columns
 #' specified by \code{x}, \code{y}, and \code{time}.
@@ -15,12 +15,13 @@
 #'
 #' @return A vector of numerics representing speed.
 #' The first position is assigned a speed of NA.
-#' 
-#' @examples 
+#'
+#' @examples
 #' \dontrun{
 #' data$speed_in <- atl_get_speed(data,
-#'                x = "x", y = "y",
-#'                time = "time", type = c("in"))
+#'   x = "x", y = "y",
+#'   time = "time", type = c("in")
+#' )
 #' }
 #' @export
 atl_get_speed <- function(data,

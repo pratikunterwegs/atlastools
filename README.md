@@ -2,7 +2,7 @@
 
 <!-- badges: start -->
   [![Project Status: Active – The project has reached a stable, usable state and is being actively developed.](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active)
-  [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.4314905.svg)](https://doi.org/10.5281/zenodo.4033154)
+  [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.4033154.svg)](https://doi.org/10.5281/zenodo.4033154)
   [![R build status](https://github.com/pratikunterwegs/atlastools/workflows/R-CMD-check/badge.svg)](https://github.com/pratikunterwegs/atlastools/actions)
   [![codecov.io](https://codecov.io/github/pratikunterwegs/atlastools/coverage.svg?branch=master)](https://codecov.io/github/pratikunterwegs/atlastools/branch/master)
 <!-- badges: end -->

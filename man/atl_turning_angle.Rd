@@ -28,7 +28,8 @@ The turning angle is returned in degrees.
 \examples{
 \dontrun{
 data$angle <- atl_turning_angle(data,
-                 x = "x", y = "y", time = "time")
+  x = "x", y = "y", time = "time"
+)
 }
 }
 \author{

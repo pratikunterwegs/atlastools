@@ -32,11 +32,11 @@ detected when combined with a high turning angle.}
 A dataframe with reflections removed.
 }
 \description{
-Remove reflections, or prolonged spikes from a movement track by identifying 
+Remove reflections, or prolonged spikes from a movement track by identifying
 the bounds and removing positions between them.
-The important function arguments here are \code{point_angle_cutoff} ($A$), 
+The important function arguments here are \code{point_angle_cutoff} ($A$),
 \code{reflection_speed_cutoff} ($S$).
-If the prolonged spike ends before the last row of data, the true end point 
+If the prolonged spike ends before the last row of data, the true end point
 is used as the outer bound of the spike.
 If the prolonged spike does not end within the last row of data, all the
 data are retained and a message is printed.
@@ -47,8 +47,7 @@ filtered_data <- atl_remove_reflections(
   data = track_data,
   x = "x", y = "y", time = "time",
   point_angle_cutoff = A,
-  reflection_speed_cutoff = S,
-  est_ref_len = N
+  reflection_speed_cutoff = S
 )
 }
 }

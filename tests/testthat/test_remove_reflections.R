@@ -12,7 +12,7 @@ testthat::test_that("reflections are removed", {
   )]
 
   # remove NA speeds
-  stats::na.omit(test_data,
+  test_data <- stats::na.omit(test_data,
     cols = c("in_speed", "out_speed", "angle")
   )
 
@@ -38,6 +38,11 @@ testthat::test_that("reflections are removed", {
   # should return fewer elements than nrows in df
   testthat::expect_lte(nrow(test_output), nrow(test_data))
 
+  # get speeds again to test extremes removed
+  test_output[, c("speed") := atl_get_speed(test_output,
+    x = "X", y = "Y", time = "Time"
+  )]
+
   # no extreme speeds should remain
   testthat::expect_lte(max(test_output$speed, na.rm = TRUE), 0.024)
 
@@ -58,8 +63,10 @@ testthat::test_that("reflections are removed", {
     angle = atlastools::atl_turning_angle(test_data)
   )]
 
-  test_output <- atlastools::atl_remove_reflections(test_data,
-    reflection_speed_cutoff = 5,
+  test_output <- atlastools::atl_remove_reflections(
+    test_data,
+    x = "x", y = "y", time = "time",
+    reflection_speed_cutoff = 3,
     point_angle_cutoff = 5
   )
 
@@ -83,7 +90,9 @@ testthat::test_that("reflections do not end", {
   )]
 
   # remove NA speeds
-  stats::na.omit(test_data, cols = c("in_speed", "out_speed", "angle"))
+  test_data <- stats::na.omit(test_data,
+    cols = c("in_speed", "out_speed", "angle")
+  )
 
   # remove outliers
   test_data <- test_data[in_speed < 0.024 & out_speed < 0.024, ]
@@ -92,18 +101,16 @@ testthat::test_that("reflections do not end", {
   test_data <- test_data[seq(600), ]
 
   # now get output
-  test_output <- atlastools::atl_remove_reflections(test_data,
+  test_output <- atlastools::atl_remove_reflections(
+    test_data,
     reflection_speed_cutoff = 0.024,
-    point_angle_cutoff = 5,
-    est_ref_len = 500
+    point_angle_cutoff = 5
   )
 
   # do tests
-  # should return fewer elements than nrows in df
+  # should return fewer or the same number of elements than nrows in df
   testthat::expect_lte(nrow(test_output), nrow(test_data))
 
-  # should remove points with y coordinates less than 60
-  # this is still true even though the reflection does not end
-  # in this subset
-  testthat::expect_lt(max(test_output$y), 1.02)
+  # removed test checking for removed speeds
+  # the conservative approach is to keep data
 })

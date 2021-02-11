@@ -27,8 +27,7 @@
 #'   data = track_data,
 #'   x = "x", y = "y", time = "time",
 #'   point_angle_cutoff = A,
-#'   reflection_speed_cutoff = S,
-#'   est_ref_len = N
+#'   reflection_speed_cutoff = S
 #' )
 #' }
 #' @export

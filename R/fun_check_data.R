@@ -25,10 +25,12 @@ atl_check_data <- function(data,
   # get the colmumn names
   data_names <- colnames(data)
 
-  invisible(lapply(names_expected, function(nr) {
-    assertthat::assert_that(nr %in% data_names,
-      msg = glue::glue("atl_check_data: {nr} is
+  invisible(
+    vapply(names_expected, function(nr) {
+      assertthat::assert_that(nr %in% data_names,
+        msg = glue::glue("atl_check_data: {nr} is
                          required but missing from data!")
-    )
-  }))
+      )
+    }, FUN.VALUE = TRUE)
+  )
 }

@@ -1,6 +1,6 @@
 #' Calculate distances between successive points.
 #'
-#' Gets the euclidean distance between consecutive points in a coordinate 
+#' Gets the euclidean distance between consecutive points in a coordinate
 #' reference system in metres, i.e., UTM systems.
 #'
 #' @param x A column name in a data.frame object that contains the numeric X or

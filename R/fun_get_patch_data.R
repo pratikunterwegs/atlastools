@@ -1,6 +1,6 @@
 #' Get residence patch data.
 #'
-#' The function \code{atl_patch_summary} can be used to extract patch-specific 
+#' The function \code{atl_patch_summary} can be used to extract patch-specific
 #' summary data such as the median coordinates, the patch duration, the distance
 #'  travelled within the patch, the displacement within the patch, and the patch
 #'  area.

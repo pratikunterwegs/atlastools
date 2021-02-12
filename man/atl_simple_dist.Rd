@@ -20,5 +20,6 @@ latitude coordinate for position data.}
 Returns a vector of distances between consecutive points.
 }
 \description{
-Gets the euclidean distance between consecutive points in a coordinate reference system in metres, i.e., UTM systems.
+Gets the euclidean distance between consecutive points in a coordinate
+reference system in metres, i.e., UTM systems.
 }

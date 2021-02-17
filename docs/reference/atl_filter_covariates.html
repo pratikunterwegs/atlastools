@@ -42,11 +42,17 @@
   
 
 <meta property="og:title" content="Filter data by position covariates. — atl_filter_covariates" />
-<meta property="og:description" content="The atlastools function atl_filter_covariates allows convenient filtering of a dataset by any number of logical filters.
-This function can be used to easily filter timestamps in a range, as well as combine simple spatial and temporal filters.
-It accepts a character vector of R expressions that each return a logical vector (i.e., TRUE or FALSE).
-Each filtering condition is interpreted in the context of the dataset supplied, and used to filter for rows that satisfy each of the filter conditions. 
-Users must make sure that the filtering variables exist in their dataset in order to avoid errors." />
+<meta property="og:description" content="The atlastools function atl_filter_covariates allows convenient
+filtering of a dataset by any number of logical filters.
+This function can be used to easily filter timestamps in a range, as well as
+combine simple spatial and temporal filters.
+It accepts a character vector of R expressions that each return a
+logical vector (i.e., TRUE or FALSE).
+Each filtering condition is interpreted in the context of the dataset
+supplied, and used to filter for rows that satisfy each of the filter
+conditions.
+Users must make sure that the filtering variables exist in their dataset in
+order to avoid errors." />
 
 
 
@@ -78,7 +84,7 @@ Users must make sure that the filtering variables exist in their dataset in orde
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">atlastools</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.9.9000</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.0000</span>
       </span>
     </div>
 
@@ -86,7 +92,7 @@ Users must make sure that the filtering variables exist in their dataset in orde
       <ul class="nav navbar-nav">
         <li>
   <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -100,7 +106,7 @@ Users must make sure that the filtering variables exist in their dataset in orde
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/pratikunterwegs/atlastools/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -123,14 +129,20 @@ Users must make sure that the filtering variables exist in their dataset in orde
     </div>
 
     <div class="ref-description">
-    <p>The atlastools function <code>atl_filter_covariates</code> allows convenient filtering of a dataset by any number of logical filters.
-This function can be used to easily filter timestamps in a range, as well as combine simple spatial and temporal filters.
-It accepts a character vector of <code>R</code> expressions that each return a logical vector (i.e., <code>TRUE</code> or <code>FALSE</code>).
-Each filtering condition is interpreted in the context of the dataset supplied, and used to filter for rows that satisfy each of the filter conditions. 
-Users must make sure that the filtering variables exist in their dataset in order to avoid errors.</p>
+    <p>The atlastools function <code>atl_filter_covariates</code> allows convenient
+filtering of a dataset by any number of logical filters.
+This function can be used to easily filter timestamps in a range, as well as
+combine simple spatial and temporal filters.
+It accepts a character vector of <code>R</code> expressions that each return a
+logical vector (i.e., <code>TRUE</code> or <code>FALSE</code>).
+Each filtering condition is interpreted in the context of the dataset
+supplied, and used to filter for rows that satisfy each of the filter
+conditions.
+Users must make sure that the filtering variables exist in their dataset in
+order to avoid errors.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>atl_filter_covariates</span>(<span class='kw'>data</span>, filters = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>())</pre>
+    <pre class="usage"><span class='fu'>atl_filter_covariates</span><span class='op'>(</span><span class='va'>data</span>, filters <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -158,18 +170,28 @@ A missing filter variables <em>will</em> result in an empty data frame.</p></td>
     <p>Pratik R. Gupte</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='co'>if</span> (<span class='fl'>FALSE</span>) {
-<span class='kw'>night_data</span> <span class='op'>&lt;-</span> <span class='fu'>atl_filter_covariates</span>(data = <span class='kw'>dataset</span>,
-               filters = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"!inrange(hour, 6, 18)"</span>))
+    <pre class="examples"><div class='input'><span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
+<span class='va'>night_data</span> <span class='op'>&lt;-</span> <span class='fu'>atl_filter_covariates</span><span class='op'>(</span>
+  data <span class='op'>=</span> <span class='va'>dataset</span>,
+  filters <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"!inrange(hour, 6, 18)"</span><span class='op'>)</span>
+<span class='op'>)</span>
 
-<span class='kw'>data_in_area</span> <span class='op'>&lt;-</span> <span class='fu'>atl_filter_covariates</span>(data = <span class='kw'>dataset</span>,
-                   filters = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"between(time, t_min, t_max)"</span>,
-                               <span class='st'>"between(x, x_min, x_max)"</span>))
-<span class='kw'>filtered_data</span> <span class='op'>&lt;-</span> <span class='fu'>atl_filter_covariates</span>(data = <span class='kw'>data</span>,
-                   filters = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"NBS &gt; 3"</span>,
-                               <span class='st'>"SD &lt; 100"</span>,
-                               <span class='st'>"between(day, 5, 8)"</span>))
-}
+<span class='va'>data_in_area</span> <span class='op'>&lt;-</span> <span class='fu'>atl_filter_covariates</span><span class='op'>(</span>
+  data <span class='op'>=</span> <span class='va'>dataset</span>,
+  filters <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span>
+    <span class='st'>"between(time, t_min, t_max)"</span>,
+    <span class='st'>"between(x, x_min, x_max)"</span>
+  <span class='op'>)</span>
+<span class='op'>)</span>
+<span class='va'>filtered_data</span> <span class='op'>&lt;-</span> <span class='fu'>atl_filter_covariates</span><span class='op'>(</span>
+  data <span class='op'>=</span> <span class='va'>data</span>,
+  filters <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span>
+    <span class='st'>"NBS &gt; 3"</span>,
+    <span class='st'>"SD &lt; 100"</span>,
+    <span class='st'>"between(day, 5, 8)"</span>
+  <span class='op'>)</span>
+<span class='op'>)</span>
+<span class='op'>}</span>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

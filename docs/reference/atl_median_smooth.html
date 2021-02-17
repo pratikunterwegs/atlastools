@@ -42,7 +42,8 @@
   
 
 <meta property="og:title" content="Apply a median smooth to coordinates. — atl_median_smooth" />
-<meta property="og:description" content="Applies a median smooth defined by a rolling window to the X and Y coordinates of the data. 
+<meta property="og:description" content="Applies a median smooth defined by a rolling window to the X and Y
+coordinates of the data.
 This function modifies in place, i.e., the results
 need not be assigned to a new data.table." />
 
@@ -76,7 +77,7 @@ need not be assigned to a new data.table." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">atlastools</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.9.9000</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.0000</span>
       </span>
     </div>
 
@@ -84,7 +85,7 @@ need not be assigned to a new data.table." />
       <ul class="nav navbar-nav">
         <li>
   <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -98,7 +99,7 @@ need not be assigned to a new data.table." />
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/pratikunterwegs/atlastools/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -121,12 +122,13 @@ need not be assigned to a new data.table." />
     </div>
 
     <div class="ref-description">
-    <p>Applies a median smooth defined by a rolling window to the X and Y coordinates of the data. 
+    <p>Applies a median smooth defined by a rolling window to the X and Y
+coordinates of the data.
 This function <em>modifies in place</em>, i.e., <em>the results
 need not be assigned to a new data.table</em>.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>atl_median_smooth</span>(<span class='kw'>data</span>, x = <span class='st'>"X"</span>, y = <span class='st'>"Y"</span>, time = <span class='st'>"TIME"</span>, moving_window = <span class='fl'>3</span>)</pre>
+    <pre class="usage"><span class='fu'>atl_median_smooth</span><span class='op'>(</span><span class='va'>data</span>, x <span class='op'>=</span> <span class='st'>"X"</span>, y <span class='op'>=</span> <span class='st'>"Y"</span>, time <span class='op'>=</span> <span class='st'>"TIME"</span>, moving_window <span class='op'>=</span> <span class='fl'>3</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -166,12 +168,14 @@ additional columns posID and ts, which is TIME converted to human
 readable POSIXct format.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='co'>if</span> (<span class='fl'>FALSE</span>) {
-<span class='fu'>atl_median_smooth</span>(data = <span class='kw'>track_data</span>,
-                 x = <span class='st'>"x"</span>, y = <span class='st'>"y"</span>,
-                 time = <span class='st'>"time"</span>,
-                 moving_window = <span class='fl'>5</span>)
-}
+    <pre class="examples"><div class='input'><span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
+<span class='fu'>atl_median_smooth</span><span class='op'>(</span>
+  data <span class='op'>=</span> <span class='va'>track_data</span>,
+  x <span class='op'>=</span> <span class='st'>"x"</span>, y <span class='op'>=</span> <span class='st'>"y"</span>,
+  time <span class='op'>=</span> <span class='st'>"time"</span>,
+  moving_window <span class='op'>=</span> <span class='fl'>5</span>
+<span class='op'>)</span>
+<span class='op'>}</span>
 
 </div></pre>
   </div>

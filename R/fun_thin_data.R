@@ -6,10 +6,10 @@
 #' Both options make two important assumptions:
 #' (1) that timestamps are named `time', and
 #' (2) all columns except the identity columns can be averaged in \code{R}.
-#' While the `resample' option returns a thinned dataset with all columns from
+#' While the `subsample' option returns a thinned dataset with all columns from
 #' the input data, the `aggregate' option drops the column \code{COVXY}, since
 #' this cannot be propagated to the averaged position.
-#' Both options handle the column `time' differently: while `resample' returns
+#' Both options handle the column `time' differently: while `subsample' returns
 #' the actual timestamp (in UNIX time) of each sample, `aggregate' returns the
 #' mean timestamp (also in UNIX time).
 #' In both cases, an extra column, \code{time_agg}, is added which has a uniform
@@ -28,7 +28,7 @@
 #' @param interval The interval in seconds over which to aggregate.
 #' @param id_columns Column names for grouping columns.
 #' @param method Should the data be thinned by subsampling or aggregation.
-#' If resampling (\code{method = "resample"}), the first position of each group
+#' If resampling (\code{method = "subsample"}), the first position of each group
 #' is taken. If aggregation (\code{method = "aggregate"}), the group positions'
 #' mean is taken.
 #'
@@ -49,7 +49,7 @@ atl_thin_data <- function(data,
                           interval = 60,
                           id_columns = NULL,
                           method = c(
-                            "resample",
+                            "subsample",
                             "aggregate"
                           )) {
   time <- SD <- VARX <- VARY <- COVXY <- NULL
@@ -62,10 +62,10 @@ atl_thin_data <- function(data,
 
   # check that type is a character and within scope
   assertthat::assert_that(method %in% c(
-    "resample",
+    "subsample",
     "aggregate"
   ),
-  msg = "thin_data: type must be 'resample' or \\
+  msg = "thin_data: type must be 'subsample' or \\
                           'aggregate'"
   )
 
@@ -128,8 +128,8 @@ atl_thin_data <- function(data,
       new = c("VARX", "VARY"),
       skip_absent = TRUE
     )
-  } else if (method == "resample") {
-    # resample the first observation per rounded interval
+  } else if (method == "subsample") {
+    # subsample the first observation per rounded interval
     data <- data[, c(lapply(.SD, data.table::first),
       count = length(x)
     ),

@@ -1,6 +1,6 @@
 Package: atlastools
 Title: Tools for Pre-Processing High-Throughput Animal Tracking Data
-Version: 0.9.9000
+Version: 1.0.0000
 Authors@R:
     c(person(given = "Pratik",
            family = "Gupte",

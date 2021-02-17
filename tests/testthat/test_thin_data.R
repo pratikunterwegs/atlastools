@@ -87,7 +87,7 @@ testthat::test_that("aggregating cleaned data", {
 })
 
 # test for resampling
-testthat::test_that("resampling cleaned data", {
+testthat::test_that("subsampling cleaned data", {
   interval <- 60
   # make test_data
   test_data <- data.table::data.table(
@@ -110,7 +110,7 @@ testthat::test_that("resampling cleaned data", {
   test_output <- atlastools::atl_thin_data(test_data,
     interval = 60,
     id_columns = "id",
-    method = "resample"
+    method = "subsample"
   )
 
   # do tests

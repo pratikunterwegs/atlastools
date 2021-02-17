@@ -49,7 +49,7 @@ atl_thin_data <- function(data,
                           interval = 60,
                           id_columns = NULL,
                           method = c(
-                            "resample",
+                            "subsample",
                             "aggregate"
                           )) {
   time <- SD <- VARX <- VARY <- COVXY <- NULL
@@ -62,10 +62,10 @@ atl_thin_data <- function(data,
 
   # check that type is a character and within scope
   assertthat::assert_that(method %in% c(
-    "resample",
+    "subsample",
     "aggregate"
   ),
-  msg = "thin_data: type must be 'resample' or \\
+  msg = "thin_data: type must be 'subsample' or \\
                           'aggregate'"
   )
 
@@ -128,7 +128,7 @@ atl_thin_data <- function(data,
       new = c("VARX", "VARY"),
       skip_absent = TRUE
     )
-  } else if (method == "resample") {
+  } else if (method == "subsample") {
     # resample the first observation per rounded interval
     data <- data[, c(lapply(.SD, data.table::first),
       count = length(x)

@@ -2,6 +2,7 @@
 #'
 #' Gets the relative heading between two positions using the law of cosines.
 #' The turning angle is returned in degrees.
+#' Users should apply this function to _one individual at a time_.
 #'
 #' @author Pratik R. Gupte
 #' @param data A dataframe or similar which must have the columns

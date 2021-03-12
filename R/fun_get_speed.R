@@ -2,6 +2,7 @@
 #'
 #' Returns speed in metres per time interval. The time interval is dependent
 #' on the units of the column specified in \code{time}.
+#' Users should apply this function to _one individual at a time_.
 #'
 #' @author Pratik R. Gupte
 #' @param data A dataframe or similar which must have the columns

@@ -23,8 +23,8 @@ indicating animal id is \emph{required}.}
 
 \item{buffer_radius}{A numeric value specifying the radius of the buffer to
 be considered around each coordinate point. May be thought of as the distance
- that an individual can access, assess, or otherwise cover when at a discrete
-  point in space.}
+that an individual can access, assess, or otherwise cover when at a discrete
+point in space.}
 
 \item{lim_spat_indep}{A numeric value of distance in metres of the spatial
 distance between two patches for them to the considered independent.}
@@ -65,7 +65,7 @@ threshold between clusters of positions (called \code{lim_spat_indep}),
 and (3) the time interval between clusters (called \code{lim_time_indep}).
 Clusters formed of fewer than a minimum number of positions can be excluded.
 The exclusion of clusters with few positions can help in removing bias due to
- short stops, but if such short stops are also of interest, they can be
+short stops, but if such short stops are also of interest, they can be
 included by reducing the \code{min_fixes} argument.
 Position covariates such as speed may also be summarised patch-wise by
 passing covariate names and  summary functions as character vectors to the

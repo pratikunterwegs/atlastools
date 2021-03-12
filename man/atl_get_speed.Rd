@@ -27,7 +27,8 @@ The first position is assigned a speed of NA.
 \description{
 Returns speed in metres per time interval. The time interval is dependent
 on the units of the column specified in \code{time}.
-Users should apply this function to \emph{one individual at a time}.
+Users should apply this function to \emph{one individual at a time}, ideally by
+splittng a dataframe with multiple individuals into a list of dataframes.
 }
 \examples{
 \dontrun{

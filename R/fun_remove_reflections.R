@@ -81,14 +81,14 @@ atl_remove_reflections <- function(data,
 
   while (anchor_point < (nrow(data) - 1)) {
 
-    # find next point with speed out > S
+    # find first of next points with speed out > S
     est_ref_end <- which(data[
       seq(
         anchor_point,
         nrow(data)
       ),
       speed_out
-    ] > reflection_speed_cutoff)
+    ] > reflection_speed_cutoff)[1] # this finds the first
 
     # handle case where there is no end, conservatively keep all data
     if (!any(est_ref_end)) {

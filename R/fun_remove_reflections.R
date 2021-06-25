@@ -57,6 +57,10 @@ atl_remove_reflections <- function(data,
   )
   data$angle <- atl_turning_angle(data, x = x, y = y, time = time)
 
+  # handle bad angles due to identical positions
+  data[, angle := data.table::fifelse((speed_in < 1e-5 | speed_out < 1e-5) & 
+    is.na(angle), 0, angle)]
+
   # remove points that cannot be assessed
   # can't determine whether the last few points are reflections hence remove
   data <- data[

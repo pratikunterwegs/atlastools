@@ -4,18 +4,18 @@
 #' (specified by the \code{method} argument) over an interval specified in
 #' seconds using the \code{interval} argument.
 #' Both options make two important assumptions:
-#' (1) that timestamps are named `time', and
+#' (1) that timestamps are named \code{time}, and
 #' (2) all columns except the identity columns can be averaged in \code{R}.
-#' While the `subsample' option returns a thinned dataset with all columns from
-#' the input data, the `aggregate' option drops the column \code{COVXY}, since
-#' this cannot be propagated to the averaged position.
-#' Both options handle the column `time' differently: while `subsample' returns
-#' the actual timestamp (in UNIX time) of each sample, `aggregate' returns the
-#' mean timestamp (also in UNIX time).
+#' While the \code{subsample} option returns a thinned dataset with all columns 
+#' from the input data, the \code{aggregate} option drops the column 
+#' \code{COVXY}, since this cannot be propagated to the averaged position.
+#' Both options handle the column \code{time} differently: while \code{subsample} 
+#' returns the actual timestamp (in UNIX time) of each sample, \code{aggregate} 
+#' returns the mean timestamp (also in UNIX time).
 #' In both cases, an extra column, \code{time_agg}, is added which has a uniform
 #'  difference between each element corresponding to the user-defined thinning
 #' interval.
-#' The `aggregate' option only recognises errors named \code{VARX} and
+#' The \code{aggregate} option only recognises errors named \code{VARX} and
 #' \code{VARY}, and standard deviation around each position named \code{SD}.
 #' If all of these columns are not present together the function assumes there
 #' is no measure of error, and drops those columns.

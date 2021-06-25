@@ -91,7 +91,7 @@ atl_remove_reflections <- function(data,
     ] > reflection_speed_cutoff)[1] # this finds the first
 
     # handle case where there is no end, conservatively keep all data
-    if (!any(est_ref_end)) {
+    if (is.na(est_ref_end) | !is.integer(est_ref_end)) {
       message("the reflection does not appear to end: keeping all points")
       break()
     } else {

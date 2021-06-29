@@ -57,6 +57,10 @@ atl_remove_reflections <- function(data,
   )
   data$angle <- atl_turning_angle(data, x = x, y = y, time = time)
 
+  # handle bad angles due to identical positions
+  data[, angle := data.table::fifelse((speed_in < 1e-5 | speed_out < 1e-5) & 
+    is.na(angle), 0, angle)]
+
   # remove points that cannot be assessed
   # can't determine whether the last few points are reflections hence remove
   data <- data[
@@ -77,17 +81,17 @@ atl_remove_reflections <- function(data,
 
   while (anchor_point < (nrow(data) - 1)) {
 
-    # find next point with speed out > S
+    # find first of next points with speed out > S
     est_ref_end <- which(data[
       seq(
         anchor_point,
         nrow(data)
       ),
       speed_out
-    ] > reflection_speed_cutoff)
+    ] > reflection_speed_cutoff)[1] # this finds the first
 
     # handle case where there is no end, conservatively keep all data
-    if (!any(est_ref_end)) {
+    if (is.na(est_ref_end) | !is.integer(est_ref_end)) {
       message("the reflection does not appear to end: keeping all points")
       break()
     } else {

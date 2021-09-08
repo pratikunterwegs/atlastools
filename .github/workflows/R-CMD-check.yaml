@@ -11,6 +11,9 @@ on:
       - main
       - master
       - develop
+  schedule:
+    # * is a special character in YAML so you have to quote this string
+    - cron:  '30 5 * * 1' # runs this check every monday at 5:30 AM
 
 name: R-CMD-check
 

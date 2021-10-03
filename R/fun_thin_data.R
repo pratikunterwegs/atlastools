@@ -26,6 +26,8 @@
 #'
 #' @param data Cleaned data to aggregate. Must have a numeric column named time.
 #' @param interval The interval in seconds over which to aggregate.
+#' @param time The timestamp column name, ideally referring to a column with
+#' an integer type.
 #' @param id_columns Column names for grouping columns.
 #' @param method Should the data be thinned by subsampling or aggregation.
 #' If resampling (\code{method = "subsample"}), the first position of each group
@@ -33,7 +35,7 @@
 #' mean is taken.
 #'
 #' @return A dataframe aggregated taking the mean over the interval.
-#'
+#' @import data.table
 #' @examples
 #' \dontrun{
 #' thinned_data <- atl_thin_data(data,
@@ -47,13 +49,14 @@
 #'
 atl_thin_data <- function(data,
                           interval = 60,
+                          time = "time",
                           id_columns = NULL,
                           method = c(
                             "subsample",
                             "aggregate"
                           )) {
-  time <- SD <- VARX <- VARY <- COVXY <- NULL
-  x <- y <- time_agg <- NULL
+  SD <- VARX <- VARY <- COVXY <- NULL
+  time_agg <- NULL
 
   # check input type
   assertthat::assert_that("data.frame" %in% class(data),
@@ -76,16 +79,23 @@ atl_thin_data <- function(data,
 
   # include asserts checking for required columns
   atl_check_data(data,
-    names_expected = c("x", "y", "time", id_columns)
+    names_expected = c(time, id_columns)
   )
 
+  if(!(all(c("x", "y") %in% colnames(data)))) {
+    warning(
+      "atl_thin_data: could not find columns named 'x' and 'y'
+      make sure coordinate columns exist in this data."
+    )
+  }
+
   # check aggregation interval is greater than min time difference
-  assertthat::assert_that(interval > min(diff(data$time)),
+  assertthat::assert_that(interval > min(diff(data[[time]])),
     msg = "thin_data: thinning interval less than tracking interval!"
   )
 
   # round interval and reassign, this modifies by reference!
-  data[, time_agg := floor(as.numeric(time) / interval) * interval]
+  data[, time_agg := floor(as.numeric((time)) / interval) * interval]
 
   # handle method option
   if (method == "aggregate") {
@@ -101,14 +111,14 @@ atl_thin_data <- function(data,
         # the standard deviation is the square root of the variance
 
         SD = sqrt(sum(SD^2, na.rm = TRUE) / (length(SD)^2)),
-        count = length(x)
+        count = (.N)
       ),
       by = c("time_agg", id_columns)
       ]
     } else {
       # aggregate over tracking interval
       data <- data[, c(lapply(.SD, mean, na.rm = TRUE),
-        count = length(x)
+        count = (.N)
       ),
       by = c("time_agg", id_columns)
       ]
@@ -131,7 +141,7 @@ atl_thin_data <- function(data,
   } else if (method == "subsample") {
     # subsample the first observation per rounded interval
     data <- data[, c(lapply(.SD, data.table::first),
-      count = length(x)
+      count = (.N)
     ),
     by = c("time_agg", id_columns)
     ]

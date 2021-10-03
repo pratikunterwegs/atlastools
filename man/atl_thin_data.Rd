@@ -7,6 +7,7 @@
 atl_thin_data(
   data,
   interval = 60,
+  time = "time",
   id_columns = NULL,
   method = c("subsample", "aggregate")
 )
@@ -15,6 +16,9 @@ atl_thin_data(
 \item{data}{Cleaned data to aggregate. Must have a numeric column named time.}
 
 \item{interval}{The interval in seconds over which to aggregate.}
+
+\item{time}{The timestamp column name, ideally referring to a column with
+an integer type.}
 
 \item{id_columns}{Column names for grouping columns.}
 
@@ -31,13 +35,18 @@ Uniformly reduce data volumes with either aggregation or resampling
 (specified by the \code{method} argument) over an interval specified in
 seconds using the \code{interval} argument.
 Both options make two important assumptions:
-(1) that timestamps are named \verb{time', and (2) all columns except the identity columns can be averaged in \code{R}. While the }subsample' option returns a thinned dataset with all columns from
-the input data, the \verb{aggregate' option drops the column \code{COVXY}, since this cannot be propagated to the averaged position. Both options handle the column }time' differently: while \verb{subsample' returns the actual timestamp (in UNIX time) of each sample, }aggregate' returns the
-mean timestamp (also in UNIX time).
+(1) that timestamps are named \code{time}, and
+(2) all columns except the identity columns can be averaged in \code{R}.
+While the \code{subsample} option returns a thinned dataset with all columns
+from the input data, the \code{aggregate} option drops the column
+\code{COVXY}, since this cannot be propagated to the averaged position.
+Both options handle the column \code{time} differently: while \code{subsample}
+returns the actual timestamp (in UNIX time) of each sample, \code{aggregate}
+returns the mean timestamp (also in UNIX time).
 In both cases, an extra column, \code{time_agg}, is added which has a uniform
 difference between each element corresponding to the user-defined thinning
 interval.
-The `aggregate' option only recognises errors named \code{VARX} and
+The \code{aggregate} option only recognises errors named \code{VARX} and
 \code{VARY}, and standard deviation around each position named \code{SD}.
 If all of these columns are not present together the function assumes there
 is no measure of error, and drops those columns.

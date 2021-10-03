@@ -3,10 +3,10 @@ testthat::test_that("aggregating cleaned data", {
   interval <- 60
   # make test_data
   test_data <- data.table::data.table(
-    x = as.double(1:1e3),
-    y = as.double(1:1e3),
-    time = as.numeric(1:1e3),
-    ts = as.POSIXct(1:1e3,
+    `location-lat` = as.double(seq(1000)), # mimic movebank naming
+    y = as.double(seq(1000)),
+    time = as.numeric(seq(1000)),
+    ts = as.POSIXct(seq(1000),
       origin = "1970-01-01"
     ),
     id = as.factor("abc"),
@@ -18,12 +18,15 @@ testthat::test_that("aggregating cleaned data", {
   # make SD
   test_data[, SD := sqrt(VARX + VARY + 2 * COVXY)]
 
-  # run function
-  test_output <- atl_thin_data(test_data,
-    id_columns = "id",
-    interval = 60,
-    time = "time",
-    method = "aggregate"
+  # run function --- expect warning
+  # expect a warning for the missing 'x' column name
+  testthat::expect_warning(
+    test_output <- atl_thin_data(test_data,
+      id_columns = "id",
+      interval = 60,
+      time = "time",
+      method = "aggregate"
+    )
   )
 
   # do tests

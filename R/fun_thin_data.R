@@ -26,6 +26,8 @@
 #'
 #' @param data Cleaned data to aggregate. Must have a numeric column named time.
 #' @param interval The interval in seconds over which to aggregate.
+#' @param time The timestamp column name, ideally referring to a column with
+#' an integer type.
 #' @param id_columns Column names for grouping columns.
 #' @param method Should the data be thinned by subsampling or aggregation.
 #' If resampling (\code{method = "subsample"}), the first position of each group
@@ -47,12 +49,13 @@
 #'
 atl_thin_data <- function(data,
                           interval = 60,
+                          time = "time",
                           id_columns = NULL,
                           method = c(
                             "subsample",
                             "aggregate"
                           )) {
-  time <- SD <- VARX <- VARY <- COVXY <- NULL
+  SD <- VARX <- VARY <- COVXY <- NULL
   x <- y <- time_agg <- NULL
 
   # check input type
@@ -76,16 +79,16 @@ atl_thin_data <- function(data,
 
   # include asserts checking for required columns
   atl_check_data(data,
-    names_expected = c("x", "y", "time", id_columns)
+    names_expected = c("x", "y", time, id_columns)
   )
 
   # check aggregation interval is greater than min time difference
-  assertthat::assert_that(interval > min(diff(data$time)),
+  assertthat::assert_that(interval > min(diff(data[[time]])),
     msg = "thin_data: thinning interval less than tracking interval!"
   )
 
   # round interval and reassign, this modifies by reference!
-  data[, time_agg := floor(as.numeric(time) / interval) * interval]
+  data[, time_agg := floor(as.numeric((time)) / interval) * interval]
 
   # handle method option
   if (method == "aggregate") {

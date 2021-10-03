@@ -22,6 +22,7 @@ testthat::test_that("aggregating cleaned data", {
   test_output <- atl_thin_data(test_data,
     id_columns = "id",
     interval = 60,
+    time = "time",
     method = "aggregate"
   )
 

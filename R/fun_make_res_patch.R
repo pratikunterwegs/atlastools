@@ -98,6 +98,21 @@ atl_res_patch <- function(data,
   # convert variable units from minutes to seconds
   lim_time_indep <- lim_time_indep * 60
 
+  # prepare summary function list if asked
+  # get function list
+  f_names = summary_functions
+  if (length(summary_functions) > 0) {
+    summary_functions = lapply(
+      summary_functions,
+      function(fun_name) {
+        eval(as.symbol(fun_name))
+      }
+    )
+  }
+
+  # set summary function names
+  names(summary_functions) = f_names
+
   # get names and numeric variables
   names_req <- c("id", "x", "y", "time", summary_variables)
 
@@ -110,7 +125,7 @@ atl_res_patch <- function(data,
   }
 
   # sort by time
-  data.table::setorderv(data, time)
+  data.table::setorder(data, time)
   assertthat::assert_that(min(diff(data$time)) >= 0,
     msg = "data for segmentation is not ordered by time"
   )
@@ -229,11 +244,9 @@ atl_res_patch <- function(data,
 
         # now get optional metrics if any asked
         if (length(summary_variables) > 0) {
-          dt3 <- data.table::dcast(dt, 1 ~ 1,
-            fun.aggregate = eval(lapply(
-              summary_functions,
-              as.symbol
-            )),
+          
+          dt3 <- data.table::dcast(dt, . ~ 1,
+            fun.aggregate = summary_functions,
             value.var = summary_variables
           )
           # remove this vestigial column

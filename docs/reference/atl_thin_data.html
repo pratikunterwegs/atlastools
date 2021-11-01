@@ -46,18 +46,18 @@
 (specified by the method argument) over an interval specified in
 seconds using the interval argument.
 Both options make two important assumptions:
-(1) that timestamps are named `time', and
+(1) that timestamps are named time, and
 (2) all columns except the identity columns can be averaged in R.
-While the `subsample' option returns a thinned dataset with all columns from
-the input data, the `aggregate' option drops the column COVXY, since
-this cannot be propagated to the averaged position.
-Both options handle the column `time' differently: while `subsample' returns
-the actual timestamp (in UNIX time) of each sample, `aggregate' returns the
-mean timestamp (also in UNIX time).
+While the subsample option returns a thinned dataset with all columns
+from the input data, the aggregate option drops the column
+COVXY, since this cannot be propagated to the averaged position.
+Both options handle the column time differently: while subsample
+returns the actual timestamp (in UNIX time) of each sample, aggregate
+returns the mean timestamp (also in UNIX time).
 In both cases, an extra column, time_agg, is added which has a uniform
- difference between each element corresponding to the user-defined thinning
+difference between each element corresponding to the user-defined thinning
 interval.
-The `aggregate' option only recognises errors named VARX and
+The aggregate option only recognises errors named VARX and
 VARY, and standard deviation around each position named SD.
 If all of these columns are not present together the function assumes there
 is no measure of error, and drops those columns.
@@ -145,18 +145,18 @@ character vector to the id_columns argument." />
 (specified by the <code>method</code> argument) over an interval specified in
 seconds using the <code>interval</code> argument.
 Both options make two important assumptions:
-(1) that timestamps are named `time', and
+(1) that timestamps are named <code>time</code>, and
 (2) all columns except the identity columns can be averaged in <code>R</code>.
-While the `subsample' option returns a thinned dataset with all columns from
-the input data, the `aggregate' option drops the column <code>COVXY</code>, since
-this cannot be propagated to the averaged position.
-Both options handle the column `time' differently: while `subsample' returns
-the actual timestamp (in UNIX time) of each sample, `aggregate' returns the
-mean timestamp (also in UNIX time).
+While the <code>subsample</code> option returns a thinned dataset with all columns
+from the input data, the <code>aggregate</code> option drops the column
+<code>COVXY</code>, since this cannot be propagated to the averaged position.
+Both options handle the column <code>time</code> differently: while <code>subsample</code>
+returns the actual timestamp (in UNIX time) of each sample, <code>aggregate</code>
+returns the mean timestamp (also in UNIX time).
 In both cases, an extra column, <code>time_agg</code>, is added which has a uniform
- difference between each element corresponding to the user-defined thinning
+difference between each element corresponding to the user-defined thinning
 interval.
-The `aggregate' option only recognises errors named <code>VARX</code> and
+The <code>aggregate</code> option only recognises errors named <code>VARX</code> and
 <code>VARY</code>, and standard deviation around each position named <code>SD</code>.
 If all of these columns are not present together the function assumes there
 is no measure of error, and drops those columns.
@@ -169,6 +169,7 @@ character vector to the <code>id_columns</code> argument.</p>
     <pre class="usage"><span class='fu'>atl_thin_data</span><span class='op'>(</span>
   <span class='va'>data</span>,
   interval <span class='op'>=</span> <span class='fl'>60</span>,
+  time <span class='op'>=</span> <span class='st'>"time"</span>,
   id_columns <span class='op'>=</span> <span class='cn'>NULL</span>,
   method <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"subsample"</span>, <span class='st'>"aggregate"</span><span class='op'>)</span>
 <span class='op'>)</span></pre>
@@ -183,6 +184,11 @@ character vector to the <code>id_columns</code> argument.</p>
     <tr>
       <th>interval</th>
       <td><p>The interval in seconds over which to aggregate.</p></td>
+    </tr>
+    <tr>
+      <th>time</th>
+      <td><p>The timestamp column name, ideally referring to a column with
+an integer type.</p></td>
     </tr>
     <tr>
       <th>id_columns</th>
@@ -202,15 +208,15 @@ mean is taken.</p></td>
     <p>A dataframe aggregated taking the mean over the interval.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
-<span class='va'>thinned_data</span> <span class='op'>&lt;-</span> <span class='fu'>atl_thin_data</span><span class='op'>(</span><span class='va'>data</span>,
-  interval <span class='op'>=</span> <span class='fl'>60</span>,
-  id_columns <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"animal_id"</span><span class='op'>)</span>,
-  method <span class='op'>=</span> <span class='st'>"aggregate"</span>
-<span class='op'>)</span>
-<span class='op'>}</span>
-
-</div></pre>
+    <pre class="examples"><span class='r-in'><span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span></span>
+<span class='r-in'><span class='va'>thinned_data</span> <span class='op'>&lt;-</span> <span class='fu'>atl_thin_data</span><span class='op'>(</span><span class='va'>data</span>,</span>
+<span class='r-in'>  interval <span class='op'>=</span> <span class='fl'>60</span>,</span>
+<span class='r-in'>  id_columns <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"animal_id"</span><span class='op'>)</span>,</span>
+<span class='r-in'>  method <span class='op'>=</span> <span class='st'>"aggregate"</span></span>
+<span class='r-in'><span class='op'>)</span></span>
+<span class='r-in'><span class='op'>}</span></span>
+<span class='r-in'></span>
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

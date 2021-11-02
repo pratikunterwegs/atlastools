@@ -16,7 +16,7 @@ The package functions are conveniently documented at the package website: https:
 
 ## A Guide to Pre-procesing High-throughput Animal Tracking Data
 
-Using `atlastools` to clean data before making biological inferences is covered in depth in the preprint _Gupte et al. (2020)_ on bioRxiv: https://www.biorxiv.org/content/10.1101/2020.12.15.422876v2
+Using `atlastools` to clean data before making biological inferences is covered in this article in the _Journal of Animal Ecology_, [A Guide to Pre-processing High-throughput Animal Tracking Data](https://besjournals.onlinelibrary.wiley.com/doi/10.1111/1365-2656.13610).
 
 ## Installation
 

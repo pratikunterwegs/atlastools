@@ -57,7 +57,7 @@ threshold between clusters of positions (called lim_spat_indep),
 and (3) the time interval between clusters (called lim_time_indep).
 Clusters formed of fewer than a minimum number of positions can be excluded.
 The exclusion of clusters with few positions can help in removing bias due to
- short stops, but if such short stops are also of interest, they can be
+short stops, but if such short stops are also of interest, they can be
 included by reducing the min_fixes argument.
 Position covariates such as speed may also be summarised patch-wise by
 passing covariate names and  summary functions as character vectors to the
@@ -154,7 +154,7 @@ threshold between clusters of positions (called <code>lim_spat_indep</code>),
 and (3) the time interval between clusters (called <code>lim_time_indep</code>).
 Clusters formed of fewer than a minimum number of positions can be excluded.
 The exclusion of clusters with few positions can help in removing bias due to
- short stops, but if such short stops are also of interest, they can be
+short stops, but if such short stops are also of interest, they can be
 included by reducing the <code>min_fixes</code> argument.
 Position covariates such as speed may also be summarised patch-wise by
 passing covariate names and  summary functions as character vectors to the
@@ -187,8 +187,8 @@ indicating animal id is <em>required</em>.</p></td>
       <th>buffer_radius</th>
       <td><p>A numeric value specifying the radius of the buffer to
 be considered around each coordinate point. May be thought of as the distance
- that an individual can access, assess, or otherwise cover when at a discrete
-  point in space.</p></td>
+that an individual can access, assess, or otherwise cover when at a discrete
+point in space.</p></td>
     </tr>
     <tr>
       <th>lim_spat_indep</th>
@@ -230,18 +230,18 @@ summary variables.</p>
     <p>Pratik R. Gupte</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
-<span class='va'>patches</span> <span class='op'>&lt;-</span> <span class='fu'>atl_res_patch</span><span class='op'>(</span>
-  data <span class='op'>=</span> <span class='va'>track_data</span>,
-  buffer_radius <span class='op'>=</span> <span class='fl'>10</span>,
-  lim_spat_indep <span class='op'>=</span> <span class='fl'>100</span>,
-  lim_time_indep <span class='op'>=</span> <span class='fl'>30</span>,
-  min_fixes <span class='op'>=</span> <span class='fl'>3</span>,
-  summary_variables <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"speed"</span><span class='op'>)</span>,
-  summary_functions <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"mean"</span>, <span class='st'>"sd"</span><span class='op'>)</span>
-<span class='op'>)</span>
-<span class='op'>}</span>
-</div></pre>
+    <pre class="examples"><span class='r-in'><span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span></span>
+<span class='r-in'><span class='va'>patches</span> <span class='op'>&lt;-</span> <span class='fu'>atl_res_patch</span><span class='op'>(</span></span>
+<span class='r-in'>  data <span class='op'>=</span> <span class='va'>track_data</span>,</span>
+<span class='r-in'>  buffer_radius <span class='op'>=</span> <span class='fl'>10</span>,</span>
+<span class='r-in'>  lim_spat_indep <span class='op'>=</span> <span class='fl'>100</span>,</span>
+<span class='r-in'>  lim_time_indep <span class='op'>=</span> <span class='fl'>30</span>,</span>
+<span class='r-in'>  min_fixes <span class='op'>=</span> <span class='fl'>3</span>,</span>
+<span class='r-in'>  summary_variables <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"speed"</span><span class='op'>)</span>,</span>
+<span class='r-in'>  summary_functions <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"mean"</span>, <span class='st'>"sd"</span><span class='op'>)</span></span>
+<span class='r-in'><span class='op'>)</span></span>
+<span class='r-in'><span class='op'>}</span></span>
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
